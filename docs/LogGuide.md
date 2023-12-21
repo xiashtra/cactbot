@@ -196,7 +196,7 @@ This guide was last updated for:
 
 ## Data Flow
 
-![Alt text](https://g.gravizo.com/source/data_flow?https%3A%2F%2Fraw.githubusercontent.com%2Fquisquous%2Fcactbot%2Fmain%2Fdocs%2FLogGuide.md)
+![Alt text](https://g.gravizo.com/source/data_flow?https%3A%2F%2Fraw.githubusercontent.com%OverlayPlugin%2Fcactbot%2Fmain%2Fdocs%2FLogGuide.md)
 
 <details>
 <summary></summary>
@@ -1567,7 +1567,7 @@ Interpreting these [values](https://github.com/goaaats/Dalamud/blob/4ad5bee0c621
 
 There are a number of references for job gauge memory:
 
-  1) [cactbot FFXIVProcess code](https://github.com/quisquous/cactbot/blob/a4d27eca3628d397cb9f5638fad97191566ed5a1/CactbotOverlay/FFXIVProcessIntl.cs#L267)
+  1) [cactbot FFXIVProcess code](https://github.com/OverlayPlugin/cactbot/blob/a4d27eca3628d397cb9f5638fad97191566ed5a1/CactbotOverlay/FFXIVProcessIntl.cs#L267)
   1) [Dalamud code](https://github.com/goaaats/Dalamud/blob/4ad5bee0c62128315b0a247466d28f42264c3069/Dalamud/Game/ClientState/Structs/JobGauge/NINGauge.cs#L15)
 
 Unfortunately, network data about other player's gauge is not sent.
