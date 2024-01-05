@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { ConsoleLogger, LogLevelKey } from './console_logger';
 import { cleanName } from './csv_util';
 import { OutputFileAttributes, XivApi } from './xivapi';
 
@@ -33,6 +34,10 @@ type MappingTable = {
 type OutputEffectId = {
   [name: string]: string; // the id is converted to hex, so use string
 };
+
+const _SCRIPT_NAME = path.basename(import.meta.url);
+const log = new ConsoleLogger();
+log.setLogLevel('alert');
 
 // TODO: add renaming?
 // Almagest: 563
@@ -90,16 +95,12 @@ const customMapping: Readonly<MappingTable> = {
   'EmboldenSelf': 1239,
 };
 
-const printError = (
-  header: string,
-  what: string,
-) => console.error(`${header} ${what}`);
-
 const assembleData = (apiData: XivApiStatus): OutputEffectId => {
   const formattedData: OutputEffectId = {};
   const foundNames = new Set();
   const map = new Map<string, number>();
 
+  log.debug('Processing & assembling data...');
   for (const effect of apiData) {
     const id = effect.ID;
     const rawName = effect.Name;
@@ -110,50 +111,62 @@ const assembleData = (apiData: XivApiStatus): OutputEffectId => {
     if (!name)
       continue;
 
-    // TODO: The below printError() calls generate a ton of noise.  That's to be expected,
-    // but we might want to add a flag to suppress these entirely, or filter out
-    // existing/known conflicts so we can just see what's changing each patch.
+    // See comment above specifically about known mappings.
+    // Conflicts here are only logged at a 'debug' level because of the noise generated.
+    // If a future patch makes job changes resulting in a new status ID,
+    // we have to trust someone will notice the jobs module is no longer tracking,
+    // and then update the known mapping manually.
     if (rawName in knownMapping) {
       if (id !== knownMapping[rawName]) {
-        printError('skipping', rawName);
+        log.debug(`Conflict with known/static mapping: ${name} (ID: ${id})`);
         continue;
       }
     }
 
     if (map.has(name)) {
-      printError('collision', name);
-      printError('collision', name);
+      log.info(
+        `Collision detected: ${name} (IDs: ${id}, ${map.get(name) ?? ''}).  Skipping...`,
+      );
       map.delete(name);
       continue;
     }
     if (foundNames.has(name)) {
-      printError('collision', name);
+      log.debug(`Additional collision: ${name} (new ID: ${id}). Skipping...`);
       continue;
     }
 
     foundNames.add(name);
     map.set(name, id);
+    log.debug(`Adding ${name} (ID: ${id}) to data output.`);
   }
+  log.debug('Completed initial pass. Starting post-processing...');
 
   // Make sure everything specified in known_mapping was found in the above loop.
   for (const rawName of Object.keys(knownMapping)) {
     const name = cleanName(rawName);
     if (name && !foundNames.has(name))
-      printError('missing known name', rawName);
+      log.alert(`Known name missing from data: ${rawName}.  Please investigate.`);
   }
+  log.debug('Known name mapping check complete.');
 
   // Add custom effect name for necessary duplicates.
-  for (const [name, id] of Object.entries(customMapping))
+  for (const [name, id] of Object.entries(customMapping)) {
     map.set(name, id);
+    log.debug(`Added custom mapping: ${name} (ID: ${id})`);
+  }
+  log.debug('Custom name mappings added.');
 
   // Store ids as hex.
   map.forEach((id, name) => formattedData[name] = id.toString(16).toUpperCase());
-
+  log.debug('Data assembly/formatting complete.');
   return formattedData;
 };
 
-export default async (): Promise<void> => {
-  const api = new XivApi(null, true);
+export default async (logLevel: LogLevelKey): Promise<void> => {
+  log.setLogLevel(logLevel);
+  log.info(`Starting processing for ${_SCRIPT_NAME}`);
+
+  const api = new XivApi(null, log);
 
   const apiData = await api.queryApi(
     _ENDPOINT,
@@ -163,8 +176,10 @@ export default async (): Promise<void> => {
   const outputData = assembleData(apiData);
 
   await api.writeFile(
-    path.basename(import.meta.url),
+    _SCRIPT_NAME,
     _EFFECT_ID,
     outputData,
   );
+
+  log.successDone(`Completed processing for ${_SCRIPT_NAME}`);
 };
