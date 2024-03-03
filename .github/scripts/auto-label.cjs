@@ -31,8 +31,7 @@ const regexLabelMap = {
   '^\\.mocharc.cjs$': ['test'],
   '^eslint/': ['style'],
   '^\\.eslintrc\\.js$': ['style'],
-  '^\\.github/workflows/': ['ci'],
-  '^\\.github/scripts/': ['ci'],
+  '^\\.github/': ['ci'],
   '^plugin/': ['plugin'],
   '^ui/config/': ['config'],
   '^ui/eureka/eureka_config': ['config', 'eureka'],
@@ -127,7 +126,58 @@ const getLabels = async (github, owner, repo, pullNumber) => {
     }
   })));
 
-  return [...changedModule, ...changedLang.map((v) => langToLabel(v))];
+  // since this script clobbers all PR labels, we need to capture
+  // existing PR labels that are unrelated to scope and preserve them.
+  /**
+   * @typedef {{ name: string }} Label
+   * @type {Label[]}
+   */
+  const prLabels = pullRequest.labels;
+  const scopeLabelsAll = nonNullUnique(lodash.flatten(Object.values(regexLabelMap)));
+  const prNonScopeLabels = prLabels
+    .map((label) => label.name)
+    .filter((label) => !scopeLabelsAll.includes(label));
+
+  // Determine if there is an approving review from a reviewer with write access;
+  // if not (and it's not a draft PR), add the 'needs-review' label.
+  const isApproved = await isPRApproved(github, prIdentifier);
+  if (!isApproved && !pullRequest.draft)
+    prNonScopeLabels.push('needs-review');
+
+  return [
+    ...prNonScopeLabels,
+    ...changedModule,
+    ...changedLang.map((v) => langToLabel(v)),
+  ];
+};
+
+/**
+ * @param {GitHub} github
+ * @param {identifier} prIdentifier
+ * @returns {Promise<boolean>}
+ */
+const isPRApproved = async (github, prIdentifier) => {
+  /**
+   * @typedef {{ state: string, author_association: string }} Review
+   * @type {{ [data: string]: Review[] }};
+   */
+  const { data: reviews } = await github.rest.pulls.listReviews(prIdentifier);
+  if (reviews === undefined || reviews.length === 0) {
+    return false;
+  }
+  for (const review of reviews) {
+    if (review.state === 'APPROVED' && isReviewer(review.author_association))
+      return true;
+  }
+  return false;
+};
+
+/**
+ * @param {string} association
+ * @returns {boolean}
+ */
+const isReviewer = (association) => {
+  return association === 'COLLABORATOR' || association === 'OWNER';
 };
 
 /**
