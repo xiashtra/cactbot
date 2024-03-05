@@ -8,9 +8,9 @@ for folks who want to write ACT triggers for ff14.
 
 This guide was last updated for:
 
-- [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) Patch 6.5
-- [FFXIV Plugin](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) Patch 2.6.9.7
-- [OverlayPlugin](https://github.com/OverlayPlugin/OverlayPlugin/releases) Patch 0.19.24
+- [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) Patch 6.57
+- [FFXIV Plugin](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) Patch 2.6.9.9
+- [OverlayPlugin](https://github.com/OverlayPlugin/OverlayPlugin/releases) Patch 0.19.27
 
 ## TOC
 
@@ -196,6 +196,38 @@ This guide was last updated for:
     - [Structure](#structure-37)
     - [Regexes](#regexes-37)
     - [Examples](#examples-37)
+  - [Line 266 (0x10A): NpcYell](#line-266-0x10a-npcyell)
+    - [Structure](#structure-38)
+    - [Regexes](#regexes-38)
+    - [Examples](#examples-38)
+  - [Line 267 (0x10B): BattleTalk2](#line-267-0x10b-battletalk2)
+    - [Structure](#structure-39)
+    - [Regexes](#regexes-39)
+    - [Examples](#examples-39)
+  - [Line 268 (0x10C): Countdown](#line-268-0x10c-countdown)
+    - [Structure](#structure-40)
+    - [Regexes](#regexes-40)
+    - [Examples](#examples-40)
+  - [Line 269 (0x10D): CountdownCancel](#line-269-0x10d-countdowncancel)
+    - [Structure](#structure-41)
+    - [Regexes](#regexes-41)
+    - [Examples](#examples-41)
+  - [Line 270 (0x10E): ActorMove](#line-270-0x10e-actormove)
+    - [Structure](#structure-42)
+    - [Regexes](#regexes-42)
+    - [Examples](#examples-42)
+  - [Line 271 (0x10F): ActorSetPos](#line-271-0x10f-actorsetpos)
+    - [Structure](#structure-43)
+    - [Regexes](#regexes-43)
+    - [Examples](#examples-43)
+  - [Line 272 (0x110): SpawnNpcExtra](#line-272-0x110-spawnnpcextra)
+    - [Structure](#structure-44)
+    - [Regexes](#regexes-44)
+    - [Examples](#examples-44)
+  - [Line 273 (0x111): ActorControlExtra](#line-273-0x111-actorcontrolextra)
+    - [Structure](#structure-45)
+    - [Regexes](#regexes-45)
+    - [Examples](#examples-45)
 <!-- AUTO-GENERATED-CONTENT:END -->
 
 ## Data Flow
@@ -2790,20 +2822,20 @@ and a value of `1` indicates that it is enabled.
 
 ```log
 Network Log Line Structure:
-265|[timestamp]|[zoneID]|[zoneName]|[inContentFinderContent]|[unrestrictedParty]|[minimalItemLevel]|[silenceEcho]|[explorerMode]|[levelSync]
+265|[timestamp]|[zoneId]|[zoneName]|[inContentFinderContent]|[unrestrictedParty]|[minimalItemLevel]|[silenceEcho]|[explorerMode]|[levelSync]
 
 Parsed Log Line Structure:
-[timestamp] 265 109:[zoneID]:[zoneName]:[inContentFinderContent]:[unrestrictedParty]:[minimalItemLevel]:[silenceEcho]:[explorerMode]:[levelSync]
+[timestamp] 265 109:[zoneId]:[zoneName]:[inContentFinderContent]:[unrestrictedParty]:[minimalItemLevel]:[silenceEcho]:[explorerMode]:[levelSync]
 ```
 
 #### Regexes
 
 ```log
 Network Log Line Regex:
-^(?<type>265)\|(?<timestamp>[^|]*)\|(?<zoneID>[^|]*)\|(?<zoneName>[^|]*)\|(?<inContentFinderContent>[^|]*)\|(?<unrestrictedParty>[^|]*)\|(?<minimalItemLevel>[^|]*)\|(?<silenceEcho>[^|]*)\|(?<explorerMode>[^|]*)\|(?<levelSync>[^|]*)\|
+^(?<type>265)\|(?<timestamp>[^|]*)\|(?<zoneId>[^|]*)\|(?<zoneName>[^|]*)\|(?<inContentFinderContent>[^|]*)\|(?<unrestrictedParty>[^|]*)\|(?<minimalItemLevel>[^|]*)\|(?<silenceEcho>[^|]*)\|(?<explorerMode>[^|]*)\|(?<levelSync>[^|]*)\|
 
 Parsed Log Line Regex:
-(?<timestamp>^.{14}) 265 (?<type>109):(?<zoneID>[^:]*):(?<zoneName>[^:]*):(?<inContentFinderContent>[^:]*):(?<unrestrictedParty>[^:]*):(?<minimalItemLevel>[^:]*):(?<silenceEcho>[^:]*):(?<explorerMode>[^:]*):(?<levelSync>[^:]*)(?:$|:)
+(?<timestamp>^.{14}) 265 (?<type>109):(?<zoneId>[^:]*):(?<zoneName>[^:]*):(?<inContentFinderContent>[^:]*):(?<unrestrictedParty>[^:]*):(?<minimalItemLevel>[^:]*):(?<silenceEcho>[^:]*):(?<explorerMode>[^:]*):(?<levelSync>[^:]*)(?:$|:)
 ```
 
 #### Examples
@@ -2821,3 +2853,420 @@ Parsed Log Line Examples:
 ```
 
 <!-- AUTO-GENERATED-CONTENT:END (logLines:type=ContentFinderSettings&lang=en-US) -->
+
+<a name="line266"></a>
+
+### Line 266 (0x10A): NpcYell
+
+This log line is emitted whenever a NpcYell packet is received from the server,
+indicating that an NPC has yelled something (e.g. UCOB Nael quotes).
+
+`npcNameId` and `npcYellId` (both hex values) correspond to IDs
+in the [BNpcName](https://github.com/xivapi/ffxiv-datamining/blob/master/csv/BNpcName.csv)
+and [NpcYell](https://github.com/xivapi/ffxiv-datamining/blob/master/csv/NpcYell.csv) tables, respectively.
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=NpcYell&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+266|[timestamp]|[npcId]|[npcNameId]|[npcYellId]
+
+Parsed Log Line Structure:
+[timestamp] 266 10A:[npcId]:[npcNameId]:[npcYellId]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>266)\|(?<timestamp>[^|]*)\|(?<npcId>[^|]*)\|(?<npcNameId>[^|]*)\|(?<npcYellId>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 266 (?<type>10A):(?<npcId>[^:]*):(?<npcNameId>[^:]*):(?<npcYellId>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+266|2024-02-29T15:15:40.5850000-08:00|4001F001|02D2|07AF|8f731e1760bdcfc9
+266|2024-02-29T15:15:54.5570000-08:00|4001F002|02D4|07BE|ae0674ec1e496642
+266|2024-02-25T16:02:15.0300000-05:00|E0000000|6B10|2B29|65aa9c0faa3d0e16
+
+Parsed Log Line Examples:
+[15:15:40.585] 266 10A:4001F001:02D2:07AF
+[15:15:54.557] 266 10A:4001F002:02D4:07BE
+[16:02:15.030] 266 10A:E0000000:6B10:2B29
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=NpcYell&lang=en-US) -->
+
+<a name="line267"></a>
+
+### Line 267 (0x10B): BattleTalk2
+
+This log line is emitted whenever a BattleTalk2 packet is received from the server,
+resulting in popup dialog being displayed during instanced content.
+
+`npcNameId` and `instanceContentTextId` (both hex values) correspond to IDs
+in the [BNpcName](https://github.com/xivapi/ffxiv-datamining/blob/master/csv/BNpcName.csv)
+and [InstanceContentTextData](https://github.com/xivapi/ffxiv-datamining/blob/master/csv/InstanceContentTextData.csv)
+tables, respectively.
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=BattleTalk2&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+267|[timestamp]|[npcId]|[instance]|[npcNameId]|[instanceContentTextId]|[displayMs]
+
+Parsed Log Line Structure:
+[timestamp] 267 10B:[npcId]:[instance]:[npcNameId]:[instanceContentTextId]:[displayMs]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>267)\|(?<timestamp>[^|]*)\|(?<npcId>[^|]*)\|(?<instance>[^|]*)\|(?<npcNameId>[^|]*)\|(?<instanceContentTextId>[^|]*)\|(?<displayMs>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 267 (?<type>10B):(?<npcId>[^:]*):(?<instance>[^:]*):(?<npcNameId>[^:]*):(?<instanceContentTextId>[^:]*):(?<displayMs>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+267|2024-02-29T16:22:41.4210000-08:00|00000000|80034E2B|02CE|840C|5000|0|2|0|0|6f6ccb784c36e978
+267|2024-02-29T16:22:17.9230000-08:00|00000000|80034E2B|02D2|8411|7000|0|2|0|0|be1dee98cdcd67a4
+267|2024-02-29T16:23:00.6680000-08:00|4001FFC4|80034E2B|02D5|840F|3000|0|2|0|0|cffef89907b5345b
+
+Parsed Log Line Examples:
+[16:22:41.421] 267 10B:00000000:80034E2B:02CE:840C:5000:0:2:0:0
+[16:22:17.923] 267 10B:00000000:80034E2B:02D2:8411:7000:0:2:0:0
+[16:23:00.668] 267 10B:4001FFC4:80034E2B:02D5:840F:3000:0:2:0:0
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=BattleTalk2&lang=en-US) -->
+
+<a name="line268"></a>
+
+### Line 268 (0x10C): Countdown
+
+This log line is emitted whenever a countdown is started.
+
+`result` is `00` if successful, and non-zero if the attempt to start a countdown failed
+(e.g., if a countdown is already in progress, or if combat has started).
+
+Note: Because there is no network packet sent when a countdown completes successfully,
+no log line is (or reasonably can be) emitted for the 'Engage!' message.
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=Countdown&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+268|[timestamp]|[id]|[worldId]|[countdownTime]|[result]|[name]
+
+Parsed Log Line Structure:
+[timestamp] 268 10C:[id]:[worldId]:[countdownTime]:[result]:[name]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>268)\|(?<timestamp>[^|]*)\|(?<id>[^|]*)\|(?<worldId>[^|]*)\|(?<countdownTime>[^|]*)\|(?<result>[^|]*)\|(?<name>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 268 (?<type>10C):(?<id>[^:]*):(?<worldId>[^:]*):(?<countdownTime>[^:]*):(?<result>[^:]*):(?<name>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+268|2024-02-29T15:19:48.6250000-08:00|10FF0001|0036|13|00|Tini Poutini|0ab734bdbcb55902
+268|2024-02-29T15:34:16.4280000-08:00|10FF0002|0036|20|00|Potato Chippy|0ab734bdbcb55902
+
+Parsed Log Line Examples:
+[15:19:48.625] 268 10C:10FF0001:0036:13:00:Tini Poutini
+[15:34:16.428] 268 10C:10FF0002:0036:20:00:Potato Chippy
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=Countdown&lang=en-US) -->
+
+<a name="line269"></a>
+
+### Line 269 (0x10D): CountdownCancel
+
+This log line is emitted whenever a currently-running countdown is cancelled.
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=CountdownCancel&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+269|[timestamp]|[id]|[worldId]|[name]
+
+Parsed Log Line Structure:
+[timestamp] 269 10D:[id]:[worldId]:[name]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>269)\|(?<timestamp>[^|]*)\|(?<id>[^|]*)\|(?<worldId>[^|]*)\|(?<name>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 269 (?<type>10D):(?<id>[^:]*):(?<worldId>[^:]*):(?<name>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+269|2024-02-29T15:19:55.3490000-08:00|10FF0001|0036|Tini Poutini|e17efb9d120adea0
+269|2024-02-29T15:34:22.8940000-08:00|10FF0002|0036|Potato Chippy|e17efb9d120adea0
+
+Parsed Log Line Examples:
+[15:19:55.349] 269 10D:10FF0001:0036:Tini Poutini
+[15:34:22.894] 269 10D:10FF0002:0036:Potato Chippy
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=CountdownCancel&lang=en-US) -->
+
+<a name="line270"></a>
+
+### Line 270 (0x10E): ActorMove
+
+An `ActorMove` packet is sent to instruct the game client to move an actor to a new position
+whenever they have been moved.
+This can be used, for example, to detect rapid movement which would otherwise be lost
+(e.g., in UWU, when Titan turns prior to jumping to indicate the direction of his jump).
+The FFXIV client interpolates the actor's movement between the current position and the new position.
+
+Currently, these log lines are emitted only for non-player actors (id >= 0x40000000).
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=ActorMove&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+270|[timestamp]|[id]|[heading]|[?]|[?]|[x]|[y]|[z]
+
+Parsed Log Line Structure:
+[timestamp] 270 10E:[id]:[heading]:[?]:[?]:[x]:[y]:[z]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>270)\|(?<timestamp>[^|]*)\|(?<id>[^|]*)\|(?<heading>[^|]*)\|(?:[^|]*\|){2}(?<x>[^|]*)\|(?<y>[^|]*)\|(?<z>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 270 (?<type>10E):(?<id>[^:]*):(?<heading>[^:]*)(?::[^:]*){2}:(?<x>[^:]*):(?<y>[^:]*):(?<z>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+270|2024-03-02T13:14:37.0430000-08:00|4000F1D3|-2.2034|0002|0014|102.0539|118.1982|0.2136|4601ae28c0b481d8
+270|2024-03-02T13:18:30.2960000-08:00|4000F44E|2.8366|0002|0014|98.2391|101.9623|0.2136|2eed500a1505cb03
+270|2024-03-02T13:18:30.6070000-08:00|4000F44E|-2.5710|0002|0014|98.2391|101.9318|0.2136|51bc63077eb489f3
+
+Parsed Log Line Examples:
+[13:14:37.043] 270 10E:4000F1D3:-2.2034:0002:0014:102.0539:118.1982:0.2136
+[13:18:30.296] 270 10E:4000F44E:2.8366:0002:0014:98.2391:101.9623:0.2136
+[13:18:30.607] 270 10E:4000F44E:-2.5710:0002:0014:98.2391:101.9318:0.2136
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=ActorMove&lang=en-US) -->
+
+<a name="line271"></a>
+
+### Line 271 (0x10F): ActorSetPos
+
+An `ActorSetPos` packet is sent to instruct the game client to set the position of an actor
+with no interpolated movement (for example, in UWU, to set the location of the Ifrit clones).
+
+These log lines are sometimes accompanied by other data (other log lines or network packets)
+indicating that an animation should be played if the actor is visible.
+For example, the following log lines (or network packets) might be sent
+in sequence to have an enemy appear to jump to a new location:
+
+1. A [NetworkAbility](#line-21-0x15-networkability) line with an associated animation
+   to make it appear as though the actor is jumping.
+2. An `ActorSetPos` line to change the actor's location.
+3. Another `NetworkAbility` line (or other packet) with an associated animation to make it
+   appear as though the actor has landed.
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=ActorSetPos&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+271|[timestamp]|[id]|[heading]|[?]|[?]|[x]|[y]|[z]
+
+Parsed Log Line Structure:
+[timestamp] 271 10F:[id]:[heading]:[?]:[?]:[x]:[y]:[z]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>271)\|(?<timestamp>[^|]*)\|(?<id>[^|]*)\|(?<heading>[^|]*)\|(?:[^|]*\|){2}(?<x>[^|]*)\|(?<y>[^|]*)\|(?<z>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 271 (?<type>10F):(?<id>[^:]*):(?<heading>[^:]*)(?::[^:]*){2}:(?<x>[^:]*):(?<y>[^:]*):(?<z>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+271|2024-03-02T13:20:50.9620000-08:00|4000F3B7|-2.3563|00|00|116.2635|116.2635|0.0000|e3fa606a5d0b5d57
+271|2024-03-02T13:20:50.9620000-08:00|4000F3B5|-1.5709|00|00|107.0000|100.0000|0.0000|5630c8f4e2ffac77
+271|2024-03-02T13:20:50.9620000-08:00|4000F3BB|0.2617|00|00|97.4118|90.3407|0.0000|01d53a3800c6238f
+
+Parsed Log Line Examples:
+[13:20:50.962] 271 10F:4000F3B7:-2.3563:00:00:116.2635:116.2635:0.0000
+[13:20:50.962] 271 10F:4000F3B5:-1.5709:00:00:107.0000:100.0000:0.0000
+[13:20:50.962] 271 10F:4000F3BB:0.2617:00:00:97.4118:90.3407:0.0000
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=ActorSetPos&lang=en-US) -->
+
+<a name="line272"></a>
+
+### Line 272 (0x110): SpawnNpcExtra
+
+This line contains certain data from `NpcSpawn` packets not otherwise made available
+through other log lines.
+
+The `tetherId` field is the same as the `id` field used in
+[NetworkTether](#line-35-0x23-networktether) lines and corresponds to an id in the
+[Channeling table](https://github.com/xivapi/ffxiv-datamining/blob/master/csv/Channeling.csv).
+
+The `animationState` field reflects the initial animation state of the actor
+at the time it is spawned, and corresponds to the
+[BNpcState table](https://github.com/xivapi/ffxiv-datamining/blob/master/csv/BNpcState.csv).
+
+Note: If the actor spawns with a `tetherId` or `animationState` value, there will not be
+a corresponding [NetworkTether](#line-35-0x23-networktether)
+or [ActorControlExtra](#line-273-0x111-actorcontrolextra) line to indidicate this information.
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=SpawnNpcExtra&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+272|[timestamp]|[id]|[parentId]|[tetherId]|[animationState]
+
+Parsed Log Line Structure:
+[timestamp] 272 110:[id]:[parentId]:[tetherId]:[animationState]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>272)\|(?<timestamp>[^|]*)\|(?<id>[^|]*)\|(?<parentId>[^|]*)\|(?<tetherId>[^|]*)\|(?<animationState>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 272 (?<type>110):(?<id>[^:]*):(?<parentId>[^:]*):(?<tetherId>[^:]*):(?<animationState>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+272|2024-03-02T15:45:44.2260000-05:00|4000226B|E0000000|0000|01|89d2d9b95839548f
+272|2024-03-02T15:45:44.2260000-05:00|4000226D|E0000000|0000|01|b5e6a59cc0b2c1f3
+272|2024-03-03T01:44:39.5570000-08:00|400838F4|E0000000|0000|00|32d8c0e768aeb0e7
+
+Parsed Log Line Examples:
+[15:45:44.226] 272 110:4000226B:E0000000:0000:01
+[15:45:44.226] 272 110:4000226D:E0000000:0000:01
+[01:44:39.557] 272 110:400838F4:E0000000:0000:00
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=SpawnNpcExtra&lang=en-US) -->
+
+<a name="line273"></a>
+
+### Line 273 (0x111): ActorControlExtra
+
+This line contains certain data from `ActorControl` packets not otherwise made available
+through other log lines.
+
+`ActorControlExtra` lines include a numerical `category` field,
+which corresponds to the type of actor control being sent from the server.
+
+`param1` through `param4` are attributes whose meaning vary
+depending on the actor control category.
+
+The list of categories for which log lines are emitted is necessarily restrictive,
+given the volume of data, although more may be added in the future:
+
+| Category Name     | `category`  |
+| ----------------- | ----------- |
+| SetAnimationState | 0x003E (62) |
+
+- `SetAnimationState` - used to set the animation state of an actor.
+  - `param1`, like the `animationState` field in
+    [SpawnNpcExtra](#line-272-0x110-spawnnpcextra), corresponds to the
+    [BNpcState table](https://github.com/xivapi/ffxiv-datamining/blob/master/csv/BNpcState.csv).
+  - `param2` appears to change how an animation of that actor is rendered in-game.
+    More information is needed.
+
+<!-- AUTO-GENERATED-CONTENT:START (logLines:type=ActorControlExtra&lang=en-US) -->
+
+#### Structure
+
+```log
+Network Log Line Structure:
+273|[timestamp]|[id]|[category]|[param1]|[param2]|[param3]|[param4]
+
+Parsed Log Line Structure:
+[timestamp] 273 111:[id]:[category]:[param1]:[param2]:[param3]:[param4]
+```
+
+#### Regexes
+
+```log
+Network Log Line Regex:
+^(?<type>273)\|(?<timestamp>[^|]*)\|(?<id>[^|]*)\|(?<category>[^|]*)\|(?<param1>[^|]*)\|(?<param2>[^|]*)\|(?<param3>[^|]*)\|(?<param4>[^|]*)\|
+
+Parsed Log Line Regex:
+(?<timestamp>^.{14}) 273 (?<type>111):(?<id>[^:]*):(?<category>[^:]*):(?<param1>[^:]*):(?<param2>[^:]*):(?<param3>[^:]*):(?<param4>[^:]*)(?:$|:)
+```
+
+#### Examples
+
+```log
+Network Log Line Examples:
+273|2023-12-05T10:57:43.4770000-08:00|4000A145|003E|1|0|0|0|06e7eff4a949812c
+273|2023-12-05T10:58:00.3460000-08:00|4000A144|003E|1|1|0|0|a4af9f90928636a3
+273|2024-03-03T01:54:27.1980000-08:00|40016E0C|003E|1|1|0|0|f37647efed063aa1
+
+Parsed Log Line Examples:
+[10:57:43.477] 273 111:4000A145:003E:1:0:0:0
+[10:58:00.346] 273 111:4000A144:003E:1:1:0:0
+[01:54:27.198] 273 111:40016E0C:003E:1:1:0:0
+```
+
+<!-- AUTO-GENERATED-CONTENT:END (logLines:type=ActorControlExtra&lang=en-US) -->
