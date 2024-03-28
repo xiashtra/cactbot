@@ -412,6 +412,9 @@ export interface PluginCombatantState {
   IsCasting2?: number;
   CastBuffID?: number;
   CastTargetID?: number;
+  CastGroundTargetX?: number;
+  CastGroundTargetY?: number;
+  CastGroundTargetZ?: number;
   CastDurationCurrent?: number;
   CastDurationMax?: number;
   TransformationId?: number;
