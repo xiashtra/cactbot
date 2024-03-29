@@ -46,12 +46,17 @@ class TimelineParserLint extends TimelineParser {
   private ignoreSyncOrder = false;
   // Capture lint errors separately from TimelineParser's errors so we can do a separate unit test
   public lintErrors: LintError[] = [];
+  // TEMPORARY: To control scpe of linting & file changes; will remove in future PR
+  public _CURR_FILE = '';
+  private _EXPAC_FILTER = ['05-shb', '06-ew'];
 
   constructor(
     text: string,
     triggers: LooseTimelineTrigger[],
+    filename: string, // TEMPORARY: Remove when all files are linted
   ) {
     super(text, [], triggers); // calls TimelineParser's parse() method
+    this._CURR_FILE = filename; // TEMPORARY: Remove when all files are linted
     this.lintTimelineFile(text);
   }
 
@@ -185,16 +190,21 @@ class TimelineParserLint extends TimelineParser {
       return;
 
     // From this point, we should expect [time] [name] [type] [NetRegex]
-    // So just check keyword ordering (everything after), and 'window' format.
+    // So just check keyword ordering & values (everything after).
     const keywords = lineParts.slice(4);
     if (keywords.length === 0)
       return;
 
-    const keywordList = keywords.filter((_, i) => i % 2 === 0);
-    for (let i = 0; i < keywordList.length - 1; i++) {
-      const thisKeyword = keywordList[i];
+    // Assume that every keyword comes in a [keyword] [param] format
+    // If we ever implement a keyword with no (or multiple) parameters, update this logic
+    for (let i = 0; i < keywords.length; i += 2) {
+      const thisKeyword = keywords[i];
       if (thisKeyword === undefined)
         throw new UnreachableCode();
+
+      // TEMPORARY: Remove when all files are linted
+      if (!this._EXPAC_FILTER.some((e) => this._CURR_FILE.includes(e)))
+        return;
 
       if (!syncKewordsOrder.includes(thisKeyword)) {
         this.lintErrors.push({
@@ -205,29 +215,42 @@ class TimelineParserLint extends TimelineParser {
         return;
       }
 
-      // check that `window` is in a [number],[number] format
-      if (thisKeyword === 'window') {
-        const windowKwIdx = keywords.indexOf('window');
-        const windowArgs = keywords[windowKwIdx + 1];
-        if (windowArgs === undefined) {
-          this.lintErrors.push({
-            lineNumber: lineNumber,
-            line: origLine,
-            error: `Missing parameter for 'window' keyword`,
-          });
-          return;
-        }
-        if (!/^\d+(\.\d)?,\d+(\.\d)?$/.test(windowArgs)) {
-          this.lintErrors.push({
-            lineNumber: lineNumber,
-            line: origLine,
-            error: `Invalid 'window' parameter "${windowArgs}": must be in [#],[#] format.`,
-          });
-          // don't return; continue processing the line
-        }
+      const keywordParam = keywords[i + 1];
+      if (keywordParam === undefined) {
+        this.lintErrors.push({
+          lineNumber: lineNumber,
+          line: origLine,
+          error: `Missing parameter for "${thisKeyword}" keyword`,
+        });
+        return;
       }
 
-      const nextKeyword = keywordList[i + 1];
+      if (
+        !isNaN(parseFloat(keywordParam)) &&
+        keywordParam.endsWith('.0')
+      ) {
+        this.lintErrors.push({
+          lineNumber: lineNumber,
+          line: origLine,
+          error: `Unnecessary float "${keywordParam}" - use an integer instead.`,
+        });
+        // don't return; continue processing the line
+      }
+
+      // check that `window` is in a [number],[number] format
+      if (
+        thisKeyword === 'window' &&
+        !/^\d+(\.\d)?,\d+(\.\d)?$/.test(keywordParam)
+      ) {
+        this.lintErrors.push({
+          lineNumber: lineNumber,
+          line: origLine,
+          error: `Invalid 'window' parameter "${keywordParam}": must be in [#],[#] format.`,
+        });
+        // don't return; continue processing the line
+      }
+
+      const nextKeyword = keywords[i + 2];
       if (nextKeyword === undefined)
         break;
 
@@ -396,6 +419,7 @@ const testTimelineFiles = (timelineFiles: string[]): void => {
           timeline = new TimelineParserLint(
             timelineText,
             triggerSet.timelineTriggers ?? [],
+            timelineFile, // TEMPORARY: Remove when all files are linted
           );
         });
         // This test loads an individual raidboss timeline and makes sure
