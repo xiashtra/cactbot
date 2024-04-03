@@ -1362,6 +1362,29 @@ const latestLogDefinitions = {
     canAnonymize: true,
     firstOptionalField: undefined,
   },
+  ActorControlSelfExtra: {
+    type: '274',
+    name: 'ActorControlSelfExtra',
+    source: 'OverlayPlugin',
+    messageType: '274',
+    fields: {
+      type: 0,
+      timestamp: 1,
+      id: 2,
+      category: 3,
+      param1: 4,
+      param2: 5,
+      param3: 6,
+      param4: 7,
+      param5: 8,
+      param6: 9,
+    },
+    playerIds: {
+      2: null,
+    },
+    canAnonymize: true,
+    firstOptionalField: undefined,
+  },
 } as const;
 
 export const logDefinitionsVersions = {

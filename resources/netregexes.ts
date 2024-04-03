@@ -708,6 +708,15 @@ export default class NetRegexes {
   ): CactbotBaseRegExp<'ActorControlExtra'> {
     return buildRegex('ActorControlExtra', params);
   }
+
+  /**
+   * matches: https://github.com/OverlayPlugin/cactbot/blob/main/docs/LogGuide.md#line-274-0x112-actorcontrolselfextra
+   */
+  static actorControlSelfExtra(
+    params?: NetParams['ActorControlSelfExtra'],
+  ): CactbotBaseRegExp<'ActorControlSelfExtra'> {
+    return buildRegex('ActorControlSelfExtra', params);
+  }
 }
 
 export const commonNetRegex = {
