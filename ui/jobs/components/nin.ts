@@ -106,15 +106,6 @@ export class NINComponent extends BaseComponent {
         }, 15000);
         break;
       }
-      case kAbility.ArmorCrush: {
-        if (+this.kazematoi.innerText >= 4) {
-          // Pulse the kazematoi count to indicate that you are wasting it.
-          this.kazematoi.parentElement?.classList.add('nin-kazematoi', 'pulse');
-        } else {
-          this.kazematoi.parentElement?.classList.remove('nin-kazematoi', 'pulse');
-        }
-        break;
-      }
     }
   }
 
@@ -135,6 +126,12 @@ export class NINComponent extends BaseComponent {
       this.ninki.parentNode.classList.add('high');
 
     this.kazematoi.innerText = jobDetail.kazematoi?.toString() ?? '0';
+    if (jobDetail.kazematoi >= 4) {
+      // Pulse the kazematoi count to indicate that you shouldn't use Armor Crash again.
+      this.kazematoi.parentElement?.classList.add('nin-kazematoi', 'pulse');
+    } else {
+      this.kazematoi.parentElement?.classList.remove('nin-kazematoi', 'pulse');
+    }
   }
   override onCombo(skill: string, combo: ComboTracker): void {
     this.comboTimer.duration = 0;
@@ -147,6 +144,7 @@ export class NINComponent extends BaseComponent {
   override reset(): void {
     this.bunshin.duration = 0;
     this.kazematoi.innerText = '0';
+    this.kazematoi.parentElement?.classList.remove('nin-kazematoi', 'pulse');
     this.mudraTriggerCd = true;
     this.ninjutsu.duration = 0;
     this.trickAttack.duration = 0;
