@@ -21,7 +21,7 @@ import { DRG6xComponent, DRGComponent } from './drg';
 import { DRK6xComponent, DRKComponent } from './drk';
 import { GNBComponent } from './gnb';
 import { MCHComponent } from './mch';
-import { MNKComponent } from './mnk';
+import { MNK6xComponent, MNKComponent } from './mnk';
 import { NIN6xComponent, NINComponent } from './nin';
 import { PCTComponent } from './pct';
 import { PLD6xComponent, PLDComponent } from './pld';
@@ -138,6 +138,8 @@ export class ComponentManager {
         return new PLD6xComponent(this.o);
       if (job === 'DRK')
         return new DRK6xComponent(this.o);
+      if (job === 'MNK')
+        return new MNK6xComponent(this.o);
       if (job === 'DRG')
         return new DRG6xComponent(this.o);
       if (job === 'NIN')
