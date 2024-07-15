@@ -765,45 +765,52 @@ namespace Cactbot {
         Spear = 4,
         Ewer = 5,
         Spire = 6,
-        Lord = 0x70,
-        Lady = 0x80,
-      }
-
-      public enum Arcanum : byte {
-        None = 0,
-        Solar = 1,
-        Lunar = 2,
-        Celestial = 3,
+        Lord = 7,
+        Lady = 8,
       }
 
       [NonSerialized]
-      [FieldOffset(0x05)]
-      private byte _heldCard;
+      [FieldOffset(0x00)]
+      private ushort _card;
 
       [NonSerialized]
-      [FieldOffset(0x06)]
-      private byte _arcanumsmix;
+      [FieldOffset(0x02)]
+      private byte _nextdraw;
 
-      public string heldCard {
+      public string card1 {
         get {
-          return ((Card)(_heldCard & 0xF)).ToString();
+          return ((Card)(_card & 0xF)).ToString();
         }
       }
 
-      public string crownCard {
+      public string card2 {
         get {
-          return ((Card)(_heldCard & 0xF0)).ToString();
+          return ((Card)((_card >> 4) & 0xF)).ToString();
         }
       }
 
-      public string[] arcanums {
+        public string card3 {
         get {
-          var _arcanums = new List<Arcanum>();
-          for (var i = 0; i < 3; i++) {
-            int arcanum = (_arcanumsmix >> 2 * i) & 0x3;
-            _arcanums.Add((Arcanum)arcanum);
+          return ((Card)((_card >> 8) & 0xF)).ToString();
+        }
+      }
+
+      public string card4 {
+        get {
+          return ((Card)((_card >> 12) & 0xF)).ToString();
+        }
+      }
+
+      public string nextdraw {
+        get {
+          if (_nextdraw == 0)
+          {
+            return "Astral";
+          } else
+          {
+            return "Umbral";
           }
-          return _arcanums.Select(a => a.ToString()).Where(a => a != "None").ToArray();
+
         }
       }
     };

@@ -11,7 +11,7 @@ import { JobsOptions } from '../jobs_options';
 import { Player } from '../player';
 import { doesJobNeedMPBar, isPvPZone, RegexesHolder } from '../utils';
 
-import { ASTComponent } from './ast';
+import { AST6xComponent, ASTComponent } from './ast';
 import { BaseComponent, ComponentInterface, ShouldShow } from './base';
 import { BLMComponent } from './blm';
 import { BLUComponent } from './blu';
@@ -138,6 +138,8 @@ export class ComponentManager {
         return new PLD6xComponent(this.o);
       if (job === 'DRK')
         return new DRK6xComponent(this.o);
+      if (job === 'AST')
+        return new AST6xComponent(this.o);
       if (job === 'MNK')
         return new MNK6xComponent(this.o);
       if (job === 'DRG')
