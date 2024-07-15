@@ -622,11 +622,13 @@ div.justbuffs div#procs-container {
   background-color: rgb(214 237 255);
 }
 
-.pld-color-atonement.any {
+.pld-color-atonement.any,
+.pld-color-requiescat {
   background-color: rgb(25 156 255);
 }
 
-.pld-color-gore {
+.pld-color-gore,
+.pld-color-scorn {
   background-color: rgb(255 135 35);
 }
 
