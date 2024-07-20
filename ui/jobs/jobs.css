@@ -257,6 +257,7 @@ div.justbuffs div#procs-container {
 .nin #right-side-icons,
 .sam #right-side-icons,
 .rpr #right-side-icons,
+.vpr #right-side-icons,
 .brd #right-side-icons,
 .mch #right-side-icons,
 .dnc #right-side-icons,
@@ -440,6 +441,21 @@ div.justbuffs div#procs-container {
 
 #rpr-stacks-enshroud > div.void {
   background-color: rgb(255 0 255);
+}
+
+#vpr-stacks-vipersight[data-stacks="1"] {
+  --bg-color: rgb(255 0 0);
+}
+
+#vpr-stacks-vipersight[data-stacks="2"] {
+  --bg-color: rgb(20 200 255);
+}
+
+#vpr-stacks-vipersight.active[data-side="both"] > div.left,
+#vpr-stacks-vipersight.active[data-side="both"] > div.right,
+#vpr-stacks-vipersight.active[data-side="left"] > div.left,
+#vpr-stacks-vipersight.active[data-side="right"] > div.right {
+  background-color: var(--bg-color);
 }
 
 #brd-stacks-magescoda.active {
@@ -1105,6 +1121,47 @@ div.justbuffs div#procs-container {
 
 .rpr-color-shroud {
   background-color: rgb(0 170 170);
+}
+
+/* VPR */
+.vpr-color-noxious-gnash {
+  background-color: rgb(100 20 30);
+}
+
+.vpr-color-hunters-instinct {
+  background-color: rgb(255 60 140);
+}
+
+.vpr-color-swiftscaled {
+  background-color: rgb(255 200 60);
+}
+
+.vpr-color-dreadcombo {
+  background-color: rgb(99 123 77);
+}
+
+.vpr-color-rattling-coil {
+  background-color: rgb(255 60 50);
+}
+
+.vpr-color-rattling-coil.pulse {
+  animation: 1s pulse-white infinite;
+}
+
+.vpr-color-serpentofferings {
+  background-color: rgb(255 30 20 / 30%);
+}
+
+.vpr-color-serpentofferings.high {
+  background-color: rgb(90 150 220);
+}
+
+.vpr-color-serpentofferings.high.pulse {
+  animation: 1s pulse-red infinite;
+}
+
+.vpr-color-serpentofferings.active {
+  background-color: rgb(130 255 255);
 }
 
 /* BRD */

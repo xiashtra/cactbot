@@ -94,6 +94,24 @@ export interface JobDetail {
     lemureShroud: number;
     voidShroud: number;
   };
+  'VPR': {
+    rattlingCoilStacks: number;
+    anguineTribute: number;
+    serpentOffering: number;
+    advancedCombo:
+      | 'Dreadwinder'
+      | 'HuntersCoil'
+      | 'SwiftskinsCoil'
+      | 'PitOfDread'
+      | 'HuntersDen'
+      | 'SwiftskinsDen'
+      | 'Reawaken'
+      | 'FirstGeneration'
+      | 'SecondGeneration'
+      | 'ThirdGeneration'
+      | 'FourthGeneration';
+    reawakenedTimer: number;
+  };
   'BRD': {
     songName: BardSongType;
     lastPlayed: BardSongType;
