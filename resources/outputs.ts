@@ -238,6 +238,14 @@ export default {
     cn: '中间集合',
     ko: '중앙에서 모이기',
   },
+  // For general more-than-one-stack-at-a-time situations
+  stacks: {
+    en: 'Stacks',
+    de: 'Sammeln',
+    fr: 'Package',
+    cn: '分摊',
+    ko: '쉐어',
+  },
   doritoStack: {
     en: 'Dorito Stack',
     de: 'Mit Marker sammeln',
