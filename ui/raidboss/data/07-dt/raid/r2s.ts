@@ -80,6 +80,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stored Partners',
           de: 'Gespeichert: Partner',
+          cn: '存储分摊',
         },
       },
     },
@@ -93,6 +94,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stored Spread',
           de: 'Gespeichert: Verteilen',
+          cn: '存储分散',
         },
       },
     },
@@ -106,6 +108,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stored Partners',
           de: 'Gespeichert: Partner',
+          cn: '存储分摊',
         },
       },
     },
@@ -119,6 +122,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Stored Spread',
           de: 'Gespeichert: Verteilen',
+          cn: '存储分散',
         },
       },
     },
@@ -148,10 +152,12 @@ const triggerSet: TriggerSet<Data> = {
         spread: {
           en: 'Spread',
           de: 'Verteilen',
+          cn: '分散',
         },
         partners: {
           en: 'Partners',
           de: 'Partner',
+          cn: '分摊',
         },
         unknown: Outputs.unknown,
       },
@@ -202,6 +208,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Under Intercards => Out => Cards',
           de: 'Rein Interkardinal => Raus => Kardinal',
+          cn: '内斜角 => 外斜角 => 外正点',
         },
       },
     },
@@ -215,6 +222,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Out Cards => Intercards => Under',
           de: 'Raus Kardinal => Interkardinal => Rein',
+          cn: '外正点 => 外斜角 => 内斜角',
         },
       },
     },
