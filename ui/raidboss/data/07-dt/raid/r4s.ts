@@ -803,7 +803,7 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Spread (${stacks} stacks)',
           de: 'Verteilen (${stacks} sammeln)',
           ja: '散開 (${stacks} 回のほう)',
-          cn: '分散 (${stacks} 分摊)',
+          cn: '分散 (${stacks} 层雷)',
         },
       },
     },
@@ -847,7 +847,7 @@ const triggerSet: TriggerSet<Data> = {
           en: '(${stacks} stacks after)',
           de: '(${stacks} danach sammeln)',
           ja: '(${stacks} 回のほう)',
-          cn: '(${stacks} 待会分摊)',
+          cn: '(${stacks} 层雷)',
         },
         combo: {
           en: '${dir} => ${mech} ${remind}',
