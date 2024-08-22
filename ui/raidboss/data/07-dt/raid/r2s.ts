@@ -156,6 +156,7 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         avoidTowers: {
           en: 'Spread -- Avoid Towers',
+          cn: '分散 - 躲开塔',
         },
         towers: Outputs.getTowers,
       },
