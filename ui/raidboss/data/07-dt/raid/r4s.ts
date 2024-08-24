@@ -1475,20 +1475,31 @@ const triggerSet: TriggerSet<Data> = {
           ? (data.midnightCardFirst ? output.cardinals!() : output.intercards!())
           : (data.midnightCardFirst ? output.intercards!() : output.cardinals!());
 
-        return output.combo!({ dir: dirStr, mech: firstMechStr });
+        const typeStr = data.midnightFirstAdds === 'wings' ? output.wings!() : output.guns!();
+
+        return output.combo!({ dir: dirStr, type: typeStr, mech: firstMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          de: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          cn: '${dir} => ${mech}',
-          ko: '${dir} => ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          de: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          cn: '${dir} + ${type} + ${mech}',
+          ko: '${dir} + ${type} + ${mech}',
+        },
+        guns: {
+          en: 'Avoid Line',
+          cn: '躲避直线',
+        },
+        wings: {
+          en: 'Donut',
+          cn: '月环',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
         spread: Outputs.spread,
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -1509,15 +1520,25 @@ const triggerSet: TriggerSet<Data> = {
           ? (secondAddsOnCards ? output.cardinals!() : output.intercards!())
           : (secondAddsOnCards ? output.intercards!() : output.cardinals!());
 
-        return output.combo!({ dir: dirStr, mech: secondMechStr });
+        const typeStr = data.midnightSecondAdds === 'wings' ? output.wings!() : output.guns!();
+
+        return output.combo!({ dir: dirStr, type: typeStr, mech: secondMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          de: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          cn: '${dir} => ${mech}',
-          ko: '${dir} => ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          de: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          cn: '${dir} + ${type} + ${mech}',
+          ko: '${dir} + ${type} + ${mech}',
+        },
+        guns: {
+          en: 'Avoid Line',
+          cn: '躲避直线',
+        },
+        wings: {
+          en: 'Donut',
+          cn: '月环',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
@@ -1526,7 +1547,6 @@ const triggerSet: TriggerSet<Data> = {
         unknown: Outputs.unknown,
       },
     },
-
     // Chain Lightning
     {
       id: 'R4S Flame Slash',
