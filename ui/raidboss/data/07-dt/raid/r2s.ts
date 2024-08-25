@@ -42,10 +42,12 @@ const poisonOutputStrings = {
   defamations: {
     en: 'Defamations',
     de: 'Große AoE auf dir',
+    cn: '大圈点名',
   },
   in: {
     en: 'In (Avoid Defamations)',
     de: 'Mitte (weiche den AoEs aus)',
+    cn: '去脚下 (远离大圈)',
   },
 };
 
@@ -311,14 +313,17 @@ const triggerSet: TriggerSet<Data> = {
         middle: {
           en: '(middle after)',
           de: '(danach mitte)',
+          cn: '(稍后场中)',
         },
         partners: {
           en: '(middle + partners after)',
           de: '(mitte + danach mit partner sammeln)',
+          cn: '(稍后场中 + 分摊)',
         },
         spread: {
           en: '(middle + spread after)',
           de: '(mitte + danach verteilen)',
+          cn: '(稍后场中 + 分散)',
         },
       },
     },
@@ -352,6 +357,7 @@ const triggerSet: TriggerSet<Data> = {
         combo: {
           en: '${next} + ${mech}',
           de: '${next} + ${mech}',
+          cn: '${next} + ${mech}',
         },
       },
     },
@@ -374,14 +380,17 @@ const triggerSet: TriggerSet<Data> = {
         out: {
           en: '(out after)',
           de: '(danach raus)',
+          cn: '(稍后远离)',
         },
         partners: {
           en: '(out + partners after)',
           de: '(raus + danach mit partner sammeln)',
+          cn: '(稍后远离 + 分摊)',
         },
         spread: {
           en: '(out + spread after)',
           de: '(raus + danach verteilen)',
+          cn: '(稍后远离 + 分散)',
         },
       },
     },
@@ -415,6 +424,7 @@ const triggerSet: TriggerSet<Data> = {
         combo: {
           en: '${next} + ${mech}',
           de: '${next} + ${mech}',
+          cn: '${next} + ${mech}',
         },
       },
     },
@@ -583,6 +593,7 @@ const triggerSet: TriggerSet<Data> = {
         merge: {
           en: 'Merge Soon w/ ${player}',
           de: 'Bald berühren mit ${player}',
+          cn: '准备和 ${player} 撞毒',
         },
         unknown: Outputs.unknown,
       },
@@ -614,6 +625,7 @@ const triggerSet: TriggerSet<Data> = {
         merge: {
           en: 'Merge: ${alpha} + ${beta}',
           de: 'Berühren: ${alpha} + ${beta}',
+          cn: '撞毒: ${alpha} + ${beta}',
         },
         unknown: Outputs.unknown,
       },
