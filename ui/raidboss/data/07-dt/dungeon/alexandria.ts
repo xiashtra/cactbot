@@ -41,11 +41,12 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.goFront(),
     },
     {
+      // Interferon R is 12842, Interferon C is 12843
       id: 'Alexandria AntivirusX Interferon Collect',
       type: 'AddedCombatant',
-      netRegex: { name: ['Interferon C', 'Interferon R'] },
+      netRegex: { npcNameId: ['12842', '12843'] },
       run: (data, matches, output) => {
-        const call = matches.name === 'Interferon C' ? output.avoid!() : output.in!();
+        const call = matches.npcNameId === '12843' ? output.avoid!() : output.in!();
         data.interferonCalls.push(call);
       },
       outputStrings: {
@@ -61,7 +62,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Alexandria AntivirusX Interferon Call',
       type: 'AddedCombatant',
-      netRegex: { name: ['Interferon C', 'Interferon R'], capture: false },
+      netRegex: { npcNameId: ['12842', '12843'], capture: false },
       delaySeconds: 0.5,
       durationSeconds: 15,
       infoText: (data, _matches, output) => {
