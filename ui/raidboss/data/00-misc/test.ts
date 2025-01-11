@@ -442,10 +442,31 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'Test Trigger Countdown',
+      type: 'GameLog',
+      netRegex: {
+        line: 'cactbot test trigger countdown.*?',
+        code: Util.gameLogCodes.echo,
+        capture: false,
+      },
+      delaySeconds: 2,
+      durationSeconds: 7, // should cause countdown to be displayed at 0.0 for 2 seconds.
+      countdownSeconds: 5,
+      infoText: (_data, _matches, output) => {
+        return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: 'Trigger countdown test',
+        },
+      },
+    },
   ],
   timelineReplace: [
     {
       locale: 'de',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': 'Du winkst der Trainingspuppe zum Abschied zu',
         'You bow courteously to the striking dummy':
@@ -486,6 +507,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'fr',
+      missingTranslations: true,
       replaceSync: {
         'cactbot lang': 'cactbot langue',
         'cactbot test response': 'cactbot test de réponse',
@@ -570,6 +592,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'cn',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': '.*向木人告别',
         'You bow courteously to the striking dummy': '.*恭敬地对木人行礼',
@@ -609,6 +632,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       locale: 'ko',
+      missingTranslations: true,
       replaceSync: {
         'You bid farewell to the striking dummy': '.*나무인형에게 작별 인사를 합니다',
         'You bow courteously to the striking dummy': '.*나무인형에게 공손하게 인사합니다',
