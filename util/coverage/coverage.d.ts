@@ -1,7 +1,9 @@
 import { Lang } from '../../resources/languages';
+import { LocaleText } from '../../types/trigger';
 import { MissingTranslationErrorType } from '../find_missing_translations';
 
 export type CoverageEntry = {
+  label?: LocaleText;
   triggers: {
     num: number;
   };
@@ -18,6 +20,13 @@ export type CoverageEntry = {
       [type in MissingTranslationErrorType]?: number;
     };
   };
+  comments?: LocaleText;
+  files: {
+    name: string;
+    commit?: string;
+    tag?: string;
+  }[];
+  lastModified: number;
 };
 
 export type Coverage = { [zoneId: string]: CoverageEntry };
@@ -47,3 +56,17 @@ export type TranslationTotals = {
     errors: number;
   };
 };
+
+export type Tags = {
+  [tagName: string]: {
+    tagDate: number;
+    tagHash: string;
+  };
+};
+
+export type Pulls = {
+  url: string;
+  number: number;
+  title: string;
+  files: string[];
+}[];
