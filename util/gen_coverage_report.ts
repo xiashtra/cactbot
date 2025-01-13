@@ -26,19 +26,6 @@ import {
 import { findMissingTranslations, MissingTranslationErrorType } from './find_missing_translations';
 import findManifestFiles from './manifest';
 
-// eslint can't find these types from simple-git for some reason
-// Redefine the parts that we actually use
-type TagResult = {
-  all: string[];
-};
-
-type LogResult = {
-  latest: {
-    date: string;
-    hash: string;
-  } | null;
-};
-
 type MissingTranslations = {
   file: string;
   line?: number;
@@ -49,6 +36,17 @@ type MissingTranslations = {
 type MissingTranslationsDict = {
   [lang in Lang]?: MissingTranslations[];
 };
+
+type SimpleGit = ReturnType<typeof simpleGit>;
+
+// This hash is the default "initial commit" hash for git, all repos have it
+// If for some reason the entire git tree is re-imported into a newer version of git,
+// the default commit hash will be an SHA-256 hash as follows instead:
+// 6ef19b41225c5369f1c104d45d8d85efa9b057b53b14b4b9b939dd74decc5321
+// This can be derived as needed via `git hash-object -t tree /dev/null`
+const DEFAULT_COMMIT_HASH = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+
+const notUndefined = <T>(v: T | undefined): v is T => v !== undefined;
 
 // Paths are relative to current file.
 // We can't import the manifest directly from util/ because that's webpack magic,
@@ -482,20 +480,48 @@ const writeMissingTranslations = (missing: MissingTranslations[], outputFileName
   }
 };
 
-(async () => {
-  const git = simpleGit();
+const mapCoverageTags = async (coverage: Coverage, git: SimpleGit, tags: Tags) => {
+  const reverseOrderTags = Object.keys(tags).reverse();
 
-  let tagData: TagResult | undefined;
+  for (const coverageEntry of Object.values(coverage)) {
+    for (const file of coverageEntry.files) {
+      const logData = await git.log({
+        file: file.name,
+        maxCount: 1,
+      });
 
-  await git.tags({
-    '--sort': '-authordate',
+      if (logData === undefined)
+        continue;
+
+      const latest = logData.latest;
+      if (latest !== null) {
+        coverageEntry.lastModified = Math.max(
+          coverageEntry.lastModified,
+          (new Date(latest.date)).getTime(),
+        );
+        file.commit = latest.hash;
+      }
+
+      if (file.commit !== undefined) {
+        for (const tag of reverseOrderTags) {
+          const tagFile = tags[tag]?.files.find((tagFile) => tagFile.name === file.name);
+          if (tagFile) {
+            file.tag = tag;
+            file.tagHash = tagFile.hash;
+            break;
+          }
+        }
+      }
+    }
+  }
+};
+
+const extractTagsAndPulls = async (git: SimpleGit) => {
+  const tagData = await git.tags({
     '--format': '%(objectname)|%(refname:strip=2)|%(authordate)|%(*authordate)',
-  }, (_err, data) => {
-    tagData = data;
   });
-  tagData ??= undefined;
 
-  const tags: Tags = {};
+  const unsortedTags: (Tags[string] & { name: string })[] = [];
 
   for (const tag of tagData?.all ?? []) {
     const [tagHash, tagName, tagDate, commitDate] = tag.split('|', 4);
@@ -508,9 +534,35 @@ const writeMissingTranslations = (missing: MissingTranslations[], outputFileName
     if (isNaN(tagDateObj.getTime())) {
       tagDateObj = new Date(commitDate);
     }
-    tags[tagName] = {
+    unsortedTags.push({
+      name: tagName,
       tagDate: tagDateObj.getTime(),
       tagHash: tagHash,
+      files: [],
+    });
+  }
+
+  const tags: Tags = {};
+
+  let lastVersion = DEFAULT_COMMIT_HASH;
+
+  for (const tag of unsortedTags.sort((l, r) => l.tagDate - r.tagDate)) {
+    const result = await git.raw(['diff-tree', '-r', lastVersion, tag.name]);
+    lastVersion = tag.name;
+
+    tags[tag.name] = {
+      tagDate: tag.tagDate,
+      tagHash: tag.tagHash,
+      files: result.split('\n').map((line) => {
+        const matches =
+          /^:(?<oldMode>[^\s]+) (?<newMode>[^\s]+) (?<oldHash>[^\s]+) (?<newHash>[^\s]+) (?<action>[^\s]+)\s*(?<name>[^\s].*?)$/
+            .exec(line);
+
+        return {
+          hash: matches?.groups?.['newHash'] ?? '',
+          name: matches?.groups?.['name'] ?? '',
+        };
+      }),
     };
   }
 
@@ -537,13 +589,33 @@ const writeMissingTranslations = (missing: MissingTranslations[], outputFileName
 
     const files = pullFiles.map((f) => f.filename);
 
+    const zones = pullFiles
+      .filter((f) =>
+        (f.filename.startsWith('ui/raidboss/data') ||
+          f.filename.startsWith('ui/oopsyraidsy/data')) && f.filename.endsWith('.ts')
+      )
+      .map((f) => /ZoneId\.([a-zA-Z0-9]+)/.exec(f.patch ?? '')?.[1])
+      .filter(notUndefined)
+      .map((zoneId) =>
+        zoneId in ZoneId ? ZoneId[zoneId as keyof typeof ZoneId] as number : undefined
+      )
+      .filter(notUndefined);
+
     pulls.push({
       number: openPull.number,
       title: openPull.title,
       url: openPull.html_url,
       files: files,
+      zones: zones,
     });
   }
+  return { tags, pulls };
+};
+
+(async () => {
+  const git = simpleGit();
+
+  const { tags, pulls }: { tags: Tags; pulls: Pulls } = await extractTagsAndPulls(git);
 
   // Do this prior to chdir which conflicts with find_missing_timeline_translations.ts.
   // FIXME: make that script more robust to cwd.
@@ -564,42 +636,7 @@ const writeMissingTranslations = (missing: MissingTranslations[], outputFileName
   await processRaidbossCoverage(raidbossManifest, coverage, missingTranslations);
   await processOopsyCoverage(oopsyManifest, coverage);
 
-  for (const coverageEntry of Object.values(coverage)) {
-    for (const file of coverageEntry.files) {
-      let logData: undefined | LogResult;
-      await git.log({
-        file: file.name,
-        maxCount: 1,
-      }, (_err, data) => logData = data);
-
-      logData ??= undefined;
-
-      if (logData === undefined)
-        continue;
-
-      const latest = logData.latest;
-      if (latest !== null) {
-        coverageEntry.lastModified = Math.max(
-          coverageEntry.lastModified,
-          (new Date(latest.date)).getTime(),
-        );
-        file.commit = latest.hash;
-      }
-
-      if (file.commit !== undefined) {
-        let tagData: undefined | string;
-        await git.tag({
-          '--sort': 'authordate',
-          '--contains': file.commit,
-        }, (_err, data) => tagData = data.split('\n')[0]?.trim());
-        tagData ??= undefined;
-
-        if (tagData !== undefined) {
-          file.tag = tagData;
-        }
-      }
-    }
-  }
+  await mapCoverageTags(coverage, git, tags);
 
   const { totals, translationTotals } = buildTotals(coverage, missingTranslations);
   writeCoverageReport(
