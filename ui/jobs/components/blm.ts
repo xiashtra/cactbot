@@ -9,14 +9,16 @@ import { BaseComponent, ComponentInterface } from './base';
 
 export class BLMComponent extends BaseComponent {
   thunderDot: TimerBox;
-  thunderProc: TimerBox;
-  fireProc: TimerBox;
   manafont: TimerBox;
+  amplifier: TimerBox;
+  firestarter: HTMLDivElement;
+  thunderhead: HTMLDivElement;
+  paradox: HTMLDivElement;
   xenoStacks: HTMLElement[];
   heartStacks: HTMLElement[];
-  astralSoulStacks: HTMLElement[];
   umbralTimer: ResourceBox;
   xenoTimer: ResourceBox;
+  astralSoul: ResourceBox;
 
   maxpoly: number;
   umbralStacks: number;
@@ -26,20 +28,6 @@ export class BLMComponent extends BaseComponent {
 
     this.maxpoly = 0;
     this.umbralStacks = 0;
-
-    this.fireProc = this.bars.addProcBox({
-      id: 'blm-procs-fire',
-      fgColor: 'blm-color-fire',
-      threshold: 1000,
-    });
-    this.fireProc.bigatzero = false;
-
-    this.thunderProc = this.bars.addProcBox({
-      id: 'blm-procs-thunder',
-      fgColor: 'blm-color-thunder',
-      threshold: 1000,
-    });
-    this.thunderProc.bigatzero = false;
 
     this.thunderDot = this.bars.addProcBox({
       id: 'blm-dot-thunder',
@@ -52,8 +40,15 @@ export class BLMComponent extends BaseComponent {
       fgColor: 'blm-color-manafont',
     });
 
+    this.amplifier = this.bars.addProcBox({
+      id: 'blm-cd-amplifier',
+      fgColor: 'blm-color-amplifier',
+    });
+
     // It'd be super nice to use grid here.
     // Maybe some day when cactbot uses new cef.
+
+    // Umbral Hearts & Polyglot
     const stacksContainer = document.createElement('div');
     stacksContainer.id = 'blm-stacks';
     stacksContainer.classList.add('stacks');
@@ -79,24 +74,33 @@ export class BLMComponent extends BaseComponent {
       this.xenoStacks.push(d);
     }
 
-    const astralSoulStacksContainer = document.createElement('div');
-    astralSoulStacksContainer.id = 'blm-stacks-astral-souls';
-    this.astralSoulStacks = [];
-    for (let i = 0; i < 6; ++i) {
-      const d = document.createElement('div');
-      astralSoulStacksContainer.appendChild(d);
-      this.astralSoulStacks.push(d);
-    }
-    const astralSoulStacksContainerContainer = document.createElement('div');
-    astralSoulStacksContainerContainer.classList.add('stacks');
-    astralSoulStacksContainerContainer.appendChild(astralSoulStacksContainer);
-    this.bars.addJobBarContainer().appendChild(astralSoulStacksContainerContainer);
+    // Firestarter & Thunderhead & Paradox
+    const stacksContainer2 = document.createElement('div');
+    stacksContainer2.id = 'blm-stacks2';
+    stacksContainer2.classList.add('stacks');
+    this.bars.addJobBarContainer().appendChild(stacksContainer2);
+
+    const procContainer = document.createElement('div');
+    procContainer.id = 'blm-stacks-proc';
+    stacksContainer2.appendChild(procContainer);
+
+    this.firestarter = document.createElement('div');
+    this.thunderhead = document.createElement('div');
+    this.paradox = document.createElement('div');
+
+    this.firestarter.id = 'blm-stacks-firestarter';
+    this.thunderhead.id = 'blm-stacks-thunderhead';
+    this.paradox.id = 'blm-stacks-paradox';
+    [this.firestarter, this.paradox, this.thunderhead].forEach((e) => procContainer.appendChild(e));
 
     this.umbralTimer = this.bars.addResourceBox({
       classList: ['blm-umbral-timer'],
     });
     this.xenoTimer = this.bars.addResourceBox({
       classList: ['blm-xeno-timer'],
+    });
+    this.astralSoul = this.bars.addResourceBox({
+      classList: ['blm-astral-souls'],
     });
 
     this.reset();
@@ -122,16 +126,20 @@ export class BLMComponent extends BaseComponent {
         break;
       case kAbility.Manafont:
         this.manafont.duration = this.player.level >= 84 ? 100 : 120;
+        break;
+      case kAbility.Amplifier:
+        this.amplifier.duration = 120;
+        break;
     }
   }
 
-  override onYouGainEffect(id: string, matches: PartialFieldMatches<'GainsEffect'>): void {
+  override onYouGainEffect(id: string): void {
     switch (id) {
       case EffectId.Thunderhead:
-        this.thunderProc.duration = parseFloat(matches.duration ?? '0') - 0.5;
+        this.thunderhead.classList.add('active');
         break;
       case EffectId.Firestarter:
-        this.fireProc.duration = parseFloat(matches.duration ?? '0');
+        this.firestarter.classList.add('active');
         break;
       case EffectId.CircleOfPower:
         this.player.speedBuffs.circleOfPower = true;
@@ -142,10 +150,10 @@ export class BLMComponent extends BaseComponent {
   override onYouLoseEffect(id: string): void {
     switch (id) {
       case EffectId.Thunderhead:
-        this.thunderProc.duration = 0;
+        this.thunderhead.classList.remove('active');
         break;
       case EffectId.Firestarter:
-        this.fireProc.duration = 0;
+        this.firestarter.classList.remove('active');
         break;
       case EffectId.CircleOfPower:
         this.player.speedBuffs.circleOfPower = false;
@@ -154,7 +162,6 @@ export class BLMComponent extends BaseComponent {
   }
 
   override onJobDetailUpdate(jobDetail: JobDetail['BLM']): void {
-    // FIXME: make it able to use after refactoring
     if (this.umbralStacks !== jobDetail.umbralStacks) {
       this.umbralStacks = jobDetail.umbralStacks;
       this.bars._updateMPTicker({
@@ -165,6 +172,8 @@ export class BLMComponent extends BaseComponent {
         ffxivVersion: this.ffxivVersion,
       });
     }
+
+    this.paradox.classList.toggle('active', jobDetail.paradox);
 
     const fouls = jobDetail.polyglot;
     for (let i = 0; i < 3; ++i) {
@@ -183,18 +192,17 @@ export class BLMComponent extends BaseComponent {
     }
 
     const stacks = jobDetail.umbralStacks;
-    const seconds = Math.ceil(jobDetail.umbralMilliseconds / 1000.0).toString();
     const p = this.umbralTimer.parentNode;
     if (!stacks) {
       this.umbralTimer.innerText = '';
       p.classList.remove('fire');
       p.classList.remove('ice');
     } else if (stacks > 0) {
-      this.umbralTimer.innerText = seconds;
+      this.umbralTimer.innerText = stacks.toString();
       p.classList.add('fire');
       p.classList.remove('ice');
     } else {
-      this.umbralTimer.innerText = seconds;
+      this.umbralTimer.innerText = Math.abs(stacks).toString();
       p.classList.remove('fire');
       p.classList.add('ice');
     }
@@ -214,17 +222,17 @@ export class BLMComponent extends BaseComponent {
     }
 
     const asStacks = jobDetail.astralSoulStacks;
-    for (let i = 0; i < 6; ++i) {
-      if (asStacks > i)
-        this.astralSoulStacks[i]?.classList.add('active');
-      else
-        this.astralSoulStacks[i]?.classList.remove('active');
-    }
+    this.astralSoul.innerText = asStacks.toString();
+    if (asStacks === 6)
+      this.astralSoul.parentNode.classList.add('max');
+    else
+      this.astralSoul.parentNode.classList.remove('max');
   }
 
   override onStatChange({ gcdSpell }: { gcdSpell: number }): void {
     this.thunderDot.threshold = gcdSpell * 2 + 1;
     this.manafont.threshold = gcdSpell * 2 + 1;
+    this.amplifier.threshold = gcdSpell * 2 + 1;
     // FIXME: will not work if loaded without status/map changes, until Ley Lines.
     this.maxpoly = this.player.level >= 98
       ? 3
@@ -242,11 +250,13 @@ export class BLMComponent extends BaseComponent {
 
   override reset(): void {
     this.thunderDot.duration = 0;
-    this.thunderProc.duration = 0;
-    this.fireProc.duration = 0;
     this.manafont.duration = 0;
+    this.amplifier.duration = 0;
 
     this.umbralStacks = 0;
+    this.firestarter.classList.remove('active');
+    this.thunderhead.classList.remove('active');
+    this.paradox.classList.remove('active');
   }
 }
 
