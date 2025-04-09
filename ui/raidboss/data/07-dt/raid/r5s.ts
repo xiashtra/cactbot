@@ -115,6 +115,7 @@ const triggerSet: TriggerSet<Data> = {
         stored: {
           en: '(${mech} later)',
           cn: '(稍后 ${mech})',
+          ko: '(나중에 ${mech})',
         },
         lightParty: Outputs.healerGroups,
         roleGroup: Outputs.rolePositions,
@@ -140,6 +141,7 @@ const triggerSet: TriggerSet<Data> = {
         combo: {
           en: 'Start ${dir} (${num} hits) => ${mech}',
           cn: '${dir} 开始 (打 ${num} 次) => ${mech}',
+          ko: '${dir} 시작 (${num}번 공격) => ${mech}',
         },
         lightParty: Outputs.healerGroups,
         roleGroup: Outputs.rolePositions,
@@ -182,10 +184,12 @@ const triggerSet: TriggerSet<Data> = {
         shortBurn: {
           en: '(short cleanse)',
           cn: '(短舞点名)',
+          ko: '(짧은 디버프)',
         },
         longBurn: {
           en: '(long cleanse)',
           cn: '(长舞点名)',
+          ko: '(긴 디버프)',
         },
       },
     },
@@ -203,6 +207,7 @@ const triggerSet: TriggerSet<Data> = {
         cleanse: {
           en: 'Cleanse in spotlight',
           cn: '灯下跳舞',
+          ko: '스포트라이트에 서기',
         },
       },
     },
@@ -224,10 +229,12 @@ const triggerSet: TriggerSet<Data> = {
         cleanse: {
           en: 'Cleanse in spotlight',
           cn: '灯下跳舞',
+          ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
           cn: '引导青蛙',
+          ko: '개구리 유도',
         },
       },
     },
@@ -250,10 +257,12 @@ const triggerSet: TriggerSet<Data> = {
         cleanse: {
           en: 'Cleanse in spotlight',
           cn: '灯下跳舞',
+          ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
           cn: '引导青蛙',
+          ko: '개구리 유도',
         },
       },
     },
@@ -267,6 +276,7 @@ const triggerSet: TriggerSet<Data> = {
         insideOut: {
           en: 'Max Melee => Under',
           cn: '钢铁 => 月环',
+          ko: '칼끝딜 => 안으로',
         },
       },
     },
@@ -280,6 +290,7 @@ const triggerSet: TriggerSet<Data> = {
         outsideIn: {
           en: 'Under => Max Melee',
           cn: '月环 => 钢铁',
+          ko: '안으로 => 칼끝딜',
         },
       },
     },
@@ -333,22 +344,27 @@ const triggerSet: TriggerSet<Data> = {
         merge: {
           en: '${order} merge',
           cn: '${order} 撞毒',
+          ko: '${order} 융합',
         },
         first: {
           en: 'First',
           cn: '第1组',
+          ko: '첫번째',
         },
         second: {
           en: 'Second',
           cn: '第2组',
+          ko: '두번째',
         },
         third: {
           en: 'Third',
           cn: '第3组',
+          ko: '세번째',
         },
         fourth: {
           en: 'Fourth',
           cn: '第4组',
+          ko: '네번째',
         },
         unknown: Outputs.unknown,
       },
@@ -364,6 +380,7 @@ const triggerSet: TriggerSet<Data> = {
         merge: {
           en: 'Merge debuff',
           cn: '撞毒',
+          ko: '융합하기',
         },
       },
     },
