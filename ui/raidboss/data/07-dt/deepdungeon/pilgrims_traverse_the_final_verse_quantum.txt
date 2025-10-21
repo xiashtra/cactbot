@@ -1,0 +1,212 @@
+### THE FINAL VERSE (QUANTUM)
+# ZoneId: 1311
+# Q40 only
+# 20 OCT 2025 pull 49
+
+hideall "--Reset--"
+hideall "--sync--"
+
+0.0 "--Reset--" ActorControl { command: "4000000F" } window 0,100000 jump 0
+
+0.0 "--sync--" InCombat { inGameCombat: "1" } window 0,1
+4.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+5.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+7.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+8.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+12.4 "Scourging Blaze" Ability { id: ["AEFD", "AEFE"], source: "Eminent Grief" }
+19.2 "--sync--" Ability { id: "AC53", source: "Eminent Grief" }
+20.4 "Scourging Blaze" Ability { id: ["AEFF", "AF00"], source: "Eminent Grief" }
+27.2 "--sync--" Ability { id: "AC53", source: "Eminent Grief" }
+29.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+32.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+32.8 "Bounds of Sin" Ability { id: "AC58", source: "Devoured Eater" }
+33.6 "Bounds of Sin" Ability { id: "AC59", source: "Devoured Eater" }
+35.2 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+37.5 "Bounds of Sin" #Ability { id: "AC5A", source: "Devoured Eater" }
+37.8 "Bounds of Sin" #Ability { id: "AC5A", source: "Devoured Eater" }
+38.1 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+38.1 "Bounds of Sin" #Ability { id: "AC5A", source: "Devoured Eater" }
+38.4 "Bounds of Sin" #Ability { id: "AC5A", source: "Devoured Eater" }
+38.6 "Bounds of Sin" #Ability { id: "AC5A", source: "Devoured Eater" }
+38.9 "Bounds of Sin" #Ability { id: "AC5A", source: "Devoured Eater" }
+39.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+40.2 "Bounds of Sin" Ability { id: ["AC5B", "AC5C"], source: "Devoured Eater" }
+41.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+42.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+44.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+45.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+45.6 "Abyssal Sun" Ability { id: "AC6B", source: "Eminent Grief" }
+47.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+48.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+50.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+51.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+52.4 "Scourging Blaze" Ability { id: "AC56", source: "Eminent Grief" }
+53.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+53.3 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+53.3 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+54.2 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+54.2 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+54.2 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+55.1 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+55.1 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+55.1 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+56.0 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+56.0 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+56.9 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+56.9 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+57.8 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+57.8 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+58.7 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+58.7 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+59.6 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+60.5 "Scourging Blaze" #Ability { id: "AC57", source: "Eminent Grief" }
+
+# Blade first then Ball/Chains
+61.1 "Blade of First Light" Ability { id: ["AC46", "AC47"], source: "Devoured Eater" }
+62.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" }
+64.2 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC49", "AC4A"], source: "Eminent Grief" }
+65.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42", "AC4B"], source: "Eminent Grief" }
+
+# Ball/Chains first then Blade
+# 60.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC41", "AC43"], source: "Eminent Grief" }
+# 60.8 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" }
+# 63.0 "Blade of First Light" Ability { id: ["AC4C", "AC4D"], source: "Devoured Eater" }
+# 63.8 "Blade of First Light" Ability { id: "AC4E", source: "Devoured Eater" }
+
+68.6 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+69.6 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+71.6 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+72.6 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+74.6 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+75.6 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+77.6 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+78.6 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+79.6 "Searing Chains" #Ability { id: "AC70", source: "Eminent Grief" }
+80.2 "Searing Chains" #Ability { id: "AC70", source: "Eminent Grief" }
+80.2 "Searing Chains" #Ability { id: "AC70", source: "Eminent Grief" }
+82.1 "Spinelash" Ability { id: "AC5D", source: "Eminent Grief" }
+92.4 "Spinelash" Ability { id: "AC5E", source: "Eminent Grief" }
+93.3 "Spinelash" Ability { id: "B03F", source: "Eminent Grief" }
+95.2 "--sync--" Ability { id: "AC5F", source: "Eminent Grief" }
+99.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+100.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+102.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+103.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+105.0 "--sync--" #Ability { id: "AF14", source: "Eminent Grief" }
+107.0 "--sync--" #Ability { id: "AF14", source: "Eminent Grief" }
+107.7 "Bloody Claw" Ability { id: "B03C", source: "Vodoriga Minion" }
+108.7 "--sync--" Ability { id: "B08D", source: "Vodoriga Minion" }
+109.6 "Shackles of Greater Sanctity" Ability { id: "AF01", source: "Devoured Eater" }
+110.2 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+110.4 "Shackles of Sanctity" Ability { id: "AC74", source: "Devoured Eater" }
+110.4 "Shackles of Sanctity" Ability { id: "AC73", source: "Devoured Eater" }
+111.7 "--sync--" Ability { id: "B08D", source: "Vodoriga Minion" }
+113.0 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+115.0 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+116.1 "Shackles of Penitence" Ability { id: "AC76", source: "Devoured Eater" }
+118.1 "--sync--" Ability { id: "AF02", source: "Eminent Grief" }
+119.5 "Hellish Earth" Ability { id: "AC77", source: "Eminent Grief" }
+120.5 "Hellish Earth" Ability { id: "AC79", source: "Eminent Grief" }
+120.5 "Hellish Earth" Ability { id: "AC78", source: "Eminent Grief" }
+121.8 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+122.4 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+124.5 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+125.4 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+127.6 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+127.6 "Eruption" #Ability { id: "AC7C", source: "Eminent Grief" }
+128.6 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+128.6 "Manifold Lashings" Ability { id: "AC7D", source: "Eminent Grief" }
+129.6 "Eruption" #Ability { id: "AC7C", source: "Eminent Grief" }
+129.8 "Manifold Lashings" Ability { id: "AC7F", source: "Eminent Grief" }
+130.6 "Manifold Lashings" #Ability { id: "AC80", source: "Eminent Grief" }
+131.3 "Manifold Lashings" #Ability { id: "AC80", source: "Eminent Grief" }
+131.3 "Shackles of Penitence" Ability { id: "AC76", source: "Devoured Eater" }
+131.6 "Eruption" #Ability { id: "AC7C", source: "Eminent Grief" }
+134.2 "Manifold Lashings" Ability { id: "AC81", source: "Eminent Grief" }
+135.1 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+136.9 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+137.9 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+139.9 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+141.3 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+142.6 "Shackles of Penitence" Ability { id: "AC76", source: "Devoured Eater" }
+144.3 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+145.7 "Unholy Darkness" Ability { id: "AC83", source: "Devoured Eater" }
+146.3 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+146.4 "Unholy Darkness" Ability { id: "AC84", source: "Devoured Eater" }
+147.3 "--sync--" Ability { id: "AF14", source: "Eminent Grief" }
+147.6 "Shackles of Penitence" #Ability { id: "AC76", source: "Devoured Eater" }
+152.8 "Shackles of Penitence" Ability { id: "AC76", source: "Devoured Eater" }
+153.8 "Manifold Lashings" Ability { id: "AC7D", source: "Eminent Grief" }
+154.6 "Shackles of Penitence" Ability { id: "AC75", source: "Devoured Eater" }
+155.2 "Manifold Lashings" Ability { id: "AC7F", source: "Eminent Grief" }
+156.0 "Manifold Lashings" #Ability { id: "AC80", source: "Eminent Grief" }
+156.0 "Shackles of Penitence" Ability { id: "AC76", source: "Devoured Eater" }
+156.7 "Manifold Lashings" #Ability { id: "AC80", source: "Eminent Grief" }
+159.0 "Shackles of Penitence" Ability { id: "AC76", source: "Devoured Eater" }
+159.6 "Manifold Lashings" Ability { id: "AC81", source: "Eminent Grief" }
+159.8 "Shackles of Penitence" Ability { id: "AC75", source: "Devoured Eater" }
+160.5 "Hellish Torment" Ability { id: "AC7A", source: "Eminent Grief" }
+
+
+# ALL ENCOUNTER ABILITIES
+# AC41 Ball of Fire - short cast
+# AC42 Ball of Fire - damage
+# AC43 Chains of Condemnation - short cast
+# AC44 Chains of Condemnation - short cast damage
+# AC46 Blade of First Light - short cast single blade
+# AC47 Blade of First Light - short cast double blade
+# AC48 Blade of First Light - short cast damage
+# AC49 Ball of Fire - long cast
+# AC4A Chains of Condemnation - long cast
+# AC4B Chains of Condemnation - long cast damage
+# AC4C Blade of First Light - long cast single blade
+# AC4D Blade of First Light - long cast double blade
+# AC4E Blade of First Light - long cast damage
+# AC53 --sync--
+# AC56 Scourging Blaze
+# AC57 Scourging Blaze
+# AC58 Bounds of Sin
+# AC59 Bounds of Sin
+# AC5A Bounds of Sin
+# AC5B Bounds of Sin
+# AC5C Bounds of Sin
+# AC5D Spinelash
+# AC5E Spinelash
+# AC5F --sync--
+# AC67 attack
+# AC68 attack
+# AC69 attack
+# AC6B Abyssal Sun
+# AC6C Explosion
+# AC6E Explosion
+# AC70 Searing Chains
+# AC73 Shackles of Sanctity
+# AC74 Shackles of Sanctity
+# AC75 Shackles of Penitence
+# AC76 Shackles of Penitence
+# AC77 Hellish Earth
+# AC78 Hellish Earth
+# AC79 Hellish Earth
+# AC7A Hellish Torment
+# AC7B Hellish Torment
+# AC7C Eruption
+# AC7D Manifold Lashings
+# AC7E Manifold Lashings
+# AC7F Manifold Lashings
+# AC80 Manifold Lashings
+# AC81 Manifold Lashings
+# AC82 Big Burst
+# AC83 Unholy Darkness
+# AC84 Unholy Darkness
+# AEFD Scourging Blaze
+# AEFE Scourging Blaze
+# AEFF Scourging Blaze
+# AF00 Scourging Blaze
+# AF01 Shackles of Greater Sanctity
+# AF02 --sync--
+# AF0E attack
+# AF14 --sync--
+# B03C Bloody Claw
+# B03D Terror Eye
+# B03F Spinelash
+# B08D --sync--
