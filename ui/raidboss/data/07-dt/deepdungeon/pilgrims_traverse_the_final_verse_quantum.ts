@@ -29,7 +29,7 @@ const triggerSet: TriggerSet<Data> = {
 
   triggers: [
     {
-      id: 'PT Quantum Devoured Eater Blade of First Light',
+      id: 'Final Verse Quantum Blade of First Light',
       type: 'StartsUsing',
       netRegex: { id: ['AC46', 'AC47', 'AC4C', 'AC4D'], source: 'Devoured Eater', capture: true },
       alertText: (_data, matches, output) => {
@@ -44,13 +44,13 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'PT Quantum Eminent Grief Ball of Fire',
+      id: 'Final Verse Quantum Ball of Fire',
       type: 'Ability',
       netRegex: { id: ['AC41', 'AC49'], source: 'Eminent Grief', capture: false },
       response: Responses.moveAway('alert'),
     },
     {
-      id: 'PT Quantum Eminent Grief Chains of Condemnation',
+      id: 'Final Verse Quantum Chains of Condemnation',
       // raidwide + applies 11D2 Chains of Condemnation for 2s; heavy damage if moving
       type: 'StartsUsing',
       netRegex: { id: ['AC44', 'AC4B'], source: 'Eminent Grief', capture: true },
@@ -65,7 +65,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'PT Quantum Vodoriga Minion Spawn',
+      id: 'Final Verse Quantum Vodoriga Minion Spawn',
       // 14039 = Vodoriga Minion
       type: 'AddedCombatant',
       netRegex: { npcNameId: '14039', capture: false },
