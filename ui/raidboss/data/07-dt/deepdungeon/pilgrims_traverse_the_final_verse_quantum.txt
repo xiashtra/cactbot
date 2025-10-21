@@ -149,36 +149,36 @@ hideall "--sync--"
 
 
 # ALL ENCOUNTER ABILITIES
-# AC41 Ball of Fire - short cast
+# AC41 Ball of Fire - short self-cast
 # AC42 Ball of Fire - damage
-# AC43 Chains of Condemnation - short cast
+# AC43 Chains of Condemnation - short self-cast
 # AC44 Chains of Condemnation - short cast damage
-# AC46 Blade of First Light - short cast single blade
-# AC47 Blade of First Light - short cast double blade
+# AC46 Blade of First Light - short self-cast single-blade
+# AC47 Blade of First Light - short self-cast double-blade
 # AC48 Blade of First Light - short cast damage
-# AC49 Ball of Fire - long cast
-# AC4A Chains of Condemnation - long cast
+# AC49 Ball of Fire - long self-cast
+# AC4A Chains of Condemnation - long self-cast
 # AC4B Chains of Condemnation - long cast damage
-# AC4C Blade of First Light - long cast single blade
-# AC4D Blade of First Light - long cast double blade
+# AC4C Blade of First Light - long self-cast single-blade
+# AC4D Blade of First Light - long self-cast double-blade
 # AC4E Blade of First Light - long cast damage
-# AC53 --sync--
-# AC56 Scourging Blaze
-# AC57 Scourging Blaze
-# AC58 Bounds of Sin
-# AC59 Bounds of Sin
-# AC5A Bounds of Sin
+# AC53 --sync-- - exaflares spawning?
+# AC56 Scourging Blaze - exaflare self-cast (diamonds glow)
+# AC57 Scourging Blaze - exaflare damage
+# AC58 Bounds of Sin - Devoured Eater self-cast
+# AC59 Bounds of Sin - pull + 119E Bind (3s)
+# AC5A Bounds of Sin - puddle damage
 # AC5B Bounds of Sin
 # AC5C Bounds of Sin
 # AC5D Spinelash
 # AC5E Spinelash
 # AC5F --sync--
-# AC67 attack
-# AC68 attack
-# AC69 attack
+# AC67 attack - Eminent Grief self-cast
+# AC68 attack - Devoured Eater self-cast
+# AC69 attack - Devoured Eater auto damage
 # AC6B Abyssal Sun
-# AC6C Explosion
-# AC6E Explosion
+# AC6C Explosion - damage from not stacking?
+# AC6E Explosion - damage from not stacking?
 # AC70 Searing Chains
 # AC73 Shackles of Sanctity
 # AC74 Shackles of Sanctity
@@ -204,9 +204,9 @@ hideall "--sync--"
 # AF00 Scourging Blaze
 # AF01 Shackles of Greater Sanctity
 # AF02 --sync--
-# AF0E attack
+# AF0E attack - Eminent Grief auto damage
 # AF14 --sync--
-# B03C Bloody Claw
-# B03D Terror Eye
+# B03C Bloody Claw - Vodoriga Minion damage
+# B03D Terror Eye - Vodoriga Minion AoE puddle
 # B03F Spinelash
 # B08D --sync--
