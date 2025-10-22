@@ -8,21 +8,26 @@ import { TriggerSet } from '../../../../../types/trigger';
 // Pilgrim's Traverse The Final Verse Quantum
 // TODO: Q15-39
 
-/*
--- Headmarkers --
-004D
-004E
-0061
-0017
-020F - boss
-*/
+const headMarkerData = {
+  // lockon5_t0h
+  spinelashTarget: '0017',
+  // m0344trg_a0h
+  lightPartnerStack: '004D',
+  // m0344trg_b0h
+  darkPartnerStack: '004E',
+  // m0376trg_fire3_a0p
+  searingChains: '0061',
+  // share_laser_3sec_0t
+  lineStackMarker: '020F', // on boss
+} as const;
+console.assert(headMarkerData);
 
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
   id: 'TheFinalVerseQuantum',
   zoneId: ZoneId.TheFinalVerseQuantum,
-  timelineFile: 'pilgrims_traverse_the_final_verse_quantum.txt',
+  timelineFile: 'the_final_verse_quantum.txt',
   comments: {
     en: 'Q40 only',
   },
@@ -61,6 +66,31 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'AoE + Stop Moving!',
           ko: '전체 공격 + 이동 멈추기!',
+        },
+      },
+    },
+    {
+      id: 'Final Verse Quantum Spinelash',
+      // wildcharge
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.spinelashTarget, capture: true },
+      alertText: (data, matches, output) => {
+        const target = matches.target;
+        if (target === undefined)
+          return output.stackMarker!();
+        if (target === data.me)
+          return output.stackOnYou!();
+        return output.stackOnTarget!({ player: data.party.member(target) });
+      },
+      outputStrings: {
+        stackOnYou: {
+          en: 'Stack on YOU, Tank in Front',
+        },
+        stackOnTarget: {
+          en: 'Stack on ${player}, Tank in Front',
+        },
+        stackMarker: {
+          en: 'Stack, Tank in Front',
         },
       },
     },
