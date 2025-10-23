@@ -25,6 +25,44 @@ const headMarkerData = {
   lineStackMarker: '020F', // on boss
 } as const;
 
+const tetherData = {
+  // chn_fire001f
+  hellishEarth: '0005',
+  // chn_hfchain1f
+  searingChains: '0009',
+} as const;
+
+const mapEffectFlags = [
+  '00020001', // activation?
+  '00080004', // clear flag?
+  '00200010', // stand in Abyssal Sun tower?
+] as const;
+console.assert(mapEffectFlags);
+
+const mapEffectLocations = [
+  // Abyssal Sun towers?
+  '1B',
+  '1C',
+  '1E',
+  '1D',
+  // Bounds of Sin puddles (in pairs)?
+  '16',
+  '10',
+  '17',
+  '11',
+  '0C',
+  '12',
+  '13',
+  '0D',
+  '0E',
+  '14',
+  '0F',
+  '15',
+  // Spinelash glass wall?
+  '18',
+ ] as const;
+console.assert(mapEffectLocations);
+
 export type Data = RaidbossData;
 
 const triggerSet: TriggerSet<Data> = {
@@ -190,7 +228,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Final Verse Quantum Hellish Earth Tether',
       type: 'Tether',
-      netRegex: { id: '0005', source: 'Eminent Grief', capture: true },
+      netRegex: { id: tetherData.hellishEarth, source: 'Eminent Grief', capture: true },
       infoText: (data, matches, output) => {
         const target = matches.target;
         if (data.me === target)
