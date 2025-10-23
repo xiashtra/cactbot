@@ -29,20 +29,20 @@ hideall "--sync--"
 
 # Ball/Chains first then Blade 1
 99.2 label "ball-first-1"
-100.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" }
+100.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" } window 10,10
 102.2 "--sync--" Ability { id: ["AC4C", "AC4D"], source: "Devoured Eater" }
 103.0 "Blade of First Light" Ability { id: "AC4E", source: "Devoured Eater" } window 10,10 forcejump "searing-chains-1"
 
 # Blade first then Ball/Chains 1
 149.1 label "blade-first-1"
-150.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" }
+150.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" } window 10,10
 152.2 "--sync--" Ability { id: ["AC49", "AC4A"], source: "Eminent Grief" }
 153.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42", "AC4B"], source: "Eminent Grief" } window 10,10 forcejump "searing-chains-1"
 
 # Searing Chains 1
 197.5 label "searing-chains-1"
 197.5 "Searing Chains" #Ability { id: "AC70", source: "Eminent Grief" }
-200.0 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" }
+200.0 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" } window 10,10
 211.1 "Spinelash" Ability { id: "B03F", source: "Eminent Grief" }
 213.0 "--sync--" Ability { id: "AC5F", source: "Eminent Grief" }
 217.3 "--add targetable--"
@@ -82,19 +82,19 @@ hideall "--sync--"
 
 # Ball/Chains first then Blade 2
 399.2 label "ball-first-2"
-400.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" }
+400.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" } window 10,10
 402.2 "--sync--" Ability { id: ["AC4C", "AC4D"], source: "Devoured Eater" }
 403.0 "Blade of First Light" Ability { id: "AC4E", source: "Devoured Eater" } window 10,10 forcejump "spinelash-2"
 
 # Blade first then Ball/Chains 2
 449.1 label "blade-first-2"
-450.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" }
+450.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" } window 10,10
 452.2 "--sync--" Ability { id: ["AC49", "AC4A"], source: "Eminent Grief" }
 453.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42", "AC4B"], source: "Eminent Grief" } window 10,10 forcejump "spinelash-2"
 
 # Spinelash 2
 494.9 label "spinelash-2"
-494.9 "Explosion" Ability { id: "AC87", source: "Devoured Eater" }
+494.9 "Explosion" Ability { id: "AC87", source: "Devoured Eater" } window 10,10
 500.0 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" }
 511.1 "Spinelash" Ability { id: "B03F", source: "Eminent Grief" }
 513.1 "--sync--" Ability { id: "AC5F", source: "Eminent Grief" }
@@ -123,19 +123,19 @@ hideall "--sync--"
 
 # Ball/Chains first then Blade 3
 699.2 label "ball-first-3"
-700.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" }
+700.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" } window 10,10
 702.2 "--sync--" Ability { id: ["AC4C", "AC4D"], source: "Devoured Eater" }
 703.0 "Blade of First Light" Ability { id: "AC4E", source: "Devoured Eater" } window 10,10 forcejump "bounds-of-sin-4"
 
 # Blade first then Ball/Chains 3
 749.1 label "blade-first-3"
-750.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" }
+750.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" } window 10,10
 752.2 "--sync--" Ability { id: ["AC49", "AC4A"], source: "Eminent Grief" }
 753.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42", "AC4B"], source: "Eminent Grief" } window 10,10 forcejump "bounds-of-sin-4"
 
 # Bounds of Sin 4
 800.0 label "bounds-of-sin-4"
-800.0 "Abyssal Sun" Ability { id: "AC6B", source: "Eminent Grief" }
+800.0 "Abyssal Sun" Ability { id: "AC6B", source: "Eminent Grief" } window 10,10
 802.0 "Bounds of Sin draw-in" Ability { id: "AC59", source: "Devoured Eater" }
 806.1 "Bounds of Sin x12" duration 1.7 #Ability { id: "AC5A", source: "Devoured Eater" }
 808.5 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" }
@@ -165,19 +165,19 @@ hideall "--sync--"
 
 # Ball/Chains first then Blade 4
 949.2 label "ball-first-4"
-950.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" }
+950.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42","AC44"], source: "Eminent Grief" } window 10,10
 952.2 "--sync--" Ability { id: ["AC4C", "AC4D"], source: "Devoured Eater" }
 953.0 "Blade of First Light" Ability { id: "AC4E", source: "Devoured Eater" } window 10,10 forcejump "enrage"
 
 # Blade first then Ball/Chains 4
 999.1 label "blade-first-4"
-1000.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" }
+1000.0 "Blade of First Light" Ability { id: "AC48", source: "Devoured Eater" } window 10,10
 1002.2 "--sync--" Ability { id: ["AC49", "AC4A"], source: "Eminent Grief" }
 1003.0 "Ball of Fire/Chains of Condemnation" Ability { id: ["AC42", "AC4B"], source: "Eminent Grief" } window 10,10 forcejump "enrage"
 
 # enrage sequence
 1050.0 label "enrage"
-1050.7 "Unholy Darkness" Ability { id: "AC90", source: "Devoured Eater" }
+1050.7 "Unholy Darkness" Ability { id: "AC90", source: "Devoured Eater" } window 10,10
 1068.0 "Hellish Earth enrage" Ability { id: "AC8E", source: "Eminent Grief" }
 
 
