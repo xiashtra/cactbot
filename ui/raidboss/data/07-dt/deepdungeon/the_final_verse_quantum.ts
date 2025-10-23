@@ -58,9 +58,9 @@ const mapEffectLocations = [
   '14',
   '0F',
   '15',
-  // Spinelash glass wall?
+  // Spinelash back-left glass wall?
   '18',
- ] as const;
+] as const;
 console.assert(mapEffectLocations);
 
 export type Data = RaidbossData;
