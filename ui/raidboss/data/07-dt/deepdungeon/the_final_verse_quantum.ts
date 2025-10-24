@@ -10,6 +10,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 // TODO: Light/Dark Vengeance refresh warning
 // TODO: Scourging Blaze (exaflares) safe spot
 // TODO: Bounds of Sin north/south or east/west dodge direction + in/out
+// TODO: light/dark partner stacks
 // TODO: Manifold Lashings laser left/right direction
 
 const headMarkerData = {
