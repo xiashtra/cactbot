@@ -247,7 +247,7 @@ hideall "--sync--"
 # AC67 attack - Eminent Grief self-cast
 # AC68 attack - Devoured Eater self-cast
 # AC69 attack - Devoured Eater auto-attack damage
-# AC6B Abyssal Sun
+# AC6B Abyssal Sun - AoE + bleed from towers
 # AC6C Explosion - damage from not stacking?
 # AC6E Explosion - damage from not stacking?
 # AC70 Searing Chains - cross AoE + bleed
