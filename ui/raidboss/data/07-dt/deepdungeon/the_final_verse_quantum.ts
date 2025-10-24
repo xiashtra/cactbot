@@ -36,7 +36,7 @@ const tetherData = {
 const mapEffectFlags = [
   '00020001', // activation?
   '00080004', // clear flag?
-  '00200010', // stand in Abyssal Sun tower?
+  '00200010', // standing in tower?
 ] as const;
 console.assert(mapEffectFlags);
 
@@ -59,8 +59,8 @@ const mapEffectLocations = [
   '14',
   '0F',
   '15',
-  // Spinelash back-left glass wall?
-  '18',
+  // Spinelash walls?
+  '18', // back-left?
 ] as const;
 console.assert(mapEffectLocations);
 
