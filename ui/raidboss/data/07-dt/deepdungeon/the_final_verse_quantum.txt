@@ -45,7 +45,7 @@ hideall "--sync--"
 # Spinelash 1
 200.0 label "spinelash-1"
 200.0 "Searing Chains" #Ability { id: "AC70", source: "Eminent Grief" }
-217.0 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" } window 100,100
+217.0 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" } window 117,100
 228.1 "Spinelash" Ability { id: "B03F", source: "Eminent Grief" }
 230.0 "--sync--" Ability { id: "AC5F", source: "Eminent Grief" }
 234.3 "--add targetable--"
@@ -96,7 +96,7 @@ hideall "--sync--"
 # Spinelash 2
 550.0 label "spinelash-2"
 550.0 "Explosion" Ability { id: "AC87", source: "Devoured Eater" } window 10,10
-555.1 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" } window 100,100
+555.1 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" } window 105,100
 566.2 "Spinelash" Ability { id: "B03F", source: "Eminent Grief" }
 568.2 "--sync--" Ability { id: "AC5F", source: "Eminent Grief" }
 578.6 "Explosion" Ability { id: "AC87", source: "Devoured Eater" }
