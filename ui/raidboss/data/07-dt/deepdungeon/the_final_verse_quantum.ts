@@ -12,6 +12,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 // TODO: Bounds of Sin north/south or east/west dodge direction + in/out
 // TODO: light/dark partner stacks
 // TODO: Manifold Lashings laser left/right direction
+// TODO: Abyssal Sun get Light Vengeance for towers warning
 
 const headMarkerData = {
   // vfx/lockon/eff/lockon5_t0h
@@ -78,7 +79,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum Abyssal Sun',
       // instant cast
       regex: /Abyssal Sun/,
-      beforeSeconds: 5,
+      beforeSeconds: 4,
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
