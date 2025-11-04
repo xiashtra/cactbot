@@ -13,6 +13,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 // TODO: light/dark partner stacks
 // TODO: Manifold Lashings laser left/right direction
 // TODO: Abyssal Sun get Light Vengeance for towers warning
+// TODO: boss HP difference warning
 
 const headMarkerData = {
   // vfx/lockon/eff/lockon5_t0h
