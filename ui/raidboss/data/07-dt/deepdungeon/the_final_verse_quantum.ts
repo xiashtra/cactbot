@@ -7,13 +7,65 @@ import { TriggerSet } from '../../../../../types/trigger';
 
 // Pilgrim's Traverse The Final Verse Quantum
 // TODO: Q15-39
-// TODO: Light/Dark Vengeance refresh warning
 // TODO: Scourging Blaze (exaflares) safe spot
 // TODO: Bounds of Sin north/south or east/west dodge direction + in/out
 // TODO: light/dark partner stacks
 // TODO: Manifold Lashings laser left/right direction
 // TODO: Abyssal Sun get Light Vengeance for towers warning
-// TODO: boss HP difference warning
+
+// === Map Effect info: ===
+//
+// --- Bounds of Sin puddles ---
+//
+// locations (set 1):
+//
+//       00
+//    0B    01
+//  0A        02
+// 09          03
+//  08        04
+//    07    05
+//       06
+//
+// locations (set 2):
+//
+//       0C
+//    17    0D
+//  16        0E
+// 15          0F
+//  14        10
+//    13    11
+//       12
+//
+// flags:
+//
+// 00020001 - walls appearing
+// 00080004 - walls disappearing
+//
+// --- Abyssal Sun towers ---
+//
+// locations:
+//
+// 1E  1B
+// 1D  1C
+//
+// flags:
+//
+// 00020001 - tower spawn?
+// 00200010 - standing in tower?
+// 00080004 - tower clear flag?
+// 00800040 - fail to soak tower?
+//
+// --- Spinelash glass walls ---
+//
+// locations:
+//
+// 18 | 19 | 1A
+//
+// flags:
+//
+// 00020001 - glass breaking first time
+// 00200010 - glass breaking second time
 
 const headMarkerData = {
   // vfx/lockon/eff/lockon5_t0h
@@ -35,38 +87,9 @@ const tetherData = {
   searingChains: '0009',
 } as const;
 
-const mapEffectFlags = [
-  '00020001', // activation?
-  '00080004', // clear flag?
-  '00200010', // standing in tower?
-] as const;
-console.assert(mapEffectFlags);
-
-const mapEffectLocations = [
-  // Abyssal Sun towers?
-  '1B',
-  '1C',
-  '1E',
-  '1D',
-  // Bounds of Sin puddles (in pairs)?
-  '16',
-  '10',
-  '17',
-  '11',
-  '0C',
-  '12',
-  '13',
-  '0D',
-  '0E',
-  '14',
-  '0F',
-  '15',
-  // Spinelash walls?
-  '18', // back-left?
-] as const;
-console.assert(mapEffectLocations);
-
-export type Data = RaidbossData;
+export interface Data extends RaidbossData {
+  myVengeanceExpiration?: number;
+}
 
 const triggerSet: TriggerSet<Data> = {
   id: 'TheFinalVerseQuantum',
@@ -90,6 +113,65 @@ const triggerSet: TriggerSet<Data> = {
     },
   ],
   triggers: [
+    {
+      id: 'Final Verse Quantum HP Difference Warning',
+      // 9F6 = Damage Up
+      // 105F = Rehabilitation
+      type: 'GainsEffect',
+      netRegex: { effectId: ['9F6', '105F'], capture: false },
+      suppressSeconds: 1,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Check Boss HP Difference',
+        },
+      },
+    },
+    {
+      id: 'Final Verse Quantum Petrification/Hysteria',
+      // 01 = Petrification (failure from Light Vengeance expiring)
+      // 128 = Hysteria (failure from Dark Vengeance expiring)
+      type: 'GainsEffect',
+      netRegex: { effectId: ['01', '128'], capture: true },
+      infoText: (_data, matches, output) => {
+        const effect = matches.effect;
+        const target = matches.target;
+        return output.text!({ effect: effect, target: target });
+      },
+      outputStrings: {
+        text: {
+          en: '${effect} on ${target}',
+        },
+      },
+    },
+    {
+      id: 'Final Verse Quantum Light/Dark Vengeance Refresh Warning',
+      // 11CF = Dark Vengeance
+      // 11D0 = Light Vengeance
+      type: 'GainsEffect',
+      netRegex: { effectId: ['11CF', '11D0'], capture: true },
+      condition: Conditions.targetIsYou(),
+      preRun: (data, matches) => {
+        const timestamp = Date.parse(matches.timestamp);
+        const duration = parseFloat(matches.duration);
+        data.myVengeanceExpiration = timestamp + duration * 1000;
+      },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
+      infoText: (data, matches, output) => {
+        const timestamp = Date.parse(matches.timestamp);
+        const duration = parseFloat(matches.duration);
+        const thisExpiration = timestamp + duration * 1000;
+        const myExpiration = data.myVengeanceExpiration;
+        if (myExpiration === undefined || myExpiration > thisExpiration)
+          return;
+        return output.text!();
+      },
+      outputStrings: {
+        text: {
+          en: 'Refresh Vengeance',
+        },
+      },
+    },
     {
       id: 'Final Verse Scourging Blaze Safe Spot',
       type: 'Ability',
@@ -347,7 +429,8 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { effectId: '11D7', capture: true },
       condition: (data, matches) => {
         const stackCount = parseInt(matches.count);
-        return data.me === matches.target && stackCount === 15;
+        const target = matches.target;
+        return (target === data.me && stackCount === 15);
       },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -406,7 +489,7 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
-      id: 'Final Verse Quantum Debug',
+      id: 'Final Verse Quantum Ability Debug',
       type: 'Ability',
       netRegex: { id: ['AC5B', 'AC5C'], capture: true },
       infoText: (_data, matches, output) => {
@@ -416,7 +499,24 @@ const triggerSet: TriggerSet<Data> = {
       },
       outputStrings: {
         text: {
-          en: 'Debug: ${id} - ${ability}',
+          en: 'Ability - ${id}: ${ability}',
+        },
+      },
+    },
+    {
+      id: 'Final Verse Quantum MapEffect Debug',
+      type: 'MapEffect',
+      netRegex: { location: ['1B', '1C', '1D', '1E'], capture: true },
+      durationSeconds: 10,
+      suppressSeconds: 5,
+      infoText: (_data, matches, output) => {
+        const flags = matches.flags;
+        const location = matches.location;
+        return output.text!({ flags: flags, location: location });
+      },
+      outputStrings: {
+        text: {
+          en: 'Map Effect - ${flags}: ${location}',
         },
       },
     },
