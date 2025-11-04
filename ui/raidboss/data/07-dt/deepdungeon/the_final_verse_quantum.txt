@@ -248,13 +248,14 @@ hideall "--sync--"
 # AC68 attack - Devoured Eater self-cast
 # AC69 attack - Devoured Eater auto-attack damage
 # AC6B Abyssal Sun - AoE + bleed from towers
-# AC6C Explosion - damage from not stacking?
-# AC6E Explosion - damage from not stacking?
+# AC6C Explosion - damage from not stacking for light/dark partners?
+# AC6D Big Burst - AoE damage from failure to soak towers?
+# AC6E Explosion - damage from not stacking for light/dark partners?
 # AC70 Searing Chains - cross AoE + bleed
 # AC73 Shackles of Sanctity - Shackled Healing on healer
 # AC74 Shackles of Sanctity - Shackled Abilities on dps
-# AC75 Shackles of Penitence - explosion from Shackled Healing
-# AC76 Shackles of Penitence - explosion from Shackled Abilities
+# AC75 Shackles of Penitence - AoE from Shackled Healing
+# AC76 Shackles of Penitence - AoE from Shackled Abilities
 # AC77 Hellish Earth - dummy-cast
 # AC78 Hellish Earth - AoE + draw-in
 # AC79 Hellish Earth - AoE + tether + draw-in on furthest player
@@ -266,22 +267,23 @@ hideall "--sync--"
 # AC7F Manifold Lashings - first hit, damage + bleed
 # AC80 Manifold Lashings - secon/third hit, damage + bleed
 # AC81 Manifold Lashings - final hit,laser damage
-# AC82 Big Burst
+# AC82 Big Burst - AoE damage from failure to pass Sin Bearer?
 # AC83 Unholy Darkness - dummy-cast
 # AC84 Unholy Darkness - AoE + bleed
 # AC85 Crime and Punishment - dummy-cast
 # AC86 Crime and Punishment - applies 11D7 Sin Bearer
 # AC87 Explosion - Sin Bearer debuff expiration
+# AC88 Big Burst - AoE damage from failure to maintain Sin Bearer until Drain Aether?
 # AC8A Fevered Flame - dummy-cast
 # AC8B Self-Destruct - Flameborn soak/explosion
 # AC8C Fuse - Flameborn merging
 # AC8E Hellish Earth - enrage
 # AC8F Unholy Darkness - dummy-cast
 # AC90 Unholy Darkness - AoE + bleed
-# AEFD Scourging Blaze
-# AEFE Scourging Blaze
-# AEFF Scourging Blaze
-# AF00 Scourging Blaze
+# AEFD Scourging Blaze - first dummy-cast horizontal exaflares
+# AEFE Scourging Blaze - first dummy-cast vertical exaflares
+# AEFF Scourging Blaze - second instant-cast horizontal exaflares
+# AF00 Scourging Blaze - second instant-cast vertical exaflares
 # AF01 Shackles of Greater Sanctity - dummy-cast
 # AF02 --sync-- auto-attack related?
 # AF0E attack - Eminent Grief auto-attack damage

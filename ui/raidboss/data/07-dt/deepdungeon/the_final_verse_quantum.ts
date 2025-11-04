@@ -90,6 +90,35 @@ const triggerSet: TriggerSet<Data> = {
   ],
   triggers: [
     {
+      id: 'Final Verse Scourging Blaze Safe Spot',
+      type: 'Ability',
+      netRegex: { id: ['AEFD', 'AEFE'], source: 'Eminent Grief', capture: true },
+      durationSeconds: 10,
+      infoText: (_data, matches, output) => {
+        const id = matches.id;
+        if (id === 'AEFD')
+          return output.text!({ safe: output.front!() });
+        return output.text!({ safe: output.back!() });
+      },
+      outputStrings: {
+        text: {
+          en: '${safe}, for later',
+          ja: '${safe}、あとで',
+          ko: '${safe}, 나중 대비',
+        },
+        front: {
+          en: 'Front safe',
+          ja: '前方が安置',
+          ko: '앞쪽 안전',
+        },
+        back: {
+          en: 'Back safe',
+          ja: '後方が安置',
+          ko: '뒤쪽 안전',
+        },
+      },
+    },
+    {
       id: 'Final Verse Quantum Scourging Blaze',
       type: 'StartsUsing',
       netRegex: { id: 'AC56', source: 'Eminent Grief', capture: false },
@@ -290,11 +319,23 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum First Sin Bearer',
       type: 'Ability',
       netRegex: { id: 'AC86', source: 'Devoured Eater', capture: true },
-      condition: Conditions.targetIsYou(),
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, matches, output) => {
+        const target = matches.target;
+        if (target === undefined)
+          return output.sinBearer!();
+        if (target === data.me)
+          return output.sinBearerOnYou!();
+        return output.sinBearerOnTarget!({ player: data.party.member(target) });
+      },
       outputStrings: {
-        text: {
+        sinBearerOnYou: {
           en: 'Sin Bearer on YOU',
+        },
+        sinBearerOnTarget: {
+          en: 'Sin Bearer on ${player}',
+        },
+        sinBearer: {
+          en: 'Sin Bearer',
         },
       },
     },
@@ -362,6 +403,21 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'AC8B', source: 'Flameborn', capture: false },
       response: Responses.aoe(),
+    },
+    {
+      id: 'Final Verse Quantum Debug',
+      type: 'Ability',
+      netRegex: { id: ['AC5B', 'AC5C'], capture: true },
+      infoText: (_data, matches, output) => {
+        const id = matches.id;
+        const ability = matches.ability;
+        return output.text!({ id: id, ability: ability });
+      },
+      outputStrings: {
+        text: {
+          en: 'Debug: ${id} - ${ability}',
+        },
+      },
     },
   ],
   timelineReplace: [
