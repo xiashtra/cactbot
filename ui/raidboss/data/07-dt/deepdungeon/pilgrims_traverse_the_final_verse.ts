@@ -8,7 +8,6 @@ import { TriggerSet } from '../../../../../types/trigger';
 // Pilgrim's Traverse Stone 99/The Final Verse
 // TODO: Bounds of Sin dodge direction
 // TODO: Abysal Blaze left/right safe spots
-// TODO: Light/Dark Vengeance debuff expiration warning?
 // TODO: timeline
 
 // === Map Effect info: ===
