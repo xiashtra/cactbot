@@ -17,7 +17,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 //
 // --- Bounds of Sin puddles ---
 //
-// locations (set 1):
+// locations (inward-facing, center not safe):
 //
 //       00
 //    0B    01
@@ -27,7 +27,7 @@ import { TriggerSet } from '../../../../../types/trigger';
 //    07    05
 //       06
 //
-// locations (set 2):
+// locations (outward-facing, center safe):
 //
 //       0C
 //    17    0D
@@ -46,15 +46,16 @@ import { TriggerSet } from '../../../../../types/trigger';
 //
 // locations:
 //
-// 1E  1B
-// 1D  1C
+// 1B | 1C
+// ---+---
+// 1D | 1E
 //
 // flags:
 //
-// 00020001 - tower spawn?
-// 00200010 - standing in tower?
-// 00080004 - tower clear flag?
-// 00800040 - fail to soak tower?
+// 00020001 - towers appearing
+// 00200010 - standing in a tower
+// 00080004 - towers disappearing
+// 00800040 - tower exploding from failure to soak?
 //
 // --- Spinelash glass walls ---
 //
@@ -358,6 +359,14 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Tether on ${player}',
         },
       },
+    },
+    {
+      id: 'Final Verse Quantum Arcane Font Spawn',
+      // 14042 = Arcane Font
+      type: 'AddedCombatant',
+      netRegex: { npcNameId: '14042', capture: false },
+      suppressSeconds: 1,
+      response: Responses.killAdds(),
     },
     {
       id: 'Final Verse Quantum Manifold Lashings',
