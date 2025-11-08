@@ -68,6 +68,12 @@ import { TriggerSet } from '../../../../../types/trigger';
 // 00020001 - glass breaking first time
 // 00200010 - glass breaking second time
 
+// center of room
+// const center = {
+//   'x': -600,
+//   'y': -300,
+// } as const;
+
 const headMarkerData = {
   // vfx/lockon/eff/lockon5_t0h
   spinelashTarget: '0017',
@@ -174,7 +180,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Final Verse Scourging Blaze Safe Spot',
+      id: 'Final Verse Quantum Scourging Blaze Safe Spot',
       type: 'Ability',
       netRegex: { id: ['AEFD', 'AEFE'], source: 'Eminent Grief', capture: true },
       durationSeconds: 10,
@@ -188,16 +194,19 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${safe}, for later',
           ja: '${safe}、あとで',
+          cn: '稍后 ${safe}',
           ko: '${safe}, 나중 대비',
         },
         front: {
           en: 'Front safe',
           ja: '前方が安置',
+          cn: '前方安全',
           ko: '앞쪽 안전',
         },
         back: {
           en: 'Back safe',
           ja: '後方が安置',
+          cn: '后方安全',
           ko: '뒤쪽 안전',
         },
       },
@@ -207,11 +216,12 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'AC56', source: 'Eminent Grief', capture: false },
       suppressSeconds: 1,
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Avoid Exaflares',
           ja: 'エクサフレアを避ける',
+          cn: '躲避地火',
           ko: '엑사플레어 피하기',
         },
       },
@@ -257,6 +267,8 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'AoE + Stop Moving!',
+          ja: '全体攻撃 + 止まれ!',
+          cn: 'AOE + 停止移动!',
           ko: '전체 공격 + 이동 멈추기!',
         },
       },
@@ -386,7 +398,10 @@ const triggerSet: TriggerSet<Data> = {
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
-          en: 'Avoid Laser',
+          en: 'Avoid laser',
+          ja: 'レーザーを避ける',
+          cn: '避开激光',
+          ko: '레이저 피하기',
         },
       },
     },
@@ -498,9 +513,24 @@ const triggerSet: TriggerSet<Data> = {
       response: Responses.aoe(),
     },
     {
+      id: 'Final Verse Quantum StartsUsing Debug',
+      type: 'StartsUsing',
+      netRegex: { id: ['AC58', 'AC59', 'AC5B', 'AC5C'], capture: true },
+      infoText: (_data, matches, output) => {
+        const id = matches.id;
+        const ability = matches.ability;
+        return output.text!({ id: id, ability: ability });
+      },
+      outputStrings: {
+        text: {
+          en: 'StartsUsing - ${id}: ${ability}',
+        },
+      },
+    },
+    {
       id: 'Final Verse Quantum Ability Debug',
       type: 'Ability',
-      netRegex: { id: ['AC5B', 'AC5C'], capture: true },
+      netRegex: { id: ['AC58', 'AC59', 'AC5B', 'AC5C'], capture: true },
       infoText: (_data, matches, output) => {
         const id = matches.id;
         const ability = matches.ability;
@@ -515,7 +545,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Final Verse Quantum MapEffect Debug',
       type: 'MapEffect',
-      netRegex: { location: ['1B', '1C', '1D', '1E'], capture: true },
+      netRegex: { location: ['0[0-F]', '1[0-7]'], capture: true },
       durationSeconds: 10,
       suppressSeconds: 5,
       infoText: (_data, matches, output) => {

@@ -1,12 +1,12 @@
 import Conditions from '../../../../../resources/conditions';
+import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
-import { TriggerSet } from '../../../../../types/trigger';
+import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 
 // Pilgrim's Traverse Stone 99/The Final Verse
-// TODO: Bounds of Sin dodge direction
 // TODO: Abysal Blaze left/right safe spots
 // TODO: timeline
 
@@ -40,8 +40,72 @@ import { TriggerSet } from '../../../../../types/trigger';
 // 00020001 - glass breaking first time
 // 00200010 - glass breaking second time
 
+// center of room
+const center = {
+  'x': -600,
+  'y': -300,
+} as const;
+
+type DirectionOutput12 =
+  | 'dirN'
+  | 'dirNNE'
+  | 'dirENE'
+  | 'dirE'
+  | 'dirESE'
+  | 'dirSSE'
+  | 'dirS'
+  | 'dirSSW'
+  | 'dirWSW'
+  | 'dirW'
+  | 'dirWNW'
+  | 'dirNNW'
+  | 'unknown';
+
+const output12Dir: DirectionOutput12[] = [
+  'dirN',
+  'dirNNE',
+  'dirENE',
+  'dirE',
+  'dirESE',
+  'dirSSE',
+  'dirS',
+  'dirSSW',
+  'dirWSW',
+  'dirW',
+  'dirWNW',
+  'dirNNW',
+];
+
+const outputStrings12Dir: OutputStrings = {
+  dirN: Outputs.dirN,
+  dirNNE: Outputs.dirNNE,
+  dirENE: Outputs.dirENE,
+  dirE: Outputs.dirE,
+  dirESE: Outputs.dirESE,
+  dirSSE: Outputs.dirSSE,
+  dirS: Outputs.dirS,
+  dirSSW: Outputs.dirSSW,
+  dirWSW: Outputs.dirWSW,
+  dirW: Outputs.dirW,
+  dirWNW: Outputs.dirWNW,
+  dirNNW: Outputs.dirNNW,
+  unknown: Outputs.unknown,
+};
+
+const xyTo12DirNum = (x: number, y: number, centerX: number, centerY: number): number => {
+  // N = 0, NE = 1, ..., NW = 12
+  x = x - centerX;
+  y = y - centerY;
+  return Math.round(6 - 6 * Math.atan2(x, y) / Math.PI) % 12;
+};
+
+const outputFrom12DirNum = (dirNum: number): DirectionOutput12 => {
+  return output12Dir[dirNum] ?? 'unknown';
+};
+
 export interface Data extends RaidbossData {
   myVengeanceExpiration?: number;
+  walls?: number[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -305,6 +369,105 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'PT 99 Devoured Eater Bounds of Sin Dodge Direction',
+      type: 'StartsUsingExtra',
+      netRegex: { id: 'AC33', capture: true },
+      suppressSeconds: (data) => {
+        const walls = data.walls;
+        if (walls === undefined || walls.length < 1)
+          return 0;
+        return 6.5;
+      },
+      infoText: (data, matches, output) => {
+        const [x, y] = [parseFloat(matches.x), parseFloat(matches.y)];
+        const dir = xyTo12DirNum(x, y, center.x, center.y);
+        data.walls ??= [];
+        data.walls.push(dir);
+
+        const walls = data.walls;
+        if (walls === undefined || walls.length < 2)
+          return;
+
+        const [wall1, wall2] = [data.walls[0], data.walls[1]];
+        if (wall1 === undefined || wall2 === undefined)
+          throw new UnreachableCode();
+
+        const isCW = wall2 - wall1 === 1 || wall1 - wall2 === 11;
+        const isCCW = wall1 - wall2 === 1 || wall2 - wall1 === 11;
+        const rotationDir = isCW ? 'cw' : isCCW ? 'ccw' : undefined;
+
+        if (rotationDir === undefined)
+          return output.text!({ dir: output.unknown!() });
+
+        if (rotationDir === 'cw') {
+          const dodgeDir = outputFrom12DirNum((wall2 + 10) % 12);
+          return output.text!({ dir: output[dodgeDir]!() });
+        }
+        const dodgeDir = outputFrom12DirNum((wall1 + 1) % 12);
+        return output.text!({ dir: output[dodgeDir]!() });
+      },
+      outputStrings: {
+        text: {
+          en: 'Go ${dir}',
+        },
+        unknown: Outputs.unknown,
+        ...outputStrings12Dir,
+      },
+    },
+    {
+      id: 'PT 99 Devoured Eater Bounds of Sin Dodge Direction Cleanup',
+      type: 'Ability',
+      netRegex: { id: 'AC34', source: 'Devoured Eater', capture: false },
+      run: (data, _matches, _output) => delete data.walls,
+    },
+    // {
+    //   id: 'PT 99 StartsUsing Debug',
+    //   type: 'StartsUsing',
+    //   netRegex: { id: ['AC31', 'AC32', 'AC34'], capture: true },
+    //   infoText: (_data, matches, output) => {
+    //     const id = matches.id;
+    //     const ability = matches.ability;
+    //     return output.text!({ id: id, ability: ability });
+    //   },
+    //   outputStrings: {
+    //     text: {
+    //       en: 'StartsUsing - ${id}: ${ability}',
+    //     },
+    //   },
+    // },
+    // {
+    //   id: 'PT 99 Ability Debug',
+    //   type: 'Ability',
+    //   netRegex: { id: ['AC31', 'AC32', 'AC34'], capture: true },
+    //   infoText: (_data, matches, output) => {
+    //     const id = matches.id;
+    //     const ability = matches.ability;
+    //     return output.text!({ id: id, ability: ability });
+    //   },
+    //   outputStrings: {
+    //     text: {
+    //       en: 'Ability - ${id}: ${ability}',
+    //     },
+    //   },
+    // },
+    // {
+    //   id: 'PT 99 MapEffect Debug',
+    //   type: 'MapEffect',
+    //   netRegex: { location: ['0[0-F]', '1[0-7]'], capture: true },
+    //   durationSeconds: 10,
+    //   suppressSeconds: 5,
+    //   infoText: (_data, matches, output) => {
+    //     const flags = matches.flags;
+    //     const location = matches.location;
+    //     return output.text!({ flags: flags, location: location });
+    //   },
+    //   outputStrings: {
+    //     text: {
+    //       en: 'Map Effect - ${flags}: ${location}',
+    //     },
+    //   },
+    // },
   ],
   timelineReplace: [
     {

@@ -244,8 +244,8 @@ hideall "--sync--"
 # AC58 Bounds of Sin - dummy-cast
 # AC59 Bounds of Sin - pull + 119E Bind (3s)
 # AC5A Bounds of Sin - puddle damage
-# AC5B Bounds of Sin
-# AC5C Bounds of Sin
+# AC5B Bounds of Sin - chariot
+# AC5C Bounds of Sin - dynamo
 # AC5D Spinelash - dummy-cast
 # AC5E Spinelash - self-cast
 # AC5F --sync--
