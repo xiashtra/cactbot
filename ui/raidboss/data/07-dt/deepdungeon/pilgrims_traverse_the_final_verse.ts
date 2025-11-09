@@ -203,7 +203,7 @@ const triggerSet: TriggerSet<Data> = {
           data.sidesMiddle = 'middle';
         }
       },
-      durationSeconds: 8,
+      durationSeconds: 9,
       alertText: (data, matches, output) => {
         const id = matches.id;
         const ballChains = data.ballChains;
@@ -230,7 +230,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['AC1D', 'AC24'], source: 'Eminent Grief', capture: true },
       preRun: (data, _matches) => data.ballChains = 'ball',
-      durationSeconds: 8,
+      durationSeconds: 9,
       alertText: (data, matches, output) => {
         const id = matches.id;
         const ballChains = data.ballChains;
@@ -264,7 +264,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: ['AC20', 'AC26'], source: 'Eminent Grief', capture: true },
       preRun: (data, _matches) => data.ballChains = 'chains',
-      durationSeconds: 8,
+      durationSeconds: 9,
       alertText: (data, matches, output) => {
         const id = matches.id;
         const ballChains = data.ballChains;
