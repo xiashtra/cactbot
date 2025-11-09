@@ -515,7 +515,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Final Verse Quantum StartsUsing Debug',
       type: 'StartsUsing',
-      netRegex: { id: ['AC58', 'AC59', 'AC5B', 'AC5C'], capture: true },
+      netRegex: { id: ['AC5B', 'AC5C'], capture: true },
       infoText: (_data, matches, output) => {
         const id = matches.id;
         const ability = matches.ability;
@@ -530,7 +530,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Final Verse Quantum Ability Debug',
       type: 'Ability',
-      netRegex: { id: ['AC58', 'AC59', 'AC5B', 'AC5C'], capture: true },
+      netRegex: { id: ['AC5B', 'AC5C'], capture: true },
       infoText: (_data, matches, output) => {
         const id = matches.id;
         const ability = matches.ability;
