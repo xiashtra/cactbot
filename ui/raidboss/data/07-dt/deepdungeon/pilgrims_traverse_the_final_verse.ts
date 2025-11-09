@@ -103,9 +103,20 @@ const outputFrom12DirNum = (dirNum: number): DirectionOutput12 => {
   return output12Dir[dirNum] ?? 'unknown';
 };
 
+const chainsOfCondemnationOutputStrings = {
+  chains: {
+    en: 'AoE + Stop Moving!',
+    ja: '全体攻撃 + 止まれ!',
+    cn: 'AOE + 停止移动!',
+    ko: '전체 공격 + 이동 멈추기!',
+  },
+} as const;
+
 export interface Data extends RaidbossData {
   myVengeanceExpiration?: number;
   walls?: number[];
+  sidesMiddle?: 'sides' | 'middle';
+  ballChains?: 'ball' | 'chains';
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -184,19 +195,65 @@ const triggerSet: TriggerSet<Data> = {
       id: 'PT 99 Devoured Eater Blade of First Light',
       type: 'StartsUsing',
       netRegex: { id: ['AC21', 'AC22', 'AC27', 'AC28'], source: 'Devoured Eater', capture: true },
-      alertText: (_data, matches, output) => {
+      preRun: (data, matches) => {
         const id = matches.id;
-        if (id === 'AC21' || id === 'AC27')
-          return output.sides!();
-        return output.middle!();
+        if (id === 'AC21' || id === 'AC27') {
+          data.sidesMiddle = 'sides';
+        } else {
+          data.sidesMiddle = 'middle';
+        }
+      },
+      durationSeconds: 8,
+      alertText: (data, matches, output) => {
+        const id = matches.id;
+        const ballChains = data.ballChains;
+        const sidesMiddle = data.sidesMiddle;
+        if (ballChains === undefined || sidesMiddle === undefined)
+          return;
+
+        if (id === 'AC21' || id === 'AC22')
+          return output.text!({ mech1: output[sidesMiddle]!(), mech2: output[ballChains]!() });
+        return output.text!({ mech1: output[ballChains]!(), mech2: output[sidesMiddle]!() });
       },
       outputStrings: {
+        text: {
+          en: '${mech1} => ${mech2}',
+        },
         sides: Outputs.sides,
         middle: Outputs.goIntoMiddle,
+        ball: Outputs.baitPuddles,
+        ...chainsOfCondemnationOutputStrings,
       },
     },
     {
       id: 'PT 99 Eminent Grief Ball of Fire',
+      type: 'StartsUsing',
+      netRegex: { id: ['AC1D', 'AC24'], source: 'Eminent Grief', capture: true },
+      preRun: (data, _matches) => data.ballChains = 'ball',
+      durationSeconds: 8,
+      alertText: (data, matches, output) => {
+        const id = matches.id;
+        const ballChains = data.ballChains;
+        const sidesMiddle = data.sidesMiddle;
+        if (ballChains === undefined || sidesMiddle === undefined)
+          return;
+
+        if (id === 'AC1D')
+          return output.text!({ mech1: output[ballChains]!(), mech2: output[sidesMiddle]!() });
+        return output.text!({ mech1: output[sidesMiddle]!(), mech2: output[ballChains]!() });
+      },
+      outputStrings: {
+        text: {
+          en: '${mech1} => ${mech2}',
+        },
+        sides: Outputs.sides,
+        middle: Outputs.goIntoMiddle,
+        ball: Outputs.baitPuddles,
+        ...chainsOfCondemnationOutputStrings,
+      },
+    },
+    {
+      id: 'PT 99 Eminent Grief Ball of Fire Move',
       type: 'Ability',
       netRegex: { id: ['AC1D', 'AC24'], source: 'Eminent Grief', capture: false },
       response: Responses.moveAway('alert'),
@@ -206,17 +263,37 @@ const triggerSet: TriggerSet<Data> = {
       // raidwide + applies 11D2 Chains of Condemnation for 3s; heavy damage if moving
       type: 'StartsUsing',
       netRegex: { id: ['AC20', 'AC26'], source: 'Eminent Grief', capture: true },
-      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 5,
-      countdownSeconds: 5,
+      preRun: (data, _matches) => data.ballChains = 'chains',
       durationSeconds: 8,
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (data, matches, output) => {
+        const id = matches.id;
+        const ballChains = data.ballChains;
+        const sidesMiddle = data.sidesMiddle;
+        if (ballChains === undefined || sidesMiddle === undefined)
+          return;
+
+        if (id === 'AC20')
+          return output.text!({ mech1: output[ballChains]!(), mech2: output[sidesMiddle]!() });
+        return output.text!({ mech1: output[sidesMiddle]!(), mech2: output[ballChains]!() });
+      },
       outputStrings: {
         text: {
-          en: 'AoE + Stop Moving!',
-          ja: '全体攻撃 + 止まれ!',
-          cn: 'AOE + 停止移动!',
-          ko: '전체 공격 + 이동 멈추기!',
+          en: '${mech1} => ${mech2}',
         },
+        sides: Outputs.sides,
+        middle: Outputs.goIntoMiddle,
+        ball: Outputs.baitPuddles,
+        ...chainsOfCondemnationOutputStrings,
+      },
+    },
+    {
+      id: 'PT 99 Eminent Grief Blade/Ball/Chains Cleanup',
+      type: 'Ability',
+      netRegex: { id: ['AC29', 'AC24', 'AC26'], source: ['Eminent Grief', 'Devoured Eater'], capture: false },
+      suppressSeconds: 1,
+      run: (data, _matches) => {
+        delete data.ballChains;
+        delete data.sidesMiddle;
       },
     },
     {
@@ -359,7 +436,7 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'AC2F', source: 'Eminent Grief', capture: false },
       suppressSeconds: 1,
-      alarmText: (_data, _matches, output) => output.text!(),
+      alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Avoid Exaflares',
