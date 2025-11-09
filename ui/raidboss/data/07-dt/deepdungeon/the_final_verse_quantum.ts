@@ -94,8 +94,20 @@ const tetherData = {
   searingChains: '0009',
 } as const;
 
+const chainsOfCondemnationOutputStrings = {
+  chains: {
+    en: 'AoE + Stop Moving!',
+    ja: '全体攻撃 + 止まれ!',
+    cn: 'AOE + 停止移动!',
+    ko: '전체 공격 + 이동 멈추기!',
+  },
+} as const;
+
 export interface Data extends RaidbossData {
   myVengeanceExpiration?: number;
+  sidesMiddle?: 'sides' | 'middle';
+  ballChains?: 'ball' | 'chains';
+  sinBearer: boolean;
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -105,6 +117,9 @@ const triggerSet: TriggerSet<Data> = {
   comments: {
     en: 'Q40',
   },
+  initData: () => ({
+    sinBearer: false,
+  }),
   timelineTriggers: [
     {
       id: 'Final Verse Quantum Abyssal Sun',
@@ -230,24 +245,61 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum Blade of First Light',
       type: 'StartsUsing',
       netRegex: { id: ['AC46', 'AC47', 'AC4C', 'AC4D'], source: 'Devoured Eater', capture: true },
-      alertText: (_data, matches, output) => {
+      preRun: (data, matches) => {
         const id = matches.id;
-        if (id === 'AC46' || id === 'AC4C')
-          return output.sides!();
-        return output.middle!();
+        if (id === 'AC46' || id === 'AC4C') {
+          data.sidesMiddle = 'sides';
+        } else {
+          data.sidesMiddle = 'middle';
+        }
+      },
+      durationSeconds: 8,
+      alertText: (data, matches, output) => {
+        const id = matches.id;
+        const ballChains = data.ballChains;
+        const sidesMiddle = data.sidesMiddle;
+        if (ballChains === undefined || sidesMiddle === undefined)
+          return;
+
+        if (id === 'AC46' || id === 'AC47')
+          return output.text!({ mech1: output[sidesMiddle]!(), mech2: output[ballChains]!() });
+        return output.text!({ mech1: output[ballChains]!(), mech2: output[sidesMiddle]!() });
       },
       outputStrings: {
+        text: {
+          en: '${mech1} => ${mech2}',
+        },
         sides: Outputs.sides,
         middle: Outputs.goIntoMiddle,
+        ball: Outputs.baitPuddles,
+        ...chainsOfCondemnationOutputStrings,
       },
     },
     {
-      id: 'Final Verse Quantum Ball of Fire Bait',
+      id: 'Final Verse Quantum Ball of Fire',
       type: 'StartsUsing',
-      netRegex: { id: ['AC41', 'AC49'], source: 'Eminent Grief', capture: false },
-      infoText: (_data, _matches, output) => output.baitPuddles!(),
+      netRegex: { id: ['AC41', 'AC49'], source: 'Eminent Grief', capture: true },
+      preRun: (data, _matches) => data.ballChains = 'ball',
+      durationSeconds: 8,
+      alertText: (data, matches, output) => {
+        const id = matches.id;
+        const ballChains = data.ballChains;
+        const sidesMiddle = data.sidesMiddle;
+        if (ballChains === undefined || sidesMiddle === undefined)
+          return;
+
+        if (id === 'AC41')
+          return output.text!({ mech1: output[ballChains]!(), mech2: output[sidesMiddle]!() });
+        return output.text!({ mech1: output[sidesMiddle]!(), mech2: output[ballChains]!() });
+      },
       outputStrings: {
-        baitPuddles: Outputs.baitPuddles,
+        text: {
+          en: '${mech1} => ${mech2}',
+        },
+        sides: Outputs.sides,
+        middle: Outputs.goIntoMiddle,
+        ball: Outputs.baitPuddles,
+        ...chainsOfCondemnationOutputStrings,
       },
     },
     {
@@ -261,16 +313,37 @@ const triggerSet: TriggerSet<Data> = {
       // raidwide + applies 11D2 Chains of Condemnation for 2s; heavy damage if moving
       type: 'StartsUsing',
       netRegex: { id: ['AC44', 'AC4B'], source: 'Eminent Grief', capture: true },
-      countdownSeconds: (_data, matches) => parseFloat(matches.castTime),
-      durationSeconds: (_data, matches) => parseFloat(matches.castTime) + 2,
-      alertText: (_data, _matches, output) => output.text!(),
+      preRun: (data, _matches) => data.ballChains = 'chains',
+      durationSeconds: 8,
+      alertText: (data, matches, output) => {
+        const id = matches.id;
+        const ballChains = data.ballChains;
+        const sidesMiddle = data.sidesMiddle;
+        if (ballChains === undefined || sidesMiddle === undefined)
+          return;
+
+        if (id === 'AC44')
+          return output.text!({ mech1: output[ballChains]!(), mech2: output[sidesMiddle]!() });
+        return output.text!({ mech1: output[sidesMiddle]!(), mech2: output[ballChains]!() });
+      },
       outputStrings: {
         text: {
-          en: 'AoE + Stop Moving!',
-          ja: '全体攻撃 + 止まれ!',
-          cn: 'AOE + 停止移动!',
-          ko: '전체 공격 + 이동 멈추기!',
+          en: '${mech1} => ${mech2}',
         },
+        sides: Outputs.sides,
+        middle: Outputs.goIntoMiddle,
+        ball: Outputs.baitPuddles,
+        ...chainsOfCondemnationOutputStrings,
+      },
+    },
+    {
+      id: 'Final Verse Quantum Blade/Ball/Chains Cleanup',
+      type: 'Ability',
+      netRegex: { id: ['AC4E', 'AC49', 'AC4B'], source: ['Eminent Grief', 'Devoured Eater'], capture: false },
+      suppressSeconds: 1,
+      run: (data, _matches) => {
+        delete data.ballChains;
+        delete data.sidesMiddle;
       },
     },
     {
@@ -395,7 +468,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum Manifold Lashings Laser',
       type: 'StartsUsing',
       netRegex: { id: 'AC81', source: 'Eminent Grief', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
+      infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
         text: {
           en: 'Avoid laser',
@@ -452,9 +525,9 @@ const triggerSet: TriggerSet<Data> = {
       type: 'GainsEffect',
       netRegex: { effectId: '11D7', capture: true },
       condition: (data, matches) => {
-        const stackCount = parseInt(matches.count);
+        const stackCount = parseInt(matches.count, 16);
         const target = matches.target;
-        return (target === data.me && stackCount === 15);
+        return target === data.me && stackCount === 14;
       },
       alertText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -464,11 +537,47 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'Final Verse Quantum Sin Bearer Gain',
+      // 11D7 = Sin Bearer
+      type: 'GainsEffect',
+      netRegex: { effectId: '11D7', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data, _matches) => data.sinBearer = true,
+    },
+    {
+      id: 'Final Verse Quantum Sin Bearer Lose',
+      // 11D7 = Sin Bearer
+      type: 'LosesEffect',
+      netRegex: { effectId: '11D7', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data, _matches) => data.sinBearer = false,
+    },
+    {
+      id: 'Final Verse Quantum Doom',
+      // 11F2 = Doom
+      type: 'GainsEffect',
+      netRegex: { effectId: '11F2', capture: true },
+      condition: (data) => data.CanCleanse(),
+      alertText: (data, matches, output) => {
+        return output.text!({ player: data.party.member(matches.target) });
+      },
+      outputStrings: {
+        text: {
+          en: 'Cleanse ${player}',
+          de: 'Reinige ${player}',
+          fr: 'Guérissez ${player}',
+          cn: '康复 ${player}',
+          ko: '${player} 디버프 해제',
+        },
+      },
+    },
+    {
       id: 'Final Verse Quantum Eminent Grief Drain Aether',
       // AC61 = short cast
       // AC62 = long cast
       type: 'StartsUsing',
       netRegex: { id: ['AC61', 'AC62'], source: 'Eminent Grief', capture: true },
+      condition: (data) => !data.sinBearer,
       delaySeconds: (_data, matches) =>
         matches.id === 'AC61' ? 0 : parseFloat(matches.castTime) - 5,
       alertText: (_data, _matches, output) => output.text!(),
@@ -495,9 +604,9 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'Final Verse Quantum Flameborn Spawn',
-      // xxxx = Flameborn
+      // 14041 = Flameborn
       type: 'AddedCombatant',
-      netRegex: { npcNameId: 'xxxx', capture: false },
+      netRegex: { npcNameId: '14041', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -510,55 +619,55 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum Flameborn Self-Destruct',
       type: 'StartsUsing',
       netRegex: { id: 'AC8B', source: 'Flameborn', capture: false },
-      response: Responses.aoe(),
+      response: Responses.aoe('alert'),
     },
-    {
-      id: 'Final Verse Quantum StartsUsing Debug',
-      type: 'StartsUsing',
-      netRegex: { id: ['AC5B', 'AC5C'], capture: true },
-      infoText: (_data, matches, output) => {
-        const id = matches.id;
-        const ability = matches.ability;
-        return output.text!({ id: id, ability: ability });
-      },
-      outputStrings: {
-        text: {
-          en: 'StartsUsing - ${id}: ${ability}',
-        },
-      },
-    },
-    {
-      id: 'Final Verse Quantum Ability Debug',
-      type: 'Ability',
-      netRegex: { id: ['AC5B', 'AC5C'], capture: true },
-      infoText: (_data, matches, output) => {
-        const id = matches.id;
-        const ability = matches.ability;
-        return output.text!({ id: id, ability: ability });
-      },
-      outputStrings: {
-        text: {
-          en: 'Ability - ${id}: ${ability}',
-        },
-      },
-    },
-    {
-      id: 'Final Verse Quantum MapEffect Debug',
-      type: 'MapEffect',
-      netRegex: { location: ['0[0-F]', '1[0-7]'], capture: true },
-      durationSeconds: 10,
-      suppressSeconds: 5,
-      infoText: (_data, matches, output) => {
-        const flags = matches.flags;
-        const location = matches.location;
-        return output.text!({ flags: flags, location: location });
-      },
-      outputStrings: {
-        text: {
-          en: 'Map Effect - ${flags}: ${location}',
-        },
-      },
-    },
+    // {
+    //   id: 'Final Verse Quantum StartsUsing Debug',
+    //   type: 'StartsUsing',
+    //   netRegex: { id: ['AC5B', 'AC5C'], capture: true },
+    //   infoText: (_data, matches, output) => {
+    //     const id = matches.id;
+    //     const ability = matches.ability;
+    //     return output.text!({ id: id, ability: ability });
+    //   },
+    //   outputStrings: {
+    //     text: {
+    //       en: 'StartsUsing - ${id}: ${ability}',
+    //     },
+    //   },
+    // },
+    // {
+    //   id: 'Final Verse Quantum Ability Debug',
+    //   type: 'Ability',
+    //   netRegex: { id: ['AC5B', 'AC5C'], capture: true },
+    //   infoText: (_data, matches, output) => {
+    //     const id = matches.id;
+    //     const ability = matches.ability;
+    //     return output.text!({ id: id, ability: ability });
+    //   },
+    //   outputStrings: {
+    //     text: {
+    //       en: 'Ability - ${id}: ${ability}',
+    //     },
+    //   },
+    // },
+    // {
+    //   id: 'Final Verse Quantum MapEffect Debug',
+    //   type: 'MapEffect',
+    //   netRegex: { location: ['0[0-F]', '1[0-7]'], capture: true },
+    //   durationSeconds: 10,
+    //   suppressSeconds: 5,
+    //   infoText: (_data, matches, output) => {
+    //     const flags = matches.flags;
+    //     const location = matches.location;
+    //     return output.text!({ flags: flags, location: location });
+    //   },
+    //   outputStrings: {
+    //     text: {
+    //       en: 'Map Effect - ${flags}: ${location}',
+    //     },
+    //   },
+    // },
   ],
   timelineReplace: [
     {

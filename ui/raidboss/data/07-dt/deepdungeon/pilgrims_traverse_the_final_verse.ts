@@ -93,7 +93,7 @@ const outputStrings12Dir: OutputStrings = {
 };
 
 const xyTo12DirNum = (x: number, y: number, centerX: number, centerY: number): number => {
-  // N = 0, NE = 1, ..., NW = 12
+  // N = 0, NNE = 1, ..., NNW = 12
   x = x - centerX;
   y = y - centerY;
   return Math.round(6 - 6 * Math.atan2(x, y) / Math.PI) % 12;
