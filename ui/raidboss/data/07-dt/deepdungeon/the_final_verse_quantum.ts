@@ -338,7 +338,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'Final Verse Quantum Blade/Ball/Chains Cleanup',
       type: 'Ability',
-      netRegex: { id: ['AC4E', 'AC49', 'AC4B'], source: ['Eminent Grief', 'Devoured Eater'], capture: false },
+      netRegex: {
+        id: ['AC4E', 'AC49', 'AC4B'],
+        source: ['Eminent Grief', 'Devoured Eater'],
+        capture: false,
+      },
       suppressSeconds: 1,
       run: (data, _matches) => {
         delete data.ballChains;

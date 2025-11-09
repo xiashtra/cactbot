@@ -288,7 +288,11 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'PT 99 Eminent Grief Blade/Ball/Chains Cleanup',
       type: 'Ability',
-      netRegex: { id: ['AC29', 'AC24', 'AC26'], source: ['Eminent Grief', 'Devoured Eater'], capture: false },
+      netRegex: {
+        id: ['AC29', 'AC24', 'AC26'],
+        source: ['Eminent Grief', 'Devoured Eater'],
+        capture: false,
+      },
       suppressSeconds: 1,
       run: (data, _matches) => {
         delete data.ballChains;
