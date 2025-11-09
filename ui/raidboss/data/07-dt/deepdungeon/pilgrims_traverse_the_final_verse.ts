@@ -7,7 +7,6 @@ import { RaidbossData } from '../../../../../types/data';
 import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 
 // Pilgrim's Traverse Stone 99/The Final Verse
-// TODO: Abysal Blaze left/right safe spots
 // TODO: timeline
 
 // === Map Effect info: ===
@@ -39,6 +38,20 @@ import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 //
 // 00020001 - glass breaking first time
 // 00200010 - glass breaking second time
+
+// possible exaflare starting locations [x, y]:
+// [-582.019, -288.003]
+// [-582.019, -311.991]
+// [-588.000, -294.015]
+// [-588.000, -306.009]
+// [-594.012, -299.997]
+// [-599.994, -294.015]
+// [-599.994, -306.009]
+// [-606.006, -299.997]
+// [-612.018, -294.015]
+// [-612.018, -306.009]
+// [-618.000, -288.003]
+// [-618.000, -311.991]
 
 const center = {
   'x': -600,
@@ -113,9 +126,13 @@ const chainsOfCondemnationOutputStrings = {
 
 export interface Data extends RaidbossData {
   myVengeanceExpiration?: number;
-  walls?: number[];
   sidesMiddle?: 'sides' | 'middle';
   ballChains?: 'ball' | 'chains';
+  walls?: number[];
+  abyssalSides: boolean;
+  abyssalFrontBack?: 'front' | 'back';
+  abyssalLeftRight?: 'left' | 'right';
+  exas?: number[];
 }
 
 const triggerSet: TriggerSet<Data> = {
@@ -128,6 +145,10 @@ const triggerSet: TriggerSet<Data> = {
     en: 'Pilgrim\'s Traverse Stone 99/The Final Verse',
     cn: '朝圣交错路 第99朝圣路/卓异的悲寂歼灭战',
   },
+
+  initData: () => ({
+    abyssalSides: false,
+  }),
 
   triggers: [
     // ---------------- Stone 99/The Final Verse Boss: Eminent Grief/Devoured Eater ----------------
@@ -382,7 +403,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'PT 99 Eminent Grief Abyssal Blaze Safe Spots',
+      id: 'PT 99 Eminent Grief Abyssal Blaze Front/Back Safe Spot',
       // AC2A = first cast, horizontal exaflares, front safe
       // AC2B = first cast, vertical exaflares, left or right safe
       // AC2C = second instant cast, horizontal exaflares, back safe
@@ -391,61 +412,106 @@ const triggerSet: TriggerSet<Data> = {
       // AC2F = diamonds glow, exaflares start at end of cast
       // AC30 = instant, exaflare explosion/damage
       type: 'Ability',
-      netRegex: { id: ['AC2A', 'AC2B', 'AC2C', 'AC2D'], source: 'Eminent Grief', capture: true },
-      durationSeconds: 10,
-      infoText: (_data, matches, output) => {
+      netRegex: { id: ['AC2A', 'AC2C'], source: 'Eminent Grief', capture: true },
+      preRun: (data, matches) => {
         const id = matches.id;
-        switch (id) {
-          case 'AC2A':
-            return output.text!({ safe: output.front!() });
-          case 'AC2B':
-            return output.text!({ safe: output.side!() });
-          case 'AC2C':
-            return output.text!({ safe: output.back!() });
-          case 'AC2D':
-            return output.text!({ safe: output.side!() });
-        }
+        id === 'AC2A' ? data.abyssalFrontBack = 'front' : data.abyssalFrontBack = 'back';
+        data.abyssalSides = false;
+      },
+      infoText: (data, _matches, output) => {
+        const frontBack = data.abyssalFrontBack;
+        const leftRight = data.abyssalLeftRight;
+        if (frontBack === undefined || leftRight === undefined)
+          return;
+
+        return output.text!({ frontBack: output[frontBack]!(), leftRight: output[leftRight]!() });
       },
       outputStrings: {
         text: {
-          en: '${safe}, for later',
-          ja: '${safe}、あとで',
-          cn: '稍后 ${safe}',
-          ko: '${safe}, 나중 대비',
+          en: '${frontBack}-${leftRight}, for later',
         },
-        front: {
-          en: 'Front safe',
-          ja: '前方が安置',
-          cn: '前方安全',
-          ko: '앞쪽 안전',
+        front: Outputs.front,
+        back: Outputs.back,
+        left: Outputs.left,
+        right: Outputs.right,
+      },
+    },
+    {
+      id: 'PT 99 Eminent Grief Abyssal Blaze Left/Right Collector',
+      type: 'Ability',
+      netRegex: { id: ['AC2B', 'AC2D'], source: 'Eminent Grief', capture: false },
+      run: (data, _matches) => {
+        data.abyssalSides = true;
+      },
+    },
+    {
+      id: 'PT 99 Eminent Grief Abyssal Blaze Left/Right Safe Spot',
+      type: 'AbilityExtra',
+      netRegex: { id: 'AC2E', capture: true },
+      condition: (data) => data.abyssalSides,
+      preRun: (data, matches) => {
+        const x = parseFloat(matches.x);
+        (data.exas ??= []).push(x);
+
+        if (data.exas === undefined || data.exas.length < 4)
+          return;
+
+        const exas = data.exas.sort((a, b) => a - b);
+        const [x1, x4] = [exas[0], exas[3]];
+        if (x1 === undefined || x4 === undefined)
+          throw new UnreachableCode();
+
+        if (x1 < -615) {
+          data.abyssalLeftRight = 'right';
+        } else if (x4 > -585) {
+          data.abyssalLeftRight = 'left';
+        }
+      },
+      infoText: (data, _matches, output) => {
+        const frontBack = data.abyssalFrontBack;
+        const leftRight = data.abyssalLeftRight;
+        if (frontBack === undefined || leftRight === undefined)
+          return;
+
+        return output.text!({ frontBack: output[frontBack]!(), leftRight: output[leftRight]!() });
+      },
+      outputStrings: {
+        text: {
+          en: '${frontBack}-${leftRight}, for later',
         },
-        back: {
-          en: 'Back safe',
-          ja: '後方が安置',
-          cn: '后方安全',
-          ko: '뒤쪽 안전',
-        },
-        side: {
-          en: 'Check safe side',
-          ja: '横の安置を確認',
-          cn: '观察安全侧面',
-          ko: '양 옆 중 안전한 곳 확인',
-        },
+        front: Outputs.front,
+        back: Outputs.back,
+        left: Outputs.left,
+        right: Outputs.right,
       },
     },
     {
       id: 'PT 99 Eminent Grief Abyssal Blaze',
       type: 'StartsUsing',
       netRegex: { id: 'AC2F', source: 'Eminent Grief', capture: false },
+      durationSeconds: 16,
       suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        const frontBack = data.abyssalFrontBack === undefined ? 'unknown' : data.abyssalFrontBack;
+        const leftRight = data.abyssalLeftRight === undefined ? 'unknown' : data.abyssalLeftRight;
+
+        return output.text!({ frontBack: output[frontBack]!(), leftRight: output[leftRight]!() });
+      },
+      run: (data) => {
+        data.abyssalSides = false;
+        delete data.abyssalFrontBack;
+        delete data.abyssalLeftRight;
+        delete data.exas;
+      },
       outputStrings: {
         text: {
-          en: 'Avoid Exaflares',
-          ja: 'エクサフレアを避ける',
-          cn: '躲避地火',
-          ko: '엑사플레어 피하기',
+          en: '${frontBack}-${leftRight}, Avoid Exaflares',
         },
+        front: Outputs.front,
+        back: Outputs.back,
+        left: Outputs.left,
+        right: Outputs.right,
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -461,8 +527,7 @@ const triggerSet: TriggerSet<Data> = {
       infoText: (data, matches, output) => {
         const [x, y] = [parseFloat(matches.x), parseFloat(matches.y)];
         const dir = xyTo12DirNum(x, y, center.x, center.y);
-        data.walls ??= [];
-        data.walls.push(dir);
+        (data.walls ??= []).push(dir);
 
         const walls = data.walls;
         if (walls === undefined || walls.length < 2)

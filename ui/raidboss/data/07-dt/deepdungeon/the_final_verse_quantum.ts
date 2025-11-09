@@ -116,9 +116,11 @@ const triggerSet: TriggerSet<Data> = {
   comments: {
     en: 'Q40',
   },
+
   initData: () => ({
     sinBearer: false,
   }),
+
   timelineTriggers: [
     {
       id: 'Final Verse Quantum Abyssal Sun',
