@@ -286,7 +286,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'PT 99 Eminent Grief Blade/Ball/Chains Cleanup',
+      id: 'PT 99 Blade/Ball/Chains Cleanup',
       type: 'Ability',
       netRegex: {
         id: ['AC29', 'AC24', 'AC26'],
@@ -449,7 +449,7 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'PT 99 Devoured Eater Bounds of Sin Dodge Direction',
+      id: 'PT 99 Bounds of Sin Dodge Direction',
       type: 'StartsUsingExtra',
       netRegex: { id: 'AC33', capture: true },
       suppressSeconds: (data) => {
@@ -495,58 +495,11 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'PT 99 Devoured Eater Bounds of Sin Dodge Direction Cleanup',
+      id: 'PT 99 Bounds of Sin Dodge Direction Cleanup',
       type: 'Ability',
       netRegex: { id: 'AC34', source: 'Devoured Eater', capture: false },
       run: (data, _matches, _output) => delete data.walls,
     },
-    // {
-    //   id: 'PT 99 StartsUsing Debug',
-    //   type: 'StartsUsing',
-    //   netRegex: { id: ['AC31', 'AC32', 'AC34'], capture: true },
-    //   infoText: (_data, matches, output) => {
-    //     const id = matches.id;
-    //     const ability = matches.ability;
-    //     return output.text!({ id: id, ability: ability });
-    //   },
-    //   outputStrings: {
-    //     text: {
-    //       en: 'StartsUsing - ${id}: ${ability}',
-    //     },
-    //   },
-    // },
-    // {
-    //   id: 'PT 99 Ability Debug',
-    //   type: 'Ability',
-    //   netRegex: { id: ['AC31', 'AC32', 'AC34'], capture: true },
-    //   infoText: (_data, matches, output) => {
-    //     const id = matches.id;
-    //     const ability = matches.ability;
-    //     return output.text!({ id: id, ability: ability });
-    //   },
-    //   outputStrings: {
-    //     text: {
-    //       en: 'Ability - ${id}: ${ability}',
-    //     },
-    //   },
-    // },
-    // {
-    //   id: 'PT 99 MapEffect Debug',
-    //   type: 'MapEffect',
-    //   netRegex: { location: ['0[0-F]', '1[0-7]'], capture: true },
-    //   durationSeconds: 10,
-    //   suppressSeconds: 5,
-    //   infoText: (_data, matches, output) => {
-    //     const flags = matches.flags;
-    //     const location = matches.location;
-    //     return output.text!({ flags: flags, location: location });
-    //   },
-    //   outputStrings: {
-    //     text: {
-    //       en: 'Map Effect - ${flags}: ${location}',
-    //     },
-    //   },
-    // },
   ],
   timelineReplace: [
     {
