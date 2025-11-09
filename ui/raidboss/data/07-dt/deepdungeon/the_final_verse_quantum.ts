@@ -68,7 +68,6 @@ import { TriggerSet } from '../../../../../types/trigger';
 // 00020001 - glass breaking first time
 // 00200010 - glass breaking second time
 
-// center of room
 // const center = {
 //   'x': -600,
 //   'y': -300,

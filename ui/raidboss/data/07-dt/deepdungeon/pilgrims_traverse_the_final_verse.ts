@@ -40,7 +40,6 @@ import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 // 00020001 - glass breaking first time
 // 00200010 - glass breaking second time
 
-// center of room
 const center = {
   'x': -600,
   'y': -300,
@@ -299,7 +298,6 @@ const triggerSet: TriggerSet<Data> = {
     {
       id: 'PT 99 Devoured Eater Bounds of Sin',
       // applies 119E Bind for 3s
-      // AC33 = sequential damage cast, may have good position data for dodge direction
       type: 'Ability',
       netRegex: { id: 'AC32', source: 'Devoured Eater', capture: false },
       delaySeconds: 3,
