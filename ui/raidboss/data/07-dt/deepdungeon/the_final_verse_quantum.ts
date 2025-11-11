@@ -8,10 +8,10 @@ import { TriggerSet } from '../../../../../types/trigger';
 // Pilgrim's Traverse The Final Verse Quantum
 // TODO: Q15-39
 // TODO: Scourging Blaze (exaflares) safe spot
-// TODO: Bounds of Sin north/south or east/west dodge direction + in/out
+// TODO: Bounds of Sin dodge direction + in/out
 // TODO: light/dark partner stacks
 // TODO: Manifold Lashings laser left/right direction
-// TODO: Abyssal Sun get Light Vengeance for towers warning
+// TODO: Abyssal Sun get Light Vengeance for towers
 
 // === Map Effect info: ===
 //
@@ -106,6 +106,8 @@ export interface Data extends RaidbossData {
   myVengeanceExpiration?: number;
   sidesMiddle?: 'sides' | 'middle';
   ballChains?: 'ball' | 'chains';
+  hellishEarth: boolean;
+  eruptions: number;
   sinBearer: boolean;
 }
 
@@ -118,6 +120,8 @@ const triggerSet: TriggerSet<Data> = {
   },
 
   initData: () => ({
+    hellishEarth: false,
+    eruptions: 0,
     sinBearer: false,
   }),
 
@@ -280,7 +284,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum Ball of Fire',
       type: 'StartsUsing',
       netRegex: { id: ['AC41', 'AC49'], source: 'Eminent Grief', capture: true },
-      preRun: (data, _matches) => data.ballChains = 'ball',
+      preRun: (data) => data.ballChains = 'ball',
       durationSeconds: 8,
       alertText: (data, matches, output) => {
         const id = matches.id;
@@ -314,7 +318,7 @@ const triggerSet: TriggerSet<Data> = {
       // raidwide + applies 11D2 Chains of Condemnation for 2s; heavy damage if moving
       type: 'StartsUsing',
       netRegex: { id: ['AC44', 'AC4B'], source: 'Eminent Grief', capture: true },
-      preRun: (data, _matches) => data.ballChains = 'chains',
+      preRun: (data) => data.ballChains = 'chains',
       durationSeconds: 8,
       alertText: (data, matches, output) => {
         const id = matches.id;
@@ -346,7 +350,7 @@ const triggerSet: TriggerSet<Data> = {
         capture: false,
       },
       suppressSeconds: 1,
-      run: (data, _matches) => {
+      run: (data) => {
         delete data.ballChains;
         delete data.sidesMiddle;
       },
@@ -406,7 +410,12 @@ const triggerSet: TriggerSet<Data> = {
       // 14039 = Vodoriga Minion
       type: 'AddedCombatant',
       netRegex: { npcNameId: '14039', capture: false },
-      response: Responses.killAdds(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Kill Add',
+        },
+      },
     },
     {
       id: 'Final Verse Quantum Shackles of Greater Sanctity',
@@ -416,17 +425,6 @@ const triggerSet: TriggerSet<Data> = {
       outputStrings: {
         text: {
           en: 'Shackles',
-        },
-      },
-    },
-    {
-      id: 'Final Verse Quantum Hellish Earth',
-      type: 'StartsUsing',
-      netRegex: { id: 'AC78', source: 'Eminent Grief', capture: false },
-      alertText: (_data, _matches, output) => output.text!(),
-      outputStrings: {
-        text: {
-          en: 'AoE + Draw-in',
         },
       },
     },
@@ -451,12 +449,53 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'Final Verse Quantum Hellish Earth',
+      type: 'StartsUsing',
+      netRegex: { id: 'AC78', source: 'Eminent Grief', capture: false },
+      alertText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'AoE + Draw-in',
+        },
+      },
+    },
+    {
+      id: 'Final Verse Quantum Hellish Earth Gain',
+      // 11D6 = Hellish Earth
+      type: 'GainsEffect',
+      netRegex: { effectId: '11D6', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.hellishEarth = true,
+    },
+    {
       id: 'Final Verse Quantum Arcane Font Spawn',
       // 14042 = Arcane Font
       type: 'AddedCombatant',
       netRegex: { npcNameId: '14042', capture: false },
       suppressSeconds: 1,
-      response: Responses.killAdds(),
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Kill Towers',
+        },
+      },
+    },
+    {
+      id: 'Final Verse Quantum Eruption',
+      type: 'StartsUsing',
+      netRegex: { id: 'AC7C', source: 'Eminent Grief', capture: false },
+      suppressSeconds: 7,
+      infoText: (data, _matches, output) => {
+        if (data.hellishEarth && data.eruptions < 2)
+          return;
+        return output.text!();
+      },
+      run: (data) => data.eruptions++,
+      outputStrings: {
+        text: {
+          en: 'Bait Puddles x3',
+        },
+      },
     },
     {
       id: 'Final Verse Quantum Manifold Lashings',
@@ -525,6 +564,22 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'Final Verse Quantum Sin Bearer Gain',
+      // 11D7 = Sin Bearer
+      type: 'GainsEffect',
+      netRegex: { effectId: '11D7', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.sinBearer = true,
+    },
+    {
+      id: 'Final Verse Quantum Sin Bearer Lose',
+      // 11D7 = Sin Bearer
+      type: 'LosesEffect',
+      netRegex: { effectId: '11D7', capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data) => data.sinBearer = false,
+    },
+    {
       id: 'Final Verse Quantum Sin Bearer Pass Warning',
       // 11D7 = Sin Bearer
       type: 'GainsEffect',
@@ -540,22 +595,6 @@ const triggerSet: TriggerSet<Data> = {
           en: 'Pass Sin Bearer',
         },
       },
-    },
-    {
-      id: 'Final Verse Quantum Sin Bearer Gain',
-      // 11D7 = Sin Bearer
-      type: 'GainsEffect',
-      netRegex: { effectId: '11D7', capture: true },
-      condition: Conditions.targetIsYou(),
-      run: (data, _matches) => data.sinBearer = true,
-    },
-    {
-      id: 'Final Verse Quantum Sin Bearer Lose',
-      // 11D7 = Sin Bearer
-      type: 'LosesEffect',
-      netRegex: { effectId: '11D7', capture: true },
-      condition: Conditions.targetIsYou(),
-      run: (data, _matches) => data.sinBearer = false,
     },
     {
       id: 'Final Verse Quantum Doom',
