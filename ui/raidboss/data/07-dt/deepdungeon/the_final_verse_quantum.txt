@@ -304,5 +304,5 @@ hideall "--sync--"
 # AF14 --sync-- - auto-attack related?
 # B03C Bloody Claw - Vodoriga Minion damage
 # B03D Terror Eye - Vodoriga Minion AoE puddle
-# B03F Spinelash - damage
+# B03F Spinelash - wild charge damage
 # B08D --sync-- - Vodoriga Minion auto-attack damage

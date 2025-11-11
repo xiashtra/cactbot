@@ -8,9 +8,9 @@ import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 
 // Pilgrim's Traverse The Final Verse Quantum
 // TODO: Q15-39
-// TODO: light/dark partner stacks warning
-// TODO: Abyssal Sun call to get Light Vengeance for towers
-// TODO: Manifold Lashings laser left/right direction
+// TODO: light/dark partner stacks callout
+// TODO: Abyssal Sun callout to get Light Vengeance for towers
+// TODO: Manifold Lashings laser left/right direction callout
 // TODO: finish timeline
 
 // === Map Effect info: ===
@@ -109,8 +109,8 @@ const tetherData = {
 } as const;
 
 const center = {
-  'x': -600,
-  'y': -300,
+  x: -600,
+  y: -300,
 } as const;
 
 type DirectionOutput12 =
@@ -176,6 +176,8 @@ const outputFrom12DirNum = (dirNum: number): DirectionOutput12 => {
 };
 
 const boundsOfSinSingleWall = (count: number): boolean => {
+  // returns true if this Bounds of Sin cast is single sequential walls
+  // or false for double sequential walls
   console.assert(count >= 1 && count <= 5);
   switch (count) {
     case 1:
@@ -419,7 +421,7 @@ const triggerSet: TriggerSet<Data> = {
         const hdgDir = hdgTo12DirNum(parseFloat(matches.heading));
         const inOut = hdgDir === dir ? 'in' : Math.abs(hdgDir - dir) === 6 ? 'out' : 'unknown';
 
-        // single wall
+        // single sequential walls
         if (singleWall) {
           const [wall1, wall2] = [walls[0], walls[1]];
           if (wall1 === undefined || wall2 === undefined)
@@ -440,7 +442,7 @@ const triggerSet: TriggerSet<Data> = {
           return output.single!({ dir: output[dodgeDir]!(), inOut: output[inOut]!() });
         }
 
-        // double wall
+        // double sequential walls
         const [wall1, wall3, wall4] = [walls[0], walls[2], walls[3]];
         if (wall1 === undefined || wall3 === undefined || wall4 === undefined)
           throw new UnreachableCode();
@@ -630,7 +632,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'Final Verse Quantum Spinelash',
-      // wildcharge
+      // wild charge
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.spinelashTarget, capture: true },
       alertText: (data, matches, output) => {
@@ -789,6 +791,7 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'Final Verse Quantum First Sin Bearer',
+      // instant cast
       type: 'Ability',
       netRegex: { id: 'AC86', source: 'Devoured Eater', capture: true },
       infoText: (data, matches, output) => {
@@ -865,8 +868,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'Final Verse Quantum Eminent Grief Drain Aether',
-      // AC61 = short cast
-      // AC62 = long cast
       type: 'StartsUsing',
       netRegex: { id: ['AC61', 'AC62'], source: 'Eminent Grief', capture: true },
       condition: (data) => !data.sinBearer,
@@ -881,8 +882,6 @@ const triggerSet: TriggerSet<Data> = {
     },
     {
       id: 'Final Verse Quantum Devoured Eater Drain Aether',
-      // AC63 = short cast
-      // AC65 = long cast
       type: 'StartsUsing',
       netRegex: { id: ['AC63', 'AC65'], source: 'Devoured Eater', capture: true },
       delaySeconds: (_data, matches) =>
