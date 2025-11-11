@@ -238,7 +238,7 @@ hideall "--sync--"
 # AC4C Blade of First Light - long dummy-cast single-blade
 # AC4D Blade of First Light - long dummy-cast double-blade
 # AC4E Blade of First Light - long cast damage
-# AC53 --sync-- - exaflare markers spawning?
+# AC53 --sync-- - exaflare markers spawning
 # AC56 Scourging Blaze - exaflare dummy-cast (diamonds glow)
 # AC57 Scourging Blaze - exaflare damage
 # AC58 Bounds of Sin - dummy-cast

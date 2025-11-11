@@ -1,17 +1,17 @@
 import Conditions from '../../../../../resources/conditions';
+import { UnreachableCode } from '../../../../../resources/not_reached';
 import Outputs from '../../../../../resources/outputs';
 import { Responses } from '../../../../../resources/responses';
 import ZoneId from '../../../../../resources/zone_id';
 import { RaidbossData } from '../../../../../types/data';
-import { TriggerSet } from '../../../../../types/trigger';
+import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 
 // Pilgrim's Traverse The Final Verse Quantum
 // TODO: Q15-39
-// TODO: Scourging Blaze (exaflares) safe spot
-// TODO: Bounds of Sin dodge direction + in/out
-// TODO: light/dark partner stacks
+// TODO: light/dark partner stacks warning
+// TODO: Abyssal Sun call to get Light Vengeance for towers
 // TODO: Manifold Lashings laser left/right direction
-// TODO: Abyssal Sun get Light Vengeance for towers
+// TODO: finish timeline
 
 // === Map Effect info: ===
 //
@@ -68,10 +68,25 @@ import { TriggerSet } from '../../../../../types/trigger';
 // 00020001 - glass breaking first time
 // 00200010 - glass breaking second time
 
-// const center = {
-//   'x': -600,
-//   'y': -300,
-// } as const;
+// first 6 exaflare starting locations [x, y]:
+// ===========================================
+// set 1
+// -----
+// [-618.000, -288.003]
+// [-612.018, -294.015]
+// [-606.006, -299.997]
+// [-599.994, -306.009]
+// [-588.000, -303.018]
+// [-582.019, -290.994]
+//
+// set 2
+// -----
+// [-618.000, -290.994]
+// [-612.018, -303.018]
+// [-599.994, -306.009]
+// [-594.012, -299.997]
+// [-588.000, -294.015]
+// [-582.019, -288.003]
 
 const headMarkerData = {
   // vfx/lockon/eff/lockon5_t0h
@@ -93,6 +108,91 @@ const tetherData = {
   searingChains: '0009',
 } as const;
 
+const center = {
+  'x': -600,
+  'y': -300,
+} as const;
+
+type DirectionOutput12 =
+  | 'dirN'
+  | 'dirNNE'
+  | 'dirENE'
+  | 'dirE'
+  | 'dirESE'
+  | 'dirSSE'
+  | 'dirS'
+  | 'dirSSW'
+  | 'dirWSW'
+  | 'dirW'
+  | 'dirWNW'
+  | 'dirNNW'
+  | 'unknown';
+
+const output12Dir: DirectionOutput12[] = [
+  'dirN',
+  'dirNNE',
+  'dirENE',
+  'dirE',
+  'dirESE',
+  'dirSSE',
+  'dirS',
+  'dirSSW',
+  'dirWSW',
+  'dirW',
+  'dirWNW',
+  'dirNNW',
+];
+
+const outputStrings12Dir: OutputStrings = {
+  dirN: Outputs.dirN,
+  dirNNE: Outputs.dirNNE,
+  dirENE: Outputs.dirENE,
+  dirE: Outputs.dirE,
+  dirESE: Outputs.dirESE,
+  dirSSE: Outputs.dirSSE,
+  dirS: Outputs.dirS,
+  dirSSW: Outputs.dirSSW,
+  dirWSW: Outputs.dirWSW,
+  dirW: Outputs.dirW,
+  dirWNW: Outputs.dirWNW,
+  dirNNW: Outputs.dirNNW,
+  unknown: Outputs.unknown,
+};
+
+const xyTo12DirNum = (x: number, y: number, centerX: number, centerY: number): number => {
+  // N = 0, NNE = 1, ..., NNW = 12
+  x = x - centerX;
+  y = y - centerY;
+  return Math.round(6 - 6 * Math.atan2(x, y) / Math.PI) % 12;
+};
+
+const hdgTo12DirNum = (heading: number): number => {
+  // N = 0, NNE = 1, ..., NNW = 12
+  return (Math.round(6 - 6 * heading / Math.PI) % 12 + 12) % 12;
+};
+
+const outputFrom12DirNum = (dirNum: number): DirectionOutput12 => {
+  return output12Dir[dirNum] ?? 'unknown';
+};
+
+const boundsOfSinSingleWall = (count: number): boolean => {
+  console.assert(count >= 1 && count <= 5);
+  switch (count) {
+    case 1:
+      return false;
+    case 2:
+      return true;
+    case 3:
+      return false;
+    case 4:
+      return true;
+    case 5:
+      return true;
+    default:
+      throw new UnreachableCode();
+  }
+};
+
 const chainsOfCondemnationOutputStrings = {
   chains: {
     en: 'AoE + Stop Moving!',
@@ -104,6 +204,11 @@ const chainsOfCondemnationOutputStrings = {
 
 export interface Data extends RaidbossData {
   myVengeanceExpiration?: number;
+  scourgingFrontBack: 'front' | 'back' | 'unknown';
+  scourgingLeftRight: 'left' | 'right' | 'unknown';
+  exaflares?: number[];
+  boundsOfSin: number;
+  walls?: number[];
   sidesMiddle?: 'sides' | 'middle';
   ballChains?: 'ball' | 'chains';
   hellishEarth: boolean;
@@ -120,6 +225,9 @@ const triggerSet: TriggerSet<Data> = {
   },
 
   initData: () => ({
+    scourgingFrontBack: 'unknown',
+    scourgingLeftRight: 'unknown',
+    boundsOfSin: 0,
     hellishEarth: false,
     eruptions: 0,
     sinBearer: false,
@@ -200,51 +308,191 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
-      id: 'Final Verse Quantum Scourging Blaze Safe Spot',
-      type: 'Ability',
+      id: 'Final Verse Quantum Scourging Blaze Front/Back',
+      type: 'StartsUsing',
       netRegex: { id: ['AEFD', 'AEFE'], source: 'Eminent Grief', capture: true },
-      durationSeconds: 10,
-      infoText: (_data, matches, output) => {
+      run: (data, matches) => {
         const id = matches.id;
-        if (id === 'AEFD')
-          return output.text!({ safe: output.front!() });
-        return output.text!({ safe: output.back!() });
+        id === 'AEFD' ? data.scourgingFrontBack = 'front' : data.scourgingFrontBack = 'back';
+      },
+    },
+    {
+      id: 'Final Verse Quantum Scourging Blaze Left/Right',
+      type: 'AbilityExtra',
+      netRegex: { id: 'AC53', capture: true },
+      condition: (data) => data.exaflares === undefined || data.exaflares.length < 6,
+      infoText: (data, matches, output) => {
+        const x = parseFloat(matches.x);
+        (data.exaflares ??= []).push(x);
+
+        if (data.exaflares === undefined || data.exaflares.length < 6)
+          return;
+
+        const frontBack = data.scourgingFrontBack;
+        const exas = data.exaflares.sort((a, b) => a - b);
+        const [x3, x4] = [exas[2], exas[3]];
+        if (x3 === undefined || x4 === undefined)
+          throw new UnreachableCode();
+
+        if (frontBack === 'front') {
+          if (x3 < -603) {
+            data.scourgingLeftRight = 'left';
+          } else if (x4 > -597) {
+            data.scourgingLeftRight = 'right';
+          }
+        } else if (frontBack === 'back') {
+          if (x4 > -603) {
+            data.scourgingLeftRight = 'right';
+          } else if (x3 < -597) {
+            data.scourgingLeftRight = 'left';
+          }
+        }
+
+        const leftRight = data.scourgingLeftRight;
+        return output.text!({ frontBack: output[frontBack]!(), leftRight: output[leftRight]!() });
       },
       outputStrings: {
         text: {
-          en: '${safe}, for later',
-          ja: '${safe}、あとで',
-          cn: '稍后 ${safe}',
-          ko: '${safe}, 나중 대비',
+          en: '${frontBack}-${leftRight}, for later',
         },
-        front: {
-          en: 'Front safe',
-          ja: '前方が安置',
-          cn: '前方安全',
-          ko: '앞쪽 안전',
-        },
-        back: {
-          en: 'Back safe',
-          ja: '後方が安置',
-          cn: '后方安全',
-          ko: '뒤쪽 안전',
-        },
+        front: Outputs.front,
+        back: Outputs.back,
+        left: Outputs.left,
+        right: Outputs.right,
+        unknown: Outputs.unknown,
       },
     },
     {
       id: 'Final Verse Quantum Scourging Blaze',
       type: 'StartsUsing',
       netRegex: { id: 'AC56', source: 'Eminent Grief', capture: false },
+      durationSeconds: 14,
       suppressSeconds: 1,
-      alertText: (_data, _matches, output) => output.text!(),
+      alertText: (data, _matches, output) => {
+        const frontBack = data.scourgingFrontBack;
+        const leftRight = data.scourgingLeftRight;
+
+        return output.text!({ frontBack: output[frontBack]!(), leftRight: output[leftRight]!() });
+      },
+      run: (data) => {
+        data.scourgingFrontBack = 'unknown';
+        data.scourgingLeftRight = 'unknown';
+        delete data.exaflares;
+      },
       outputStrings: {
         text: {
-          en: 'Avoid Exaflares',
-          ja: 'エクサフレアを避ける',
-          cn: '躲避地火',
-          ko: '엑사플레어 피하기',
+          en: '${frontBack}-${leftRight}, Avoid Exaflares',
         },
+        front: Outputs.front,
+        back: Outputs.back,
+        left: Outputs.left,
+        right: Outputs.right,
+        unknown: Outputs.unknown,
       },
+    },
+    {
+      id: 'Final Verse Quantum Bounds of Sin Counter',
+      type: 'StartsUsing',
+      netRegex: { id: 'AC59', source: 'Devoured Eater', capture: false },
+      run: (data) => data.boundsOfSin++,
+    },
+    {
+      id: 'Final Verse Quantum Bounds of Sin',
+      type: 'StartsUsingExtra',
+      netRegex: { id: 'AC5A', capture: true },
+      condition: (data) => {
+        const walls = data.walls;
+        const count = boundsOfSinSingleWall(data.boundsOfSin) ? 2 : 4;
+        return (walls === undefined || walls.length < count);
+      },
+      infoText: (data, matches, output) => {
+        const [x, y] = [parseFloat(matches.x), parseFloat(matches.y)];
+        const dir = xyTo12DirNum(x, y, center.x, center.y);
+        (data.walls ??= []).push(dir);
+
+        const walls = data.walls;
+        const singleWall = boundsOfSinSingleWall(data.boundsOfSin);
+        const count = singleWall ? 2 : 4;
+        if (walls === undefined || walls.length < count)
+          return;
+
+        const hdgDir = hdgTo12DirNum(parseFloat(matches.heading));
+        const inOut = hdgDir === dir ? 'in' : Math.abs(hdgDir - dir) === 6 ? 'out' : 'unknown';
+
+        // single wall
+        if (singleWall) {
+          const [wall1, wall2] = [walls[0], walls[1]];
+          if (wall1 === undefined || wall2 === undefined)
+            throw new UnreachableCode();
+
+          const isCW = wall2 - wall1 === 1 || wall1 - wall2 === 11;
+          const isCCW = wall1 - wall2 === 1 || wall2 - wall1 === 11;
+          const rotationDir = isCW ? 'cw' : isCCW ? 'ccw' : undefined;
+
+          if (rotationDir === undefined)
+            return output.single!({ dir: output.unknown!(), inOut: output[inOut]!() });
+
+          if (rotationDir === 'cw') {
+            const dodgeDir = outputFrom12DirNum((wall2 + 10) % 12);
+            return output.single!({ dir: output[dodgeDir]!(), inOut: output[inOut]!() });
+          }
+          const dodgeDir = outputFrom12DirNum((wall1 + 1) % 12);
+          return output.single!({ dir: output[dodgeDir]!(), inOut: output[inOut]!() });
+        }
+
+        // double wall
+        const [wall1, wall3, wall4] = [walls[0], walls[2], walls[3]];
+        if (wall1 === undefined || wall3 === undefined || wall4 === undefined)
+          throw new UnreachableCode();
+
+        const nextWall = Math.abs(wall1 - wall3) === 1 ? wall3 : wall4;
+
+        const isCW = nextWall - wall1 === 1 || wall1 - nextWall === 11;
+        const isCCW = wall1 - nextWall === 1 || nextWall - wall1 === 11;
+        const rotationDir = isCW ? 'cw' : isCCW ? 'ccw' : undefined;
+
+        if (rotationDir === undefined)
+          return output.double!({
+            dir1: output.unknown!(),
+            dir2: output.unknown!(),
+            inOut: output[inOut]!(),
+          });
+
+        if (rotationDir === 'cw') {
+          const dodgeDir1 = outputFrom12DirNum((nextWall + 4) % 12);
+          const dodgeDir2 = outputFrom12DirNum((nextWall + 10) % 12);
+          return output.double!({
+            dir1: output[dodgeDir1]!(),
+            dir2: output[dodgeDir2]!(),
+            inOut: output[inOut]!(),
+          });
+        }
+        const dodgeDir1 = outputFrom12DirNum((wall1 + 1) % 12);
+        const dodgeDir2 = outputFrom12DirNum((wall1 + 7) % 12);
+        return output.double!({
+          dir1: output[dodgeDir1]!(),
+          dir2: output[dodgeDir2]!(),
+          inOut: output[inOut]!(),
+        });
+      },
+      outputStrings: {
+        single: {
+          en: '${dir} + ${inOut}',
+        },
+        double: {
+          en: '${dir1}/${dir2} + ${inOut}',
+        },
+        in: Outputs.in,
+        out: Outputs.out,
+        unknown: Outputs.unknown,
+        ...outputStrings12Dir,
+      },
+    },
+    {
+      id: 'Final Verse Quantum Bounds of Sin Cleanup',
+      type: 'Ability',
+      netRegex: { id: ['AC5B', 'AC5C'], source: 'Devoured Eater', capture: false },
+      run: (data) => delete data.walls,
     },
     {
       id: 'Final Verse Quantum Blade of First Light',
@@ -665,53 +913,6 @@ const triggerSet: TriggerSet<Data> = {
       netRegex: { id: 'AC8B', source: 'Flameborn', capture: false },
       response: Responses.aoe('alert'),
     },
-    // {
-    //   id: 'Final Verse Quantum StartsUsing Debug',
-    //   type: 'StartsUsing',
-    //   netRegex: { id: ['AC5B', 'AC5C'], capture: true },
-    //   infoText: (_data, matches, output) => {
-    //     const id = matches.id;
-    //     const ability = matches.ability;
-    //     return output.text!({ id: id, ability: ability });
-    //   },
-    //   outputStrings: {
-    //     text: {
-    //       en: 'StartsUsing - ${id}: ${ability}',
-    //     },
-    //   },
-    // },
-    // {
-    //   id: 'Final Verse Quantum Ability Debug',
-    //   type: 'Ability',
-    //   netRegex: { id: ['AC5B', 'AC5C'], capture: true },
-    //   infoText: (_data, matches, output) => {
-    //     const id = matches.id;
-    //     const ability = matches.ability;
-    //     return output.text!({ id: id, ability: ability });
-    //   },
-    //   outputStrings: {
-    //     text: {
-    //       en: 'Ability - ${id}: ${ability}',
-    //     },
-    //   },
-    // },
-    // {
-    //   id: 'Final Verse Quantum MapEffect Debug',
-    //   type: 'MapEffect',
-    //   netRegex: { location: ['0[0-F]', '1[0-7]'], capture: true },
-    //   durationSeconds: 10,
-    //   suppressSeconds: 5,
-    //   infoText: (_data, matches, output) => {
-    //     const flags = matches.flags;
-    //     const location = matches.location;
-    //     return output.text!({ flags: flags, location: location });
-    //   },
-    //   outputStrings: {
-    //     text: {
-    //       en: 'Map Effect - ${flags}: ${location}',
-    //     },
-    //   },
-    // },
   ],
   timelineReplace: [
     {
