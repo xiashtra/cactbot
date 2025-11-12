@@ -198,6 +198,7 @@ const boundsOfSinSingleWall = (count: number): boolean => {
 const chainsOfCondemnationOutputStrings = {
   chains: {
     en: 'AoE + Stop Moving!',
+    de: 'AoE + Nicht Bewegen!',
     ja: '全体攻撃 + 止まれ!',
     cn: 'AOE + 停止移动!',
     ko: '전체 공격 + 이동 멈추기!',
