@@ -70,6 +70,8 @@ import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 
 // first 6 exaflare starting locations [x, y]:
 // ===========================================
+// (same regardless of front or back safe spot)
+//
 // set 1
 // -----
 // [-618.000, -288.003]
