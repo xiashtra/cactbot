@@ -22,11 +22,13 @@ hideall "--sync--"
 40.3 "Bounds of Sin chariot/dynamo" Ability { id: ["AC5B", "AC5C"], source: "Devoured Eater" }
 45.5 "Abyssal Sun" Ability { id: "AC6B", source: "Eminent Grief" }
 53.4 "Scourging Blaze exaflares" duration 7.2 #Ability { id: "AC57", source: "Eminent Grief" }
-57.2 "Ball of Fire/Chains of Condemnation?" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-1"
-57.2 "Blade of First Light?" StartsUsing { id: "AC48", source: "Devoured Eater" } window 10,10 #jump "blade-first-1"
+57.2 "--sync--" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-1"
+57.2 "--sync--" StartsUsing { id: "AC48", source: "Devoured Eater" } window 10,10 #jump "blade-first-1"
+# 61.9 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
+# 64.9 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
 # 80.2 "Searing Chains"
 # 93.0 "Spinelash"
-# 99.1 "--add targetable--"
+# 99.1 "--add targetable--" # Vodoriga Minion
 # 109.1 "Shackles of Greater Sanctity"
 # 120.1 "Hellish Earth"
 
@@ -46,10 +48,13 @@ hideall "--sync--"
 81.9 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" } window 10,10
 93.0 "Spinelash" Ability { id: "B03F", source: "Eminent Grief" }
 94.8 "--sync--" Ability { id: "AC5F", source: "Eminent Grief" }
-99.1 "--add targetable--"
+99.1 "--add targetable--" # Vodoriga Minion
 109.1 "Shackles of Greater Sanctity" Ability { id: "AF01", source: "Devoured Eater" }
 120.1 "Hellish Earth" Ability { id: ["AC78", "AC79"], source: "Eminent Grief" }
-121.1 "--adds targetable--"
+
+121.1 "--sync--" AddedCombatant { npcNameId: "14039" }
+121.1 "--towers targetable--" # Arcane Font
+
 127.1 "Eruption 1" #Ability { id: "AC7C", source: "Eminent Grief" }
 129.1 "Eruption 2" #Ability { id: "AC7C", source: "Eminent Grief" }
 129.3 "Manifold Lashings x3" Ability { id: "AC7F", source: "Eminent Grief" } duration 1.5
@@ -70,12 +75,14 @@ hideall "--sync--"
 201.7 "Bounds of Sin chariot/dynamo" Ability { id: ["AC5B", "AC5C"], source: "Devoured Eater" }
 205.8 "Scourging Blaze exaflares" duration 7.2 #Ability { id: "AC57", source: "Eminent Grief" }
 233.0 "Crime and Punishment" Ability { id: "AC86", source: "Devoured Eater" }
-238.2 "Ball of Fire/Chains of Condemnation?" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-2"
-238.2 "Blade of First Light?" StartsUsing { id: ["AC46", "AC47"], source: "Devoured Eater" } window 10,10 #jump "blade-first-2"
+238.2 "--sync--" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-2"
+238.2 "--sync--" StartsUsing { id: ["AC46", "AC47"], source: "Devoured Eater" } window 10,10 #jump "blade-first-2"
+# 242.2 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
+# 247.3 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
 # 269.4 "Spinelash"
-# 275.5 "--add targetable--"
+# 275.5 "--add targetable--" # Vodoriga Minion
 # 286.4 "Bounds of Sin draw-in"
-# 290.3 "Bounds of Sin x6"
+# 290.3 "Bounds of Sin x6" duration 1.4
 # 293.0 "Bounds of Sin chariot/dynamo"
 
 # Ball/Chains first then Blade 2
@@ -93,7 +100,7 @@ hideall "--sync--"
 258.3 "--sync--" Ability { id: "AC5D", source: "Eminent Grief" } window 10,10
 269.4 "Spinelash" Ability { id: "B03F", source: "Eminent Grief" }
 271.3 "--sync--" Ability { id: "AC5F", source: "Eminent Grief" }
-275.5 "--add targetable--"
+275.5 "--add targetable--" # Vodoriga Minion
 286.4 "Bounds of Sin draw-in" Ability { id: "AC59", source: "Devoured Eater" }
 290.3 "Bounds of Sin x6" duration 1.4 #Ability { id: "AC5A", source: "Devoured Eater" }
 293.0 "Bounds of Sin chariot/dynamo" Ability { id: ["AC5B", "AC5C"], source: "Devoured Eater" }
@@ -114,14 +121,16 @@ hideall "--sync--"
 376.0 "--sync--" Ability { id: "AC53", source: "Eminent Grief" }
 377.2 "Scourging Blaze" Ability { id: ["AEFF", "AF00"], source: "Eminent Grief" }
 384.0 "--sync--" Ability { id: "AC53", source: "Eminent Grief" }
-394.2 "Ball of Fire/Chains of Condemnation?" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-3"
-394.2 "Blade of First Light?" StartsUsing { id: ["AC46", "AC47"], source: "Devoured Eater" } window 10,10 #jump "blade-first-3"
+394.2 "--sync--" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-3"
+394.2 "--sync--" StartsUsing { id: ["AC46", "AC47"], source: "Devoured Eater" } window 10,10 #jump "blade-first-3"
+# 400.3 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
+# 401.2 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
 # 408.3 "Abyssal Sun"
 # 410.3 "Bounds of Sin draw-in"
 # 414.4 "Bounds of Sin x12"
 # 417.6 "Bounds of Sin chariot/dynamo"
 # 428.0 "Spinelash"
-# 436.8 "Scourging Blaze exaflares"
+# 436.8 "Scourging Blaze exaflares" duration 7.2
 # 452.0 "Searing Chains"
 
 # Ball/Chains first then Blade 3
@@ -158,8 +167,10 @@ hideall "--sync--"
 505.9 "Bounds of Sin draw-in" Ability { id: "AC59", source: "Devoured Eater" }
 510.0 "Bounds of Sin x12" duration 1.7 #Ability { id: "AC5A", source: "Devoured Eater" }
 513.0 "Bounds of Sin chariot/dynamo" Ability { id: ["AC5B", "AC5C"], source: "Devoured Eater" }
-513.2 "Ball of Fire/Chains of Condemnation?" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-4"
-513.2 "Blade of First Light?" StartsUsing { id: ["AC46", "AC47"], source: "Devoured Eater" } window 10,10 #jump "blade-first-4"
+513.2 "--sync--" StartsUsing { id: ["AC41", "AC43"], source: "Eminent Grief" } window 10,10 #jump "ball-first-4"
+513.2 "--sync--" StartsUsing { id: ["AC46", "AC47"], source: "Devoured Eater" } window 10,10 #jump "blade-first-4"
+# 517.2 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
+# 520.2 "Blade of First Light/Ball of Fire/Chains of Condemnation?"
 # 539.0 "Unholy Darkness"
 # 556.3 "Hellish Earth enrage"
 
