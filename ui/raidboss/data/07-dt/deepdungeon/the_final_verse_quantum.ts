@@ -7,18 +7,14 @@ import { RaidbossData } from '../../../../../types/data';
 import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 
 // Pilgrim's Traverse The Final Verse Quantum
-// TODO: Q15-39
-// TODO: light/dark partner stacks callout
-// TODO: Abyssal Sun callout to get Light Vengeance for towers
-// TODO: Manifold Lashings laser left/right direction callout
-// TODO: finish timeline
+// Q40
 
-// === Map Effect info: ===
-//
-// --- Bounds of Sin puddles ---
-//
+// TODO: Q15-39
+// TODO: Manifold Lashings - laser left/right direction callout
+
+// === Map Effect info ===
+// --- Bounds of Sin walls ---
 // locations (inward-facing, center not safe):
-//
 //       00
 //    0B    01
 //  0A        02
@@ -28,7 +24,6 @@ import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 //       06
 //
 // locations (outward-facing, center safe):
-//
 //       0C
 //    17    0D
 //  16        0E
@@ -38,42 +33,32 @@ import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 //       12
 //
 // flags:
-//
 // 00020001 - walls appearing
 // 00080004 - walls disappearing
 //
 // --- Abyssal Sun towers ---
-//
 // locations:
-//
 // 1B | 1C
 // ---+---
 // 1D | 1E
 //
 // flags:
-//
 // 00020001 - towers appearing
 // 00200010 - standing in a tower
 // 00080004 - towers disappearing
 // 00800040 - tower exploding from failure to soak?
 //
 // --- Spinelash glass walls ---
-//
 // locations:
-//
 // 18 | 19 | 1A
 //
 // flags:
-//
 // 00020001 - glass breaking first time
 // 00200010 - glass breaking second time
 
-// first 6 exaflare starting locations [x, y]:
-// ===========================================
-// (same regardless of front or back safe spot)
-//
-// set 1
-// -----
+// === Scourging Blaze (exaflares) ===
+// first 6 starting locations [x, y] (same regardless of front or back safe):
+// --- set 1 ---
 // [-618.000, -288.003]
 // [-612.018, -294.015]
 // [-606.006, -299.997]
@@ -81,8 +66,7 @@ import { OutputStrings, TriggerSet } from '../../../../../types/trigger';
 // [-588.000, -303.018]
 // [-582.019, -290.994]
 //
-// set 2
-// -----
+// --- set 2 ---
 // [-618.000, -290.994]
 // [-612.018, -303.018]
 // [-599.994, -306.009]
@@ -240,6 +224,18 @@ const triggerSet: TriggerSet<Data> = {
 
   timelineTriggers: [
     {
+      id: 'Final Verse Quantum Abyssal Sun Light Vengeance',
+      // instant cast
+      regex: /Abyssal Sun/,
+      beforeSeconds: 16,
+      infoText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Get Light Vengeance',
+        },
+      },
+    },
+    {
       id: 'Final Verse Quantum Abyssal Sun',
       // instant cast
       regex: /Abyssal Sun/,
@@ -258,7 +254,11 @@ const triggerSet: TriggerSet<Data> = {
       // 9F6 = Damage Up
       // 105F = Rehabilitation
       type: 'GainsEffect',
-      netRegex: { effectId: ['9F6', '105F'], capture: false },
+      netRegex: {
+        effectId: ['9F6', '105F'],
+        target: ['Eminent Grief', 'Devoured Eater'],
+        capture: false,
+      },
       suppressSeconds: 1,
       alarmText: (_data, _matches, output) => output.text!(),
       outputStrings: {
@@ -500,6 +500,31 @@ const triggerSet: TriggerSet<Data> = {
       run: (data) => delete data.walls,
     },
     {
+      id: 'Final Verse Quantum Light/Dark Partner Stack',
+      type: 'HeadMarker',
+      netRegex: {
+        id: [headMarkerData.lightPartnerStack, headMarkerData.darkPartnerStack],
+        capture: true,
+      },
+      condition: Conditions.targetIsYou(),
+      infoText: (_data, matches, output) => {
+        const id = matches.id;
+        const lightDark = id === headMarkerData.lightPartnerStack ? 'dark' : 'light';
+        return output.text!({ lightDark: output[lightDark]!() });
+      },
+      outputStrings: {
+        text: {
+          en: 'Stack with ${lightDark} Partner',
+        },
+        light: {
+          en: 'Light',
+        },
+        dark: {
+          en: 'Dark',
+        },
+      },
+    },
+    {
       id: 'Final Verse Quantum Blade of First Light',
       type: 'StartsUsing',
       netRegex: { id: ['AC46', 'AC47', 'AC4C', 'AC4D'], source: 'Devoured Eater', capture: true },
@@ -598,7 +623,7 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum Blade/Ball/Chains Cleanup',
       type: 'Ability',
       netRegex: {
-        id: ['AC4E', 'AC49', 'AC4B'],
+        id: ['AC49', 'AC4B', 'AC4E'],
         source: ['Eminent Grief', 'Devoured Eater'],
         capture: false,
       },
@@ -914,6 +939,21 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'AC8B', source: 'Flameborn', capture: false },
       response: Responses.aoe('alert'),
+    },
+    {
+      id: 'Final Verse Quantum Manifold Lashings Debug',
+      type: 'StartsUsing',
+      netRegex: { id: ['AC7D', 'AC7E'], source: 'Eminent Grief', capture: true },
+      durationSeconds: 8,
+      infoText: (_data, matches, output) => {
+        const id = matches.id;
+        return output.text!({ id: id });
+      },
+      outputStrings: {
+        text: {
+          en: 'Manifold Lashings: ${id}',
+        },
+      },
     },
   ],
   timelineReplace: [
