@@ -920,8 +920,7 @@ const triggerSet: TriggerSet<Data> = {
     {
       'locale': 'en',
       'replaceText': {
-        'Blade of First Light/Ball of Fire/Chains of Condemnation?': 'Blade/Ball/Chains?',
-        'Ball of Fire/Chains of Condemnation': 'Ball/Chains',
+        'Blade of First Light/Ball of Fire/Chains of Condemnation': 'Blade/Ball/Chains',
       },
     },
   ],
