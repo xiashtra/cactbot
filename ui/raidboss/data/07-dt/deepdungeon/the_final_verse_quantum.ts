@@ -202,6 +202,7 @@ export interface Data extends RaidbossData {
   ballChains?: 'ball' | 'chains';
   hellishEarth: boolean;
   eruptions: number;
+  manifoldLashings?: 'left' | 'right';
   sinBearer: boolean;
 }
 
@@ -784,6 +785,15 @@ const triggerSet: TriggerSet<Data> = {
       },
     },
     {
+      id: 'Final Verse Quantum Manifold Lashings Collect',
+      type: 'StartsUsing',
+      netRegex: { id: ['AC7D', 'AC7E'], source: 'Eminent Grief', capture: true },
+      run: (data, matches) => {
+        const id = matches.id;
+        id === 'AC7D' ? data.manifoldLashings = 'left' : data.manifoldLashings = 'right';
+      },
+    },
+    {
       id: 'Final Verse Quantum Manifold Lashings',
       type: 'StartsUsing',
       netRegex: { id: 'AC7F', source: 'Eminent Grief', capture: false },
@@ -798,15 +808,22 @@ const triggerSet: TriggerSet<Data> = {
       id: 'Final Verse Quantum Manifold Lashings Laser',
       type: 'StartsUsing',
       netRegex: { id: 'AC81', source: 'Eminent Grief', capture: false },
-      infoText: (_data, _matches, output) => output.text!(),
+      infoText: (data, _matches, output) => {
+        const leftRight = data.manifoldLashings === undefined ? 'unknown' : data.manifoldLashings;
+        return output.text!({ leftRight: output[leftRight]!() });
+      },
+      run: (data) => delete data.manifoldLashings,
       outputStrings: {
         text: {
-          en: 'Avoid laser',
-          de: 'Laser vermeiden',
-          ja: 'レーザーを避ける',
-          cn: '避开激光',
-          ko: '레이저 피하기',
+          en: '${leftRight}, Avoid laser',
         },
+        left: {
+          en: 'Front-left/Back-right',
+        },
+        right: {
+          en: 'Front-right/Back-left',
+        },
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -948,21 +965,6 @@ const triggerSet: TriggerSet<Data> = {
       type: 'StartsUsing',
       netRegex: { id: 'AC8B', source: 'Flameborn', capture: false },
       response: Responses.aoe('alert'),
-    },
-    {
-      id: 'Final Verse Quantum Manifold Lashings Debug',
-      type: 'StartsUsing',
-      netRegex: { id: ['AC7D', 'AC7E'], source: 'Eminent Grief', capture: true },
-      durationSeconds: 8,
-      infoText: (_data, matches, output) => {
-        const id = matches.id;
-        return output.text!({ id: id });
-      },
-      outputStrings: {
-        text: {
-          en: 'Manifold Lashings: ${id}',
-        },
-      },
     },
   ],
   timelineReplace: [

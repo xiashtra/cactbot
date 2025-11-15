@@ -328,8 +328,8 @@ hideall "--sync--"
 # AC7A Hellish Torment - Arcane Font enrage?
 # AC7B Hellish Torment - stepping outside the Hellish Earth gaol?
 # AC7C Eruption - baited AoE puddles
-# AC7D Manifold Lashings - dummy-cast
-# AC7E Manifold Lashings - dummy-cast
+# AC7D Manifold Lashings - dummy-cast, laser from boss left
+# AC7E Manifold Lashings - dummy-cast, laser from boss right
 # AC7F Manifold Lashings - first hit, damage + stacking poison
 # AC80 Manifold Lashings - second/third hit, damage + stacking poison
 # AC81 Manifold Lashings - final hit, laser damage
