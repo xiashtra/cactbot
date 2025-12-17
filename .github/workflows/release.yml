@@ -153,6 +153,9 @@ jobs:
   create_npm_package:
     needs: [create_release]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     if: ${{ github.repository == 'OverlayPlugin/cactbot' }}
     steps:
       - name: Checkout Code
@@ -164,5 +167,3 @@ jobs:
 
       - run: npm publish
         working-directory: npm-package
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
