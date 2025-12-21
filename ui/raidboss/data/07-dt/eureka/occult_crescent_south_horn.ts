@@ -4110,12 +4110,8 @@ const triggerSet: TriggerSet<Data> = {
         const x = parseFloat(matches.x);
         const y = parseFloat(matches.y);
         const loc = getPuddleLocation(x, y);
-        if (loc === undefined) {
-          console.error(
-            `Occult Crescent Marble Dragon Imitation Rain 2 Dodge 1: Unexpected puddle location (${x}, ${y})`,
-          );
+        if (loc === undefined)
           return;
-        }
 
         // Crosses
         if (matches.id === '7614') {
