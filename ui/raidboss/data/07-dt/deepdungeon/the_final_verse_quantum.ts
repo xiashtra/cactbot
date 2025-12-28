@@ -363,6 +363,25 @@ const triggerSet: TriggerSet<Data> = {
   ],
   triggers: [
     {
+      id: 'Final Verse Quantum Boss Death',
+      // 11D1 = Borrowed Time
+      type: 'GainsEffect',
+      netRegex: {
+        effectId: '11D1',
+        target: ['Eminent Grief', 'Devoured Eater'],
+        capture: true,
+      },
+      alertText: (_data, matches, output) => {
+        const target = matches.target;
+        return output.text!({ target: target });
+      },
+      outputStrings: {
+        text: {
+          en: '${target} dead, swap!',
+        },
+      },
+    },
+    {
       id: 'Final Verse Quantum Offerings Collector',
       type: 'GainsEffect',
       netRegex: {
