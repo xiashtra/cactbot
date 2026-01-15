@@ -346,6 +346,18 @@ const triggerSet: TriggerSet<Data> = {
         },
       },
     },
+    {
+      id: 'Final Verse Quantum Cime and Punishment Paean',
+      // instant cast
+      regex: /Crime and Punishment/,
+      beforeSeconds: 11,
+      alarmText: (_data, _matches, output) => output.text!(),
+      outputStrings: {
+        text: {
+          en: 'Paean now!',
+        },
+      },
+    },
   ],
   triggers: [
     {
