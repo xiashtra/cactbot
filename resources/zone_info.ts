@@ -8837,7 +8837,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 4,
     'name': {
-      'cn': '异闻迷宫 异闻希拉狄哈水道',
+      'cn': '异闻希拉狄哈水道',
       'de': 'Die kuriose Unterstadt von Sil\'dih',
       'en': 'Another Sil\'dihn Subterrane',
       'fr': 'Les canalisations sildiennes annexes - Donjon alternatif',
@@ -8854,7 +8854,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 4,
     'name': {
-      'cn': '异闻迷宫 零式异闻希拉狄哈水道',
+      'cn': '零式异闻希拉狄哈水道',
       'de': 'Die kuriose Unterstadt von Sil\'dih (episch)',
       'en': 'Another Sil\'dihn Subterrane (Savage)',
       'fr': 'Les canalisations sildiennes annexes - Donjon alternatif (sadique)',
@@ -9887,7 +9887,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 4,
     'name': {
-      'cn': '异闻迷宫 异闻六根山',
+      'cn': '异闻六根山',
       'de': 'Der kuriose Rokkon',
       'en': 'Another Mount Rokkon',
       'fr': 'Le mont Rokkon annexe - Donjon alternatif',
@@ -9904,7 +9904,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 4,
     'name': {
-      'cn': '异闻迷宫 零式异闻六根山',
+      'cn': '零式异闻六根山',
       'de': 'Der kuriose Rokkon (episch)',
       'en': 'Another Mount Rokkon (Savage)',
       'fr': 'Le mont Rokkon annexe - Donjon alternatif (sadique)',
@@ -10156,7 +10156,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 4,
     'name': {
-      'cn': '异闻迷宫 异闻阿罗阿罗岛',
+      'cn': '异闻阿罗阿罗岛',
       'de': 'Kurioses Aloalo',
       'en': 'Another Aloalo Island',
       'fr': 'L\'île d\'Aloalo annexe - Donjon alternatif',
@@ -10173,7 +10173,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 4,
     'name': {
-      'cn': '异闻迷宫 零式异闻阿罗阿罗岛',
+      'cn': '零式异闻阿罗阿罗岛',
       'de': 'Kurioses Aloalo (episch)',
       'en': 'Another Aloalo Island (Savage)',
       'fr': 'L\'île d\'Aloalo annexe - Donjon alternatif (sadique)',
@@ -11711,6 +11711,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 5,
     'name': {
+      'cn': '多变迷宫 商客奇谭',
       'de': 'Des Händlers Liebesmüh',
       'en': 'The Merchant\'s Tale',
       'fr': 'Contes du Camelot - Donjon à embranchements',
@@ -11725,6 +11726,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 5,
     'name': {
+      'cn': '深读商客奇谭',
       'de': 'Des Händlers Liebesmüh (fortgeschritten)',
       'en': 'The Merchant\'s Tale (Advanced)',
       'fr': 'Contes du Camelot - Donjon à embranchements (avancé)',
@@ -11739,6 +11741,7 @@ const data: ZoneInfoType = {
     'contentType': 30,
     'exVersion': 5,
     'name': {
+      'cn': '异闻商客奇谭',
       'de': 'Des Händlers kuriose Liebesmüh',
       'en': 'Another Merchant\'s Tale',
       'fr': 'Contes du Camelot annexes - Donjon alternatif',
