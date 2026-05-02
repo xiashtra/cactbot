@@ -9,6 +9,10 @@ export type Data = RaidbossData;
 const triggerSet: TriggerSet<Data> = {
   id: 'ShisuiOfTheVioletTides',
   zoneId: ZoneId.ShisuiOfTheVioletTides,
+  comments: {
+    en: 'pre-7.5 rework',
+    cn: '7.5改版前',
+  },
   timelineFile: 'shisui_of_the_violet_tides.txt',
   triggers: [
     {

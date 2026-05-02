@@ -154,6 +154,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${mech} + Avoid Lasers',
           de: '${mech} + vermeide Laser',
+          fr: '${mech} + éviter lasers',
           cn: '${mech} + 躲避激光',
           ko: '${mech} + 레이저 피하기',
         },
@@ -174,6 +175,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: '${mech} => ${away}',
           de: '${mech} => ${away}',
+          fr: '${mech} => ${away}',
           cn: '${mech} => ${away}',
           ko: '${mech} => ${away}',
         },
@@ -201,6 +203,7 @@ const triggerSet: TriggerSet<Data> = {
         avoid: {
           en: 'Avoid ${dir} turrets',
           de: 'Vermeide ${dir} Geschütztürme',
+          fr: 'Évitez les tourelles ${dir}',
           cn: '躲避 ${dir} 炮塔',
           ko: '${dir} 포탑 피하기',
         },
@@ -258,6 +261,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Tank cleave on YOU from ${dir}',
           de: 'Tank Cleave auf DIR von ${dir}',
+          fr: 'Tank cleave sur vous depuis ${dir}',
           cn: '${dir} 坦克死刑',
           ko: '광역 탱버 대상자 ${dir} 방향',
         },
@@ -273,6 +277,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Tower x3 => Next Platform',
           de: 'Turm x3 => Nächste Plattform',
+          fr: 'Tour x3 => Prochain wagon',
           cn: '踩塔 x3 => 下一节车厢',
           ko: '탑 x3 => 다음 플랫폼',
         },
@@ -288,6 +293,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Down',
           de: 'Unten',
+          fr: 'Bas',
           cn: '下',
           ko: '아래',
         },
@@ -303,6 +309,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Up',
           de: 'Oben',
+          fr: 'Haut',
           cn: '上',
           ko: '위',
         },
@@ -323,8 +330,8 @@ const triggerSet: TriggerSet<Data> = {
       type: 'Ability',
       netRegex: { id: 'B258', capture: false },
       durationSeconds: 8,
-      countdownSeconds: 8,
       suppressSeconds: 9999,
+      countdownSeconds: 8,
       infoText: (_data, _matches, output) => output.south!(),
       outputStrings: {
         south: Outputs.south,
@@ -376,14 +383,14 @@ const triggerSet: TriggerSet<Data> = {
           return 10.5;
         return 13.5;
       },
-      countdownSeconds: (data) => {
+      suppressSeconds: (data) => {
         if (data.hailMoveCount === 2)
           return 7.5;
         if (data.hailMoveCount === 3)
           return 10.5;
         return 13.5;
       },
-      suppressSeconds: (data) => {
+      countdownSeconds: (data) => {
         if (data.hailMoveCount === 2)
           return 7.5;
         if (data.hailMoveCount === 3)
@@ -451,6 +458,7 @@ const triggerSet: TriggerSet<Data> = {
         text: {
           en: 'Tower x3',
           de: 'Turm x3',
+          fr: 'Tour x3',
           cn: '踩塔 x3',
           ko: '탑 x3',
         },
@@ -460,7 +468,6 @@ const triggerSet: TriggerSet<Data> = {
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Aether': 'Äthersphäre',
         'Doomtrain': 'Doomtrain',
@@ -591,6 +598,39 @@ const triggerSet: TriggerSet<Data> = {
         'Unlimited Express': '无控急行',
         'Windpipe': '抽雾',
         'Head-on Emission': '前方排障',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Aether': '에테르 구체',
+        'Doomtrain': '글라시아 라볼라스',
+        'Ghost Train': '글라시아 라볼라스의 분신',
+        'Kinematic Turret': '경호 포탑',
+        'Levin Signal': '뇌광륜',
+      },
+      'replaceText': {
+        'Aetherial Ray': '에테르 광선',
+        'Aether Surge': '에테르 쇄도',
+        'Arcane Revelation': '마법진 전개',
+        'Battering Arms': '팔 난타',
+        'Blastpipe': '안개 배출',
+        'Derail(?!ment)': '탈선',
+        'Derailment Siege': '탈선 난동',
+        'Electray': '일렉트로레이',
+        'Hail of Thunder': '번개 비',
+        'Headlight': '전조등',
+        'Lightning Burst': '번개 작렬',
+        'Lightning Express': '번개 폭주열차',
+        '(?<! )Overdraught': '에테르 범람',
+        'Plasma Beam': '플라스마 광선',
+        'Runaway Train': '끝없는 폭주',
+        'Shockwave': '충격파',
+        'Thunderous Breath': '번개 숨결',
+        'Turret Crossing': '추종기 출격',
+        'Unlimited Express': '무한 폭주열차',
+        'Windpipe': '안개 흡입',
+        'Head-on Emission': '전방 제거',
       },
     },
   ],

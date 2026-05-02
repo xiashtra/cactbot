@@ -30,6 +30,7 @@ import {
   ResponseOutput,
   TimelineField,
   TimelineFunc,
+  TimelineReplacement,
   TriggerAutoConfig,
   TriggerField,
   TriggerOutput,
@@ -40,7 +41,6 @@ import AutoplayHelper from './autoplay_helper';
 import BrowserTTSEngine from './browser_tts_engine';
 import { PerTriggerAutoConfig, PerTriggerOption, RaidbossOptions } from './raidboss_options';
 import { TimelineLoader } from './timeline';
-import { TimelineReplacement } from './timeline_parser';
 
 const isRaidbossLooseTimelineTrigger = (
   trigger: ProcessedTrigger,
@@ -703,21 +703,27 @@ export class PopupText {
     // User triggers must come last so that they override built-in files.
     this.triggerSets.push(...this.options.Triggers);
 
-    // Eliminate any trigger sets with duplicate ids and record a lookup by id.
-    this.triggerSets = this.triggerSets.filter((triggerSet) => {
-      if (triggerSet.id === undefined)
-        return true;
-      if (this.triggerSetsById[triggerSet.id] !== undefined) {
-        console.log(
-          `${
-            triggerSet.filename ?? '???'
-          } has duplicate triggerSet id ${triggerSet.id}, ignoring triggers`,
-        );
-        return false;
+    // Eliminate any trigger sets with duplicate ids, allowing later ones to override earlier ones.
+    // Filter the list to keep the last instance of each ID while preserving order.
+    const lastVersionOfId = new Map<string, typeof this.triggerSets[number]>();
+    for (const set of this.triggerSets) {
+      if (set.id !== undefined) {
+        const existing = lastVersionOfId.get(set.id);
+        if (existing !== undefined) {
+          console.log(
+            `Overriding trigger set id '${set.id}' from '${existing.filename}' with '${set.filename}'`,
+          );
+        }
+        lastVersionOfId.set(set.id, set);
       }
-      this.triggerSetsById[triggerSet.id] = triggerSet;
-      return true;
+    }
+
+    this.triggerSets = this.triggerSets.filter((set) => {
+      if (set.id === undefined)
+        return true;
+      return lastVersionOfId.get(set.id) === set;
     });
+    this.triggerSetsById = Object.fromEntries(lastVersionOfId);
   }
 
   OnChangeZone(e: EventResponses['ChangeZone']): void {
