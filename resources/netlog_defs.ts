@@ -995,10 +995,10 @@ const latestLogDefinitions = {
       data0: 15,
       data1: 16,
       data2: 17,
+      // triplets of fields from here (effectId + otherInfo, duration, sourceId)
       data3: 18,
       data4: 19,
       data5: 20,
-      // triplets of fields from here (effectId + otherInfo, duration, sourceId)
     },
     playerIds: {
       2: 3,
@@ -1085,6 +1085,9 @@ const latestLogDefinitions = {
       id: 2,
       name: 3,
       // triplets of fields from here (effectId + otherInfo, duration, sourceId)
+      data0: 4,
+      data1: 5,
+      data2: 6,
     },
     playerIds: {
       2: 3,
@@ -1109,12 +1112,15 @@ const latestLogDefinitions = {
       currentMp: 7,
       maxMp: 8,
       currentShield: 9,
-      // unknown0: 10,
+      // Field index 10 is always `0`
       x: 11,
       y: 12,
       z: 13,
       heading: 14,
       // triplets of fields from here (effectId + otherInfo, duration, sourceId)
+      data0: 15,
+      data1: 16,
+      data2: 17,
     },
     playerIds: {
       2: 3,

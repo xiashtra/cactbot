@@ -2524,10 +2524,10 @@ corresponds to row `702` on the `ItemFood` sheet
 
 ```log
 Network Log Line Structure:
-42|[timestamp]|[id]|[name]
+42|[timestamp]|[id]|[name]|[data0]|[data1]|[data2]
 
 Parsed Log Line Structure:
-[timestamp] StatusList3 2A:[id]:[name]
+[timestamp] StatusList3 2A:[id]:[name]:[data0]:[data1]:[data2]
 ```
 
 #### Regexes
@@ -2571,10 +2571,10 @@ See: [NetworkStatusEffects](#data-fields) for a discussion of the data fields.
 
 ```log
 Network Log Line Structure:
-43|[timestamp]|[id]|[name]|[jobLevelData]|[currentHp]|[maxHp]|[currentMp]|[maxMp]|[currentShield]|[?]|[x]|[y]|[z]|[heading]
+43|[timestamp]|[id]|[name]|[jobLevelData]|[currentHp]|[maxHp]|[currentMp]|[maxMp]|[currentShield]|[?]|[x]|[y]|[z]|[heading]|[data0]|[data1]|[data2]
 
 Parsed Log Line Structure:
-[timestamp] StatusEffectListForay3 2B:[id]:[name]:[jobLevelData]:[currentHp]:[maxHp]:[currentMp]:[maxMp]:[currentShield]:[?]:[x]:[y]:[z]:[heading]
+[timestamp] StatusEffectListForay3 2B:[id]:[name]:[jobLevelData]:[currentHp]:[maxHp]:[currentMp]:[maxMp]:[currentShield]:[?]:[x]:[y]:[z]:[heading]:[data0]:[data1]:[data2]
 ```
 
 #### Regexes
