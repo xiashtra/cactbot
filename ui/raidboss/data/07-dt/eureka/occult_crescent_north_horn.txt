@@ -13,3 +13,254 @@ hideall "--sync--"
 # Unlike with Bozja, you do not teleport into critical encounters from afar.
 # Instead players must run to the encounter spot. This makes the "entry"
 # into the critical encounter happen much later.
+
+##########################################
+### The Forked Tower: Magic (Extreme) ####
+##########################################
+
+### Two-headed Aevis (EX) ###
+
+# -ii B214 BA0A BA10 BA13 BA14 BA1F BA20 BA3F BA41 BA42 BA53 BA5F BA68 BA6C BA7B BA7E BA7F BA86 BA8B BA8C BA8E C23F C617 C618 C61D C625
+
+# 0.0 "--sync--" ActorControl { command: "80000014", data0: "389" } window 100000,0
+
+# The Herpetology Forum will be sealed off
+0.0 "--sync--" SystemLogMessage { id: "7DC", param1: "1573" } window 100000,1
+15.1 "Buffet" Ability { id: "C23E", source: ["Green Head", "Blue Head"] }
+28.3 "Poison Breath/Storm\'s Breath" Ability { id: ["BA16", "BA17"], source: ["Green Head", "Blue Head"] }
+28.3 "Fulgurous Fugue/Freezing Fugue" Ability { id: ["BA18", "BA19"], source: ["Green Head", "Blue Head"] }
+37.3 "Thunderfrost Tempest" Ability { id: ["BA7C", "BA7D"], source: ["Green Head", "Blue Head"] }
+52.8 "Crossblaze, Blazeloop" Ability { id: "BA39", source: "Green Head" }
+52.8 "Blaze" Ability { id: "BA43", source: "Green Head" }
+52.8 "Blaze" Ability { id: "C612", source: "Green Head" }
+54.8 "Crossblaze" Ability { id: "BA45", source: "Green Head" }
+56.0 "Blazeloop, Crossblaze" Ability { id: "BA3E", source: "Blue Head" }
+56.6 "Blaze" Ability { id: "BA44", source: "Blue Head" }
+56.6 "Blaze" Ability { id: "C613", source: "Blue Head" }
+58.6 "Blazeloop" Ability { id: "BA46", source: "Blue Head" }
+59.8 "Blazeloop" Ability { id: "BA48", source: "Green Head" }
+60.5 "Blaze" Ability { id: "BA49", source: "Green Head" }
+60.5 "Blaze" Ability { id: "C614", source: "Green Head" }
+62.5 "Blazeloop" Ability { id: "BA46", source: "Green Head" }
+63.7 "Crossblaze" Ability { id: "BA47", source: "Blue Head" }
+64.4 "Blaze" Ability { id: "BA49", source: "Blue Head" }
+64.4 "Blaze" Ability { id: "C614", source: "Blue Head" }
+66.4 "Crossblaze" Ability { id: "BA45", source: "Blue Head" }
+75.6 "Archaeofury" Ability { id: "BA85", source: "Green Head" }
+75.6 "Archaeofury" Ability { id: "BA88", source: "Blue Head" }
+75.6 "Archaeofury" Ability { id: "BA87", source: "Green Head" }
+92.8 "Storm's Breath" Ability { id: "BA0F", source: "Green Head" }
+92.8 "Freezing Fugue" Ability { id: "BA11", source: "Blue Head" }
+92.8 "Fulgurous Fugue/Freezing Fugue" Ability { id: ["BA18", "BA19"], source: ["Green Head", "Blue Head"] }
+92.8 "--sync--" Ability { id: "BC75", source: "Green Head" }
+92.8 "Poison Breath/Storm\'s Breath" Ability { id: ["BA16", "BA17"], source: ["Green Head", "Blue Head"] }
+94.9 "Aethersplit" Ability { id: "BE02", source: "Green Head" }
+101.8 "Thunderfrost Tempest" Ability { id: ["BA7C", "BA7D"], source: ["Green Head", "Blue Head"] }
+113.1 "Arcane Revelation" Ability { id: "BA67", source: "Green Head" }
+123.0 "Arcane Beacon" #Ability { id: "BA6A", source: "Arcane Font" }
+123.0 "Arcane Beacon" #Ability { id: "BA6A", source: "Arcane Font" }
+123.2 "Two Terrors" Ability { id: "BA51", source: "Green Head" }
+123.2 "Two Terrors" Ability { id: "BA56", source: "Blue Head" }
+123.2 "Two Terrors" Ability { id: "BA57", source: "Green Head" }
+133.3 "Summon" Ability { id: "BA5E", source: "Green Head" }
+153.5 "Breathy Duet" Ability { id: "BA1E", source: "Green Head" }
+153.5 "Ice Cluster" Ability { id: "BA22", source: "Blue Head" }
+153.5 "Lightning Cluster" Ability { id: "BA21", source: "Green Head" }
+153.8 "Ice Cluster" Ability { id: "C60C", source: "Blue Head" }
+153.8 "Lightning Cluster" Ability { id: "C60B", source: "Green Head" }
+153.9 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+153.9 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+157.1 "Lightning Cluster" Ability { id: "BA23", source: "Green Head" }
+157.1 "Ice Cluster" Ability { id: "BA24", source: "Blue Head" }
+157.3 "Lightning Cluster" Ability { id: "C60D", source: "Green Head" }
+157.3 "Ice Cluster" Ability { id: "C60E", source: "Blue Head" }
+157.4 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+157.4 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+160.5 "Ice Cluster" Ability { id: "BA24", source: "Blue Head" }
+160.5 "Lightning Cluster" Ability { id: "BA23", source: "Green Head" }
+160.8 "Ice Cluster" Ability { id: "C60E", source: "Blue Head" }
+160.8 "Lightning Cluster" Ability { id: "C60D", source: "Green Head" }
+160.9 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+160.9 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+164.2 "Lightning Cluster" Ability { id: "BA23", source: "Green Head" }
+164.2 "Ice Cluster" Ability { id: "BA24", source: "Blue Head" }
+164.4 "Lightning Cluster" Ability { id: "C60D", source: "Green Head" }
+164.4 "Ice Cluster" Ability { id: "C60E", source: "Blue Head" }
+164.5 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+164.5 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+175.2 "Arcane Revelation" Ability { id: "BA67", source: "Green Head" }
+177.3 "Aethersplit" Ability { id: "BE02", source: "Green Head" }
+189.3 "Arcane Beacon" Ability { id: "BA69", source: "Arcane Font" }
+189.3 "Fulgurous Fugue" Ability { id: "C623", source: "Green Head" }
+189.3 "Fulgurous Fugue" Ability { id: "C627", source: "Blue Head" }
+192.5 "Freezing Fugue" Ability { id: "BA04", source: "Blue Head" }
+193.2 "Freezing Fugue" Ability { id: "BA0E", source: "Blue Head" }
+193.2 "Arcane Beacon" #Ability { id: "BA6A", source: "Arcane Font" }
+193.2 "Arcane Beacon" #Ability { id: "BA6A", source: "Arcane Font" }
+201.4 "Thunderfrost Tempest" Ability { id: ["BA7C", "BA7D"], source: ["Green Head", "Blue Head"] }
+208.8 "Archaeofury" Ability { id: "BA85", source: "Green Head" }
+208.8 "Archaeofury" Ability { id: "BA88", source: "Blue Head" }
+208.8 "Archaeofury" Ability { id: "BA87", source: "Green Head" }
+219.9 "Hissing Resonance" #Ability { id: "BA6B", source: "Green Head" }
+219.9 "Hissing Resonance" #Ability { id: "BA6B", source: "Blue Head" }
+234.2 "Blazeloop, Crossblaze" Ability { id: "BA3A", source: "Green Head" }
+234.2 "Blaze" Ability { id: "BA43", source: "Green Head" }
+234.2 "Blaze" Ability { id: "C612", source: "Green Head" }
+234.6 "Buffet" Ability { id: "BA6E", source: "Green Head" }
+234.6 "Buffet" Ability { id: "BA6D", source: "Green Head" }
+236.3 "Blazeloop" Ability { id: "BA46", source: "Green Head" }
+237.5 "Crossblaze, Blazeloop" Ability { id: "BA3D", source: "Blue Head" }
+238.1 "Blaze" Ability { id: "BA44", source: "Blue Head" }
+238.1 "Blaze" Ability { id: "C613", source: "Blue Head" }
+238.5 "Buffet" Ability { id: "BA70", source: "Blue Head" }
+238.5 "Buffet" Ability { id: "BA6F", source: "Blue Head" }
+240.2 "Crossblaze" Ability { id: "BA45", source: "Blue Head" }
+241.4 "Crossblaze" Ability { id: "BA47", source: "Green Head" }
+242.1 "Blaze" Ability { id: "BA49", source: "Green Head" }
+242.1 "Blaze" Ability { id: "C614", source: "Green Head" }
+242.5 "Buffet" Ability { id: "BA6E", source: "Green Head" }
+242.5 "Buffet" Ability { id: "BA6D", source: "Green Head" }
+244.2 "Crossblaze" Ability { id: "BA45", source: "Green Head" }
+245.4 "Blazeloop" Ability { id: "BA48", source: "Blue Head" }
+246.1 "Blaze" Ability { id: "BA49", source: "Blue Head" }
+246.1 "Blaze" Ability { id: "C614", source: "Blue Head" }
+246.5 "Buffet" Ability { id: "BA70", source: "Blue Head" }
+246.5 "Buffet" Ability { id: "BA6F", source: "Blue Head" }
+248.2 "Blazeloop" Ability { id: "BA46", source: "Blue Head" }
+258.3 "Thunderfrost Tempest" Ability { id: ["BA7C", "BA7D"], source: ["Green Head", "Blue Head"] }
+269.6 "Arcane Revelation" Ability { id: "BA67", source: "Green Head" }
+271.7 "Aethersplit" Ability { id: "BE02", source: "Green Head" }
+279.5 "Arcane Beacon" Ability { id: "BA6A", source: "Arcane Font" }
+279.7 "Two Terrors" Ability { id: "BA51", source: "Green Head" }
+279.7 "Two Terrors" Ability { id: "BA56", source: "Blue Head" }
+279.7 "Two Terrors" Ability { id: "BA57", source: "Green Head" }
+287.8 "Arcane Revelation" Ability { id: "BA67", source: "Green Head" }
+300.8 "Arcane Beacon" Ability { id: "BA69", source: "Arcane Font" }
+300.8 "Fulgurous Fugue" Ability { id: "C623", source: "Green Head" }
+300.8 "Fulgurous Fugue" Ability { id: "C627", source: "Blue Head" }
+304.0 "Freezing Fugue" Ability { id: "BA04", source: "Blue Head" }
+304.8 "Freezing Fugue" Ability { id: "BA0E", source: "Blue Head" }
+304.8 "Arcane Beacon" #Ability { id: "BA6A", source: "Arcane Font" }
+304.8 "Arcane Beacon" #Ability { id: "BA6A", source: "Arcane Font" }
+315.1 "Thunderfrost Tempest" Ability { id: ["BA7C", "BA7D"], source: ["Green Head", "Blue Head"] }
+324.4 "Summon" Ability { id: "BA5E", source: "Green Head" }
+344.6 "Breathy Duet" Ability { id: "BA1E", source: "Green Head" }
+344.6 "Ice Cluster" Ability { id: "BA22", source: "Blue Head" }
+344.6 "Lightning Cluster" Ability { id: "BA21", source: "Green Head" }
+344.9 "Ice Cluster" Ability { id: "C60C", source: "Blue Head" }
+344.9 "Lightning Cluster" Ability { id: "C60B", source: "Green Head" }
+345.0 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+345.0 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+348.2 "Lightning Cluster" Ability { id: "BA23", source: "Green Head" }
+348.2 "Ice Cluster" Ability { id: "BA24", source: "Blue Head" }
+348.4 "Lightning Cluster" Ability { id: "C60D", source: "Green Head" }
+348.4 "Ice Cluster" Ability { id: "C60E", source: "Blue Head" }
+348.5 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+348.5 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+351.6 "Ice Cluster" Ability { id: "BA24", source: "Blue Head" }
+351.6 "Lightning Cluster" Ability { id: "BA23", source: "Green Head" }
+351.9 "Ice Cluster" Ability { id: "C60E", source: "Blue Head" }
+351.9 "Lightning Cluster" Ability { id: "C60D", source: "Green Head" }
+352.0 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+352.0 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+355.1 "Lightning Cluster" Ability { id: "BA23", source: "Green Head" }
+355.1 "Ice Cluster" Ability { id: "BA24", source: "Blue Head" }
+355.3 "Lightning Cluster" Ability { id: "C60D", source: "Green Head" }
+355.3 "Ice Cluster" Ability { id: "C60E", source: "Blue Head" }
+355.4 "Levin Wave" Ability { id: "BA62", source: "Charmed Lightning" }
+355.4 "Ice Wave" Ability { id: "BA63", source: "Charmed Ice" }
+366.1 "Archaeofury" Ability { id: "BA85", source: "Green Head" }
+366.1 "Archaeofury" Ability { id: "BA88", source: "Blue Head" }
+366.1 "Archaeofury" Ability { id: "BA87", source: "Green Head" }
+389.0 "Thunderfrost Tempest (enrage)" Ability { id: "BA80", source: ["Green Head", "Blue Head"] }
+
+
+# IGNORED ABILITIES
+# BA8B --sync--
+# BA8C --sync--
+# C617 --sync--
+# C618 --sync--
+
+# ALL ENCOUNTER ABILITIES
+# B214 --sync--
+# BA04 Freezing Fugue
+# BA0A --sync--
+# BA0E Freezing Fugue
+# BA0F Storm's Breath
+# BA10 Fulgurous Fugue - dummy self-cast
+# BA11 Freezing Fugue - dummy self-cast
+# BA13 --sync--
+# BA14 --sync--
+# BA16 Storm's Breath - knockback from Green Head
+# BA17 Poison Breath - circle aoe from Blue Head
+# BA18 Fulgurous Fugue - donut aoe from Green Head
+# BA19 Freezing Fugue - circle aoe from Blue Head
+# BA1E Breathy Duet
+# BA1F --sync--
+# BA20 --sync--
+# BA21 Lightning Cluster
+# BA22 Ice Cluster
+# BA23 Lightning Cluster
+# BA24 Ice Cluster
+# BA39 Crossblaze, Blazeloop - dummy self-cast from Green Head
+# BA3A Blazeloop, Crossblaze - dummy self-cast from Green Head
+# BA3D Crossblaze, Blazeloop - dummy self-cast from Blue Head
+# BA3E Blazeloop, Crossblaze - dummy self-cast from Blue Head
+# BA3F --sync--
+# BA41 --sync--
+# BA42 --sync--
+# BA43 Blaze - cross damage
+# BA44 Blaze
+# BA45 Crossblaze - cross damage
+# BA46 Blazeloop - donut damage
+# BA47 Crossblaze - dummy self-cast
+# BA48 Blazeloop - dummy self-cast
+# BA49 Blaze
+# BA51 Two Terrors
+# BA53 --sync--
+# BA56 Two Terrors
+# BA57 Two Terrors
+# BA5E Summon
+# BA5F --sync--
+# BA62 Levin Wave
+# BA63 Ice Wave
+# BA67 Arcane Revelation
+# BA68 --sync--
+# BA69 Arcane Beacon
+# BA6A Arcane Beacon
+# BA6B Hissing Resonance
+# BA6C --sync--
+# BA6D Buffet
+# BA6E Buffet
+# BA6F Buffet
+# BA70 Buffet
+# BA7B Thunderfrost Tempest - dummy self-cast
+# BA7C Thunderfrost Tempest - damage from Green Head
+# BA7D Thunderfrost Tempest - damage from Blue Head
+# BA7E Thunderfrost Tempest - dummy self-cast (enrage)
+# BA7F --sync--
+# BA80 Thunderfrost Tempest - damage (enrage)
+# BA85 Archaeofury
+# BA86 --sync--
+# BA87 Archaeofury
+# BA88 Archaeofury
+# BA8B --sync--
+# BA8C --sync--
+# BA8E --sync--
+# BC75 --sync--
+# BE02 Aethersplit
+# C23E Buffet - dummy self-cast
+# C23F --sync--
+# C60B Lightning Cluster
+# C60C Ice Cluster
+# C60D Lightning Cluster
+# C60E Ice Cluster
+# C612 Blaze - dummy self-cast
+# C613 Blaze - puddle damage
+# C614 Blaze - puddle damage
+# C617 --sync-- - auto-attack from Green Head
+# C618 --sync-- - auto-attack from Blue Head
+# C61D Poison Breath - dummy self-cast
+# C623 Fulgurous Fugue
+# C625 --sync--
+# C627 Fulgurous Fugue

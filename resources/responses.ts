@@ -445,6 +445,7 @@ export const Responses = {
   getOut: (sev?: Severity) => staticResponse(defaultAlertText(sev), Outputs.out),
   outOfMelee: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.outOfMelee),
   getInThenOut: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.inThenOut),
+  getCardinals: (sev?: Severity) => staticResponse(defaultAlertText(sev), Outputs.cardinals),
   getIntercards: (sev?: Severity) => staticResponse(defaultAlertText(sev), Outputs.intercards),
   getOutThenIn: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.outThenIn),
   getBackThenFront: (sev?: Severity) => staticResponse(defaultInfoText(sev), Outputs.backThenFront),
