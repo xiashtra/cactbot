@@ -259,9 +259,27 @@ const contentTypeToLabel: {
       en: 'BLU',
       de: 'BLAU',
       fr: 'MBU',
-      cn: '假面狂欢',
+      cn: '青魔',
       ko: '청마',
-      tc: '假面狂歡',
+      tc: '青魔',
+    },
+  },
+  [ContentType.xbm]: {
+    full: {
+      en: 'Crucible of the Unbroken',
+      de: 'Brett der Bestie',
+      fr: 'Dédale bestial',
+      ja: '闘獣練',
+      cn: '斗兽奇弈',
+      ko: '마수 시련장',
+    },
+    short: {
+      en: 'BST',
+      de: 'BST',
+      fr: 'DRE',
+      ja: '魔獣使い',
+      cn: '驯兽',
+      ko: '마수',
     },
   },
   [ContentType.Eureka]: {
@@ -1177,6 +1195,7 @@ const buildZoneTable = (container: HTMLElement, lang: Lang, coverage: Coverage) 
 
     // @TODO: Remap categories to group them better
     ContentType.TheMaskedCarnivale,
+    ContentType.xbm,
     ContentType.Eureka,
     ContentType.SaveTheQueen,
     ContentType.OccultCrescent,
